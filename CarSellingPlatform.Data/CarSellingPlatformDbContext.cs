@@ -1,4 +1,7 @@
-﻿namespace CarSellingPlatform.Data
+﻿using System.Reflection;
+using CarSellingPlatform.Data.Models;
+
+namespace CarSellingPlatform.Data
 {
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
@@ -9,6 +12,18 @@
             : base(options)
         {
 
+        }
+        
+        public DbSet<Car> Cars { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<FuelType> FuelTypes { get; set; }
+        public DbSet<Engine> Engines { get; set; }
+        public DbSet<Transmission> Transmissions { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }
