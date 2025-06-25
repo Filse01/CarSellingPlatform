@@ -14,7 +14,7 @@ namespace CarSellingPlatform.Web
             string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             
             builder.Services
-                .AddDbContext<ApplicationDbContext>(options =>
+                .AddDbContext<CarSellingPlatformDbContext>(options =>
                 {
                     options.UseSqlServer(connectionString);
                 });
@@ -25,7 +25,7 @@ namespace CarSellingPlatform.Web
                     options.SignIn.RequireConfirmedAccount = true;
                 })
                 .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<CarSellingPlatformDbContext>();
             builder.Services.AddControllersWithViews();
 
             WebApplication? app = builder.Build();
