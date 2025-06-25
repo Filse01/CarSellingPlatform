@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CarSellingPlatform.Data.Models\CarSellingPlatform.Data.Models.csproj" />
+    <ProjectReference Include="..\CarSellingPlatform.GCommon\CarSellingPlatform.GCommon.csproj" />
+    <ProjectReference Include="..\CarSellingPlatform.Services.AutoMapping\CarSellingPlatform.Services.AutoMapping.csproj" />
+  </ItemGroup>
+
+</Project>
