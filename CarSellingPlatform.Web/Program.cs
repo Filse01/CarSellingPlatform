@@ -7,7 +7,7 @@ namespace CarSellingPlatform.Web
 
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
             
@@ -24,6 +24,7 @@ namespace CarSellingPlatform.Web
                 {
                     options.SignIn.RequireConfirmedAccount = true;
                 })
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
 
@@ -51,7 +52,34 @@ namespace CarSellingPlatform.Web
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
+            using(var scope = app.Services.CreateScope())
+            {
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                var roles = new[] { "Admin", "User" };
+                foreach (var role in roles)
+                {
+                    if (!await roleManager.RoleExistsAsync(role))
+                    {
+                        await roleManager.CreateAsync(new IdentityRole(role));
+                    }
+                }
+            }
 
+            using (var scope = app.Services.CreateScope())
+            {
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+                string email = "admin@admin.com";
+                string password = "Test1234@";
+                if (await userManager.FindByEmailAsync(email) == null)
+                {
+                    var user = new IdentityUser();
+                    user.Email = email;
+                    user.UserName = email;
+                    
+                    await userManager.CreateAsync(user, password);
+                    await userManager.AddToRoleAsync(user, "Admin");
+                }
+            }
             app.Run();
         }
     }

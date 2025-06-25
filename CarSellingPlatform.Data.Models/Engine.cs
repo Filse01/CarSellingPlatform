@@ -4,6 +4,7 @@ namespace CarSellingPlatform.Data.Models;
 
 public class Engine
 {
+    [Key]
     public int Id { get; set; }
     [Required]
     public string Displacement { get; set; } = null!;
@@ -13,5 +14,5 @@ public class Engine
     public int Cylinders { get; set; }
     public string? EngineCode {get; set;}
     
-    public ICollection<Car> Cars { get; set; } = new List<Car>();
+    public ICollection<Car> Cars { get; set; } = new HashSet<Car>();
 }

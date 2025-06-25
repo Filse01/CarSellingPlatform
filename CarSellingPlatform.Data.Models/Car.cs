@@ -1,23 +1,24 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace CarSellingPlatform.Data.Models;
-
+using static CarSellingPlatform.Data.Common.Car;
 public class Car
 {
     [Key]
     public int Id { get; set; }
 
     [Required] 
+    [StringLength(TitleMaxLength, MinimumLength = TitleMinLength)]
     public string Title { get; set; } = null!;
-    
+    [StringLength(DescriptionMaxLength, MinimumLength = DescriptionMinLength)]
     public string? Description { get; set; }
     
     public string? ImageUrl { get; set; }
     [Required]
     public decimal Price { get; set; }
-    
+    [Required]
     public int Year { get; set; }
-    
+    [Required]
     public string Color { get; set; } = null!;
     
     public int CategoryId { get; set; }
