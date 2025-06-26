@@ -21,6 +21,8 @@ public class Car
     [Required]
     public string Color { get; set; } = null!;
     
+    public bool IsDeleted { get; set; }
+    
     public int CategoryId { get; set; }
     
     public Category Category { get; set; } = null!;
@@ -37,5 +39,5 @@ public class Car
     
     public FuelType FuelType { get; set; } = null!;
     
-    public int UserId { get; set; }
+    public ICollection<UserCar> UserCars { get; set; } = new HashSet<UserCar>();
 }

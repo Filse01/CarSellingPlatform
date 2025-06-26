@@ -31,6 +31,8 @@ public class CarConfiguration : IEntityTypeConfiguration<Car>
             .WithMany(f => f.Cars)
             .HasForeignKey(c => c.FuelTypeId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
+        builder
+            .HasQueryFilter(c => c.IsDeleted == false);
     }
 }
