@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+
 namespace CarSellingPlatform.Web.Controllers
 {
     using System.Diagnostics;
@@ -13,6 +15,7 @@ namespace CarSellingPlatform.Web.Controllers
 
         }
 
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();

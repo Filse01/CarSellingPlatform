@@ -1,4 +1,6 @@
 using CarSellingPlatform.Services.Core;
+using CarSellingPlatform.Services.Core.Contracts;
+using CarSellingPlatform.Services.Core.UserManager;
 
 namespace CarSellingPlatform.Web
 {
@@ -29,6 +31,7 @@ namespace CarSellingPlatform.Web
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<CarSellingPlatformDbContext>();
             builder.Services.AddControllersWithViews();
+            builder.Services.AddScoped<IUserManager, UserManagerService>();
 
             WebApplication? app = builder.Build();
             
