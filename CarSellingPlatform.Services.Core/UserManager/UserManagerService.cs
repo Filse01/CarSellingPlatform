@@ -29,10 +29,33 @@ public class UserManagerService : IUserManager
                 Id = user.Id,
                 UserName = user.UserName,
                 Email = user.Email,
-                Roles = roles
+                Roles = roles,
+                EmailConfirmed = user.EmailConfirmed,
             });
         }
     
         return users;
+    }
+
+    public async Task<bool> UpdateUserRoleAsync(string userId, string selectedRole)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+            return false;
+
+        // Get current roles
+        var currentRoles = await _userManager.GetRolesAsync(user);
+
+        // Remove all current roles
+        if (currentRoles.Any())
+        {
+            var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+            if (!removeResult.Succeeded)
+                return false;
+        }
+
+        // Add the selected role
+        var addResult = await _userManager.AddToRoleAsync(user, selectedRole);
+        return addResult.Succeeded;
     }
 }

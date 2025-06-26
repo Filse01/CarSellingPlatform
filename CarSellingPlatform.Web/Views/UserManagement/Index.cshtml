@@ -1,7 +1,9 @@
 @using CarSellingPlatform.Web.ViewModels.UserManager
 @model IEnumerable<UserManagementIndexViewModel>
+
 @{
     ViewData["Title"] = "User Management";
+    var availableRoles = new List<string> { "Admin", "User" };
 }
 
 <div class="container-fluid">
@@ -33,45 +35,50 @@
                                 <tr>
                                     <th>Email</th>
                                     <th>Roles</th>
-                                    <th>Username</th>
-                                    <th>Actions</th>
                                     <th>Email Confirmed</th>
-                                    <th>Status</th>
-                                    <th>Failed Logins</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var user in Model)
                                 {
                                     <tr>
-                                        <td>@user.UserName</td>
-                                        <td>
-                                            @if (user.Roles.Any())
-                                            {
-                                                @foreach (var role in user.Roles)
+                                        <form asp-controller="UserManagement" asp-action="UpdateUserRole" method="post">
+                                            <td>
+                                                @user.UserName
+                                                <input type="hidden" name="UserId" value="@user.Id" />
+                                            </td>
+                                            <td>
+                                                <select name="SelectedRole" class="form-select">
+                                                    @foreach (var role in availableRoles)
+                                                    {
+                                                        <option value="@role" selected="@(user.Roles.Contains(role) ? "selected" : null)">
+                                                            @role
+                                                        </option>
+                                                    }
+                                                </select>
+                                            </td>
+                                            <td>
+                                                @if (user.EmailConfirmed)
                                                 {
-                                                    <span class="badge bg-primary me-1">@role</span>
+                                                    <span class="badge bg-success">
+                                                        <i class="fas fa-check"></i> Confirmed
+                                                    </span>
                                                 }
-                                            }
-                                            else
-                                            {
-                                                <span class="text-muted">No roles assigned</span>
-                                            }
-                                        </td>
-                                        
-                                    <td>
-                                        <div class="btn-group" role="group">
-                                            <a asp-action="Details" asp-route-id="@user.Id" 
-                                               class="btn btn-sm btn-outline-info" title="View Details">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <a asp-action="ManageRoles" asp-route-id="@user.Id" 
-                                               class="btn btn-sm btn-outline-primary" title="Manage Roles">
-                                                <i class="fas fa-user-tag"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                                else
+                                                {
+                                                    <span class="badge bg-warning text-dark">
+                                                        <i class="fas fa-times"></i> Pending
+                                                    </span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <button type="submit" class="btn btn-sm btn-primary">
+                                                    <i class="fas fa-save"></i> Save
+                                                </button>
+                                            </td>
+                                        </form>
+                                    </tr>
                                 }
                             </tbody>
                         </table>
@@ -94,17 +101,25 @@
         border-top: none;
         font-weight: 600;
     }
-    
+
     .badge {
         font-size: 0.75rem;
     }
-    
+
     .btn-group .btn {
         border-radius: 0.25rem;
         margin-right: 2px;
     }
-    
+
     .table-danger {
         --bs-table-bg: rgba(220, 53, 69, 0.1);
+    }
+
+    .form-select {
+        font-size: 0.85rem;
+    }
+
+    td form {
+        margin-bottom: 0;
     }
 </style>
