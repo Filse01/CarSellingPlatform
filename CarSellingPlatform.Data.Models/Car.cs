@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace CarSellingPlatform.Data.Models;
 using static CarSellingPlatform.Data.Common.Car;
@@ -22,7 +23,9 @@ public class Car
     public string Color { get; set; } = null!;
     
     public bool IsDeleted { get; set; }
-    
+    [Required]
+    public string SellerId { get; set; } = null!;
+    public IdentityUser Seller { get; set; } = null!;
     public int CategoryId { get; set; }
     
     public Category Category { get; set; } = null!;
