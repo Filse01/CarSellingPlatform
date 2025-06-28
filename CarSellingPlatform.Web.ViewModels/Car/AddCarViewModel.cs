@@ -1,0 +1,58 @@
+using System.ComponentModel.DataAnnotations;
+using CarSellingPlatform.Data.Models;
+
+namespace CarSellingPlatform.Web.ViewModels.Car;
+
+public class AddCarViewModel
+{
+    [Required]
+    public string Brand { get; set; } = null!;
+
+    [Required]
+    public string Model { get; set; } = null!;
+
+    [Required]
+    public string Description { get; set; } = null!;
+
+    [Required]
+    [Display(Name = "Image URL")]
+    public string? ImageUrl { get; set; } 
+
+    [Required]
+    [Range(0.01, double.MaxValue)]
+    public decimal Price { get; set; }
+
+    [Required]
+    [Range(1886, 2100)]
+    public int Year { get; set; }
+
+    [Required]
+    public string Color { get; set; } = null!;
+
+    [Required]
+    public string Category { get; set; } = null!;
+
+    [Required]
+    public string Displacement { get; set; } = null!;
+
+    [Required]
+    [Range(1, 2000)]
+    public int Horsepower { get; set; }
+
+    [Required]
+    [Range(1, 20)]
+    public int Cylinders { get; set; }
+
+    public string? EngineCode { get; set; }
+
+    [Required]
+    public string FuelType { get; set; } = null!;
+
+    [Required]
+    public string Transmission { get; set; } = null!;
+
+    public IEnumerable<AddCarBrand>? Brands { get; set; }
+    public IEnumerable<AddCarCategory>? Categories { get; set; }
+    public IEnumerable<AddCarFuelType>? FuelTypes { get; set; } 
+    public IEnumerable<AddCarTransmission>? Transmissions { get; set; } 
+}
