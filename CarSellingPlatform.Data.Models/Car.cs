@@ -9,8 +9,12 @@ public class Car
     public int Id { get; set; }
 
     [Required] 
-    [StringLength(TitleMaxLength, MinimumLength = TitleMinLength)]
-    public string Title { get; set; } = null!;
+    [StringLength(BrandMaxLength, MinimumLength = BrandMinLength)]
+    public int BrandId { get; set; }
+    public Brand Brand { get; set; }
+    [Required]
+    [StringLength(ModelMaxLength, MinimumLength = ModelMinLength)]
+    public string Model { get; set; } = null!;
     [StringLength(DescriptionMaxLength, MinimumLength = DescriptionMinLength)]
     public string? Description { get; set; }
     

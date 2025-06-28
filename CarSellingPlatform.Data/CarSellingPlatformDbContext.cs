@@ -19,7 +19,7 @@ namespace CarSellingPlatform.Data
         public DbSet<FuelType> FuelTypes { get; set; }
         public DbSet<Engine> Engines { get; set; }
         public DbSet<Transmission> Transmissions { get; set; }
-
+        public DbSet<Brand> Brands { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
