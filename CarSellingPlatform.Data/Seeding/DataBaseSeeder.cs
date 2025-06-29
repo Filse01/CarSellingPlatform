@@ -72,8 +72,8 @@ public static class DataBaseSeeder
 
         if (brands != null && brands.Count > 0)
         {
-            List<int> brandIds = brands.Select(b => b.Id).ToList();
-            if (await context.Brands.AnyAsync(b => brandIds.Contains(b.Id)) == false)
+            List<string> brandIds = brands.Select(b => b.Name).ToList();
+            if (await context.Brands.AnyAsync(b => brandIds.Contains(b.Name)) == false)
             {
                 await context.Brands.AddRangeAsync(brands);
                 await context.SaveChangesAsync();

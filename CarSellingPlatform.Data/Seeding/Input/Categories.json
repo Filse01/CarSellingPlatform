@@ -1,0 +1,12 @@
+[
+{ "Name": "Sedan" },
+{ "Name": "Coupe" },
+{ "Name": "Hatchback" },
+{ "Name": "SUV" },
+{ "Name": "Convertible" },
+{ "Name": "Wagon" },
+{ "Name": "Pickup Truck" },
+{ "Name": "Van" },
+{ "Name": "Crossover" },
+{ "Name": "Sports Car" }
+]
