@@ -88,7 +88,28 @@ public static class DataBaseSeeder
         var categories = JsonSerializer.Deserialize<List<Category>>(categoriesJson);
         if (categories != null && categories.Count > 0)
         {
-            
+            List<string> categoriesName = categories.Select(c => c.Name).ToList();
+            if (await context.Categories.AnyAsync(c => categoriesName.Contains(c.Name)) == false)
+            {
+                await context.Categories.AddRangeAsync(categories);
+                await context.SaveChangesAsync();
+            }
+        }
+    }
+
+    public static async Task ImportTransmissionsFromJsonAsync(CarSellingPlatformDbContext context)
+    {
+        var path = Path.Combine("..", "CarSellingPlatform.Data", "Seeding", "Input","Transmissions.json");
+        string transmissionsJson = File.ReadAllText(path);
+        var transmissions = JsonSerializer.Deserialize<List<Transmission>>(transmissionsJson);
+        if (transmissions != null && transmissions.Count > 0)
+        {
+            List<string> transmissionIds = transmissions.Select(t => t.Type).ToList();
+            if (await context.Transmissions.AnyAsync(t => transmissionIds.Contains(t.Type)))
+            {
+                await context.Transmissions.AddRangeAsync(transmissions);
+                await context.SaveChangesAsync();
+            }
         }
     }
 }
