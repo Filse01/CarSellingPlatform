@@ -104,10 +104,26 @@ public static class DataBaseSeeder
         var transmissions = JsonSerializer.Deserialize<List<Transmission>>(transmissionsJson);
         if (transmissions != null && transmissions.Count > 0)
         {
-            List<string> transmissionIds = transmissions.Select(t => t.Type).ToList();
-            if (await context.Transmissions.AnyAsync(t => transmissionIds.Contains(t.Type)))
+            List<string> transmissionTypes = transmissions.Select(t => t.Type).ToList();
+            if (await context.Transmissions.AnyAsync(t => transmissionTypes.Contains(t.Type)))
             {
                 await context.Transmissions.AddRangeAsync(transmissions);
+                await context.SaveChangesAsync();
+            }
+        }
+    }
+
+    public static async Task ImportFuelTypesFromJsonAsync(CarSellingPlatformDbContext context)
+    {
+        var path = Path.Combine("..", "CarSellingPlatform.Data", "Seeding", "Input", "FuelTypes.json");
+        string fuelTypesJson = File.ReadAllText(path);
+        var fuelTypes = JsonSerializer.Deserialize<List<FuelType>>(fuelTypesJson);
+        if (fuelTypes != null && fuelTypes.Count > 0)
+        {
+            List<string> fuelTypesNames = fuelTypes.Select(f => f.Type).ToList();
+            if (await context.FuelTypes.AnyAsync(f => fuelTypesNames.Contains(f.Type)))
+            {
+                await context.FuelTypes.AddRangeAsync(fuelTypes);
                 await context.SaveChangesAsync();
             }
         }
