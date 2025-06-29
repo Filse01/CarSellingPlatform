@@ -80,4 +80,15 @@ public static class DataBaseSeeder
             }
         }
     }
+
+    public static async Task ImportCategoriesFromJsonAsync(CarSellingPlatformDbContext context)
+    {
+        var path = Path.Combine("..", "CarSellingPlatform.Data", "Seeding", "Input", "Categories.json");
+        string categoriesJson = File.ReadAllText(path);
+        var categories = JsonSerializer.Deserialize<List<Category>>(categoriesJson);
+        if (categories != null && categories.Count > 0)
+        {
+            
+        }
+    }
 }

@@ -4,7 +4,8 @@ namespace CarSellingPlatform.Data.Models;
 
 public class Brand
 {
-    public int Id { get; set; }
+    [Key]
+    public Guid Id { get; set; } = Guid.NewGuid();
     [Required]
     [StringLength(BrandMaxLength, MinimumLength = BrandMinLength)]
     public string Name { get; set; } = null!;

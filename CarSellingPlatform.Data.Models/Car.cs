@@ -6,11 +6,11 @@ using static CarSellingPlatform.Data.Common.Car;
 public class Car
 {
     [Key]
-    public int Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     [Required] 
     [StringLength(BrandMaxLength, MinimumLength = BrandMinLength)]
-    public int BrandId { get; set; }
+    public Guid BrandId { get; set; }
     public Brand Brand { get; set; }
     [Required]
     [StringLength(ModelMaxLength, MinimumLength = ModelMinLength)]
@@ -30,19 +30,19 @@ public class Car
     [Required]
     public string SellerId { get; set; } = null!;
     public IdentityUser Seller { get; set; } = null!;
-    public int CategoryId { get; set; }
+    public Guid CategoryId { get; set; }
     
     public Category Category { get; set; } = null!;
     
-    public int EngineId { get; set; }
+    public Guid EngineId { get; set; }
     
     public Engine Engine { get; set; } = null!;
     
-    public int TransmissionId { get; set; }
+    public Guid TransmissionId { get; set; }
     
     public Transmission Transmission { get; set; } = null!;
     
-    public int FuelTypeId { get; set; }
+    public Guid FuelTypeId { get; set; }
     
     public FuelType FuelType { get; set; } = null!;
     

@@ -5,7 +5,7 @@ namespace CarSellingPlatform.Data.Models;
 public class Engine
 {
     [Key]
-    public int Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
     [Required]
     public string Displacement { get; set; } = null!;
     [Required]
