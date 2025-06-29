@@ -1,10 +1,9 @@
-using CarSellingPlatform.Services.Core;
+using CarSellingPlatform.Services.Core.CarInfo;
 using CarSellingPlatform.Services.Core.Contracts;
 using CarSellingPlatform.Services.Core.UserManager;
-
+using CarSellingPlatform.Data;
 namespace CarSellingPlatform.Web
 {
-    using Data;
 
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
@@ -32,6 +31,7 @@ namespace CarSellingPlatform.Web
                 .AddEntityFrameworkStores<CarSellingPlatformDbContext>();
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IUserManager, UserManagerService>();
+            builder.Services.AddScoped<ICarInfoService, CarInfoService>();
 
             WebApplication? app = builder.Build();
             

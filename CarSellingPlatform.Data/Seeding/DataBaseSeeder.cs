@@ -1,8 +1,11 @@
+using System.Text.Json;
 using CarSellingPlatform.Data;
+using CarSellingPlatform.Data.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CarSellingPlatform.Services.Core;
+namespace CarSellingPlatform.Data;
 
 public static class DataBaseSeeder
 {
@@ -21,6 +24,8 @@ public static class DataBaseSeeder
 
         // Seed admin user
         await SeedAdminUserAsync(userManager);
+        
+        await ImportBrandsFromJsonAsync(context);
     }
 
     private static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
@@ -55,6 +60,23 @@ public static class DataBaseSeeder
             if (result.Succeeded)
             {
                 await userManager.AddToRoleAsync(adminUser, "Admin");
+            }
+        }
+    }
+
+    public static async Task ImportBrandsFromJsonAsync(CarSellingPlatformDbContext context)
+    {
+        var path = Path.Combine("..", "CarSellingPlatform.Data", "Seeding", "Input", "Brands.json");
+        string brandsJson = File.ReadAllText(path);
+        var brands = JsonSerializer.Deserialize<List<Brand>>(brandsJson);
+
+        if (brands != null && brands.Count > 0)
+        {
+            List<int> brandIds = brands.Select(b => b.Id).ToList();
+            if (await context.Brands.AnyAsync(b => brandIds.Contains(b.Id)) == false)
+            {
+                await context.Brands.AddRangeAsync(brands);
+                await context.SaveChangesAsync();
             }
         }
     }
