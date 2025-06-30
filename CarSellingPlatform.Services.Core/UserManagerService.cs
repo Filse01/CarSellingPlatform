@@ -4,7 +4,7 @@ using CarSellingPlatform.Web.ViewModels.UserManager;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace CarSellingPlatform.Services.Core.UserManager;
+namespace CarSellingPlatform.Services.Core;
 
 public class UserManagerService : IUserManager
 {

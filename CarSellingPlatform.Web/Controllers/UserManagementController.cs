@@ -1,5 +1,5 @@
 using CarSellingPlatform.Services.Core.Contracts;
-using CarSellingPlatform.Services.Core.UserManager;
+using CarSellingPlatform.Services.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

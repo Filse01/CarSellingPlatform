@@ -1,3 +1,4 @@
+using CarSellingPlatform.Services.Core;
 using CarSellingPlatform.Services.Core.Contracts;
 using CarSellingPlatform.Web.ViewModels.Car;
 using Microsoft.AspNetCore.Authorization;
@@ -8,10 +9,11 @@ namespace CarSellingPlatform.Web.Controllers;
 public class CarController : BaseController
 {
     private readonly ICarInfoService _carInfoService;
-
-    public CarController(ICarInfoService carInfoService)
+    private readonly ICarService _carService;
+    public CarController(ICarInfoService carInfoService, ICarService carService)
     {
         _carInfoService = carInfoService;
+        _carService = carService;
     }
     
     // [AllowAnonymous]
@@ -31,5 +33,21 @@ public class CarController : BaseController
             Transmissions = await this._carInfoService.GetTransmissionsAsync(),
         };
         return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddCar(AddCarViewModel model)
+    {
+        var userId = GetUserId();
+        if (!this.ModelState.IsValid)
+        {
+            return View(model);
+        }
+        bool addResult = await _carService.AddCarAsync(userId, model);
+        if (addResult == false)
+        {
+            return View(model);
+        }
+        return RedirectToPage("/Index");
     }
 }

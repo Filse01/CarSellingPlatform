@@ -1,6 +1,5 @@
-using CarSellingPlatform.Services.Core.CarInfo;
+using CarSellingPlatform.Services.Core;
 using CarSellingPlatform.Services.Core.Contracts;
-using CarSellingPlatform.Services.Core.UserManager;
 using CarSellingPlatform.Data;
 namespace CarSellingPlatform.Web
 {
@@ -32,6 +31,7 @@ namespace CarSellingPlatform.Web
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IUserManager, UserManagerService>();
             builder.Services.AddScoped<ICarInfoService, CarInfoService>();
+            builder.Services.AddScoped<ICarService, CarService>();
 
             WebApplication? app = builder.Build();
             

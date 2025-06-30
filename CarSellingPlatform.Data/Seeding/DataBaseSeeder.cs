@@ -26,6 +26,12 @@ public static class DataBaseSeeder
         await SeedAdminUserAsync(userManager);
         
         await ImportBrandsFromJsonAsync(context);
+        
+        await ImportCategoriesFromJsonAsync(context);
+        
+        await ImportFuelTypesFromJsonAsync(context);
+        
+        await ImportTransmissionsFromJsonAsync(context);
     }
 
     private static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
@@ -105,7 +111,7 @@ public static class DataBaseSeeder
         if (transmissions != null && transmissions.Count > 0)
         {
             List<string> transmissionTypes = transmissions.Select(t => t.Type).ToList();
-            if (await context.Transmissions.AnyAsync(t => transmissionTypes.Contains(t.Type)))
+            if (await context.Transmissions.AnyAsync(t => transmissionTypes.Contains(t.Type)) == false)
             {
                 await context.Transmissions.AddRangeAsync(transmissions);
                 await context.SaveChangesAsync();
@@ -121,11 +127,12 @@ public static class DataBaseSeeder
         if (fuelTypes != null && fuelTypes.Count > 0)
         {
             List<string> fuelTypesNames = fuelTypes.Select(f => f.Type).ToList();
-            if (await context.FuelTypes.AnyAsync(f => fuelTypesNames.Contains(f.Type)))
+            if (await context.FuelTypes.AnyAsync(f => fuelTypesNames.Contains(f.Type)) == false)
             {
                 await context.FuelTypes.AddRangeAsync(fuelTypes);
                 await context.SaveChangesAsync();
             }
         }
     }
+    
 }

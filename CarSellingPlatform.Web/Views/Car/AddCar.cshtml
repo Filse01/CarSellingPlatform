@@ -20,19 +20,19 @@
                             <!-- Basic Information -->
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label asp-for="Brand" class="form-label">Brand</label>
-                                    <select asp-for="Brand" class="form-select" asp-items="@(new SelectList(Model.Brands ?? new List<AddCarBrand>(), "Name", "Name", Model.Brand))">
+                                    <label asp-for="@Model.BrandId" class="form-label">Brand</label>
+                                    <select asp-for="@Model.BrandId" class="form-select" asp-items="@(new SelectList(Model.Brands, "Id", "Name"))">
                                         <option value="">-- Select Brand --</option>
                                     </select>
-                                    <span asp-validation-for="Brand" class="text-danger"></span>
+                                    <span asp-validation-for="@Model.BrandId" class="text-danger"></span>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label asp-for="Model" class="form-label">Model</label>
-                                    <input asp-for="Model" class="form-control" placeholder="Enter car model" />
-                                    <span asp-validation-for="Model" class="text-danger"></span>
+                                    <label asp-for="@Model.CarModel" class="form-label">@Model.CarModel</label>
+                                    <input asp-for="@Model.CarModel" class="form-control" placeholder="Enter car model"/>
+                                    <span asp-validation-for="@Model.CarModel" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -40,19 +40,19 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label asp-for="Category" class="form-label">Category</label>
-                                    <select asp-for="Category" class="form-select" asp-items="@(new SelectList(Model.Categories ?? new List<AddCarCategory>(), "Name", "Name", Model.Category))">
+                                    <label asp-for="@Model.CategoryId" class="form-label">Category</label>
+                                    <select asp-for="@Model.CategoryId" class="form-select" asp-items="@(new SelectList(Model.Categories, "Id", "Name"))">
                                         <option value="">-- Select Category --</option>
                                     </select>
-                                    <span asp-validation-for="Category" class="text-danger"></span>
+                                    <span asp-validation-for="@Model.CategoryId" class="text-danger"></span>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label asp-for="Color" class="form-label">Color</label>
-                                    <input asp-for="Color" class="form-control" placeholder="Enter car color" />
-                                    <span asp-validation-for="Color" class="text-danger"></span>
+                                    <label asp-for="@Model.Color" class="form-label">Color</label>
+                                    <input asp-for="@Model.Color" class="form-control" placeholder="Enter car color" />
+                                    <span asp-validation-for="@Model.Color" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -60,34 +60,34 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label asp-for="Year" class="form-label">Year</label>
-                                    <input asp-for="Year" class="form-control" type="number" min="1886" max="2100" placeholder="Enter year" inputmode="numeric" pattern="[0-9]*" />
-                                    <span asp-validation-for="Year" class="text-danger"></span>
+                                    <label asp-for="@Model.Year" class="form-label">Year</label>
+                                    <input asp-for="@Model.Year" class="form-control" type="number" min="1886" max="2100" placeholder="Enter year" inputmode="numeric" pattern="[0-9]*" />
+                                    <span asp-validation-for="@Model.Year" class="text-danger"></span>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label asp-for="Price" class="form-label">Price ($)</label>
+                                    <label asp-for="@Model.Price" class="form-label">Price ($)</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input asp-for="Price" class="form-control" type="number" step="0.01" min="0.01" placeholder="0.00" inputmode="decimal" />
+                                        <input asp-for="@Model.Price" class="form-control" type="number" step="1" min="1" placeholder="0" inputmode="decimal" max="10000000" />
                                     </div>
-                                    <span asp-validation-for="Price" class="text-danger"></span>
+                                    <span asp-validation-for="@Model.Price" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="ImageUrl" class="form-label">Image URL</label>
-                            <input asp-for="ImageUrl" class="form-control" type="url" placeholder="https://example.com/car-image.jpg" />
-                            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                            <label asp-for="@Model.ImageUrl" class="form-label">Image URL</label>
+                            <input asp-for="@Model.ImageUrl" class="form-control" type="url" placeholder="https://example.com/car-image.jpg" />
+                            <span asp-validation-for="@Model.ImageUrl" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="Description" class="form-label">Description</label>
-                            <textarea asp-for="Description" class="form-control" rows="4" placeholder="Enter detailed description of the car..."></textarea>
-                            <span asp-validation-for="Description" class="text-danger"></span>
+                            <label asp-for="@Model.Description" class="form-label">Description</label>
+                            <textarea asp-for="@Model.Description" class="form-control" rows="4" placeholder="Enter detailed description of the car..."></textarea>
+                            <span asp-validation-for="@Model.Description" class="text-danger"></span>
                         </div>
 
                         <!-- Engine Information -->
@@ -99,35 +99,17 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label asp-for="Displacement" class="form-label">Displacement</label>
-                                            <input asp-for="Displacement" class="form-control" placeholder="e.g., 2.0L, 1500cc" />
-                                            <span asp-validation-for="Displacement" class="text-danger"></span>
+                                            <label asp-for="@Model.Displacement" class="form-label">Displacement</label>
+                                            <input asp-for="@Model.Displacement" class="form-control" placeholder="e.g., 2.0L" />
+                                            <span asp-validation-for="@Model.Displacement" class="text-danger"></span>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label asp-for="Horsepower" class="form-label">Horsepower (HP)</label>
-                                            <input asp-for="Horsepower" class="form-control" type="number" min="1" max="2000" placeholder="Enter horsepower" inputmode="numeric" pattern="[0-9]*" />
-                                            <span asp-validation-for="Horsepower" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label asp-for="Cylinders" class="form-label">Cylinders</label>
-                                            <input asp-for="Cylinders" class="form-control" type="number" min="1" max="20" placeholder="Enter number of cylinders" inputmode="numeric" pattern="[0-9]*" />
-                                            <span asp-validation-for="Cylinders" class="text-danger"></span>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label asp-for="EngineCode" class="form-label">Engine Code (Optional)</label>
-                                            <input asp-for="EngineCode" class="form-control" placeholder="e.g., K20A, 2JZ-GTE" />
-                                            <span asp-validation-for="EngineCode" class="text-danger"></span>
+                                            <label asp-for="@Model.Horsepower" class="form-label">Horsepower (HP)</label>
+                                            <input asp-for="@Model.Horsepower" class="form-control" type="number" min="1" max="2000" placeholder="Enter horsepower" inputmode="numeric" pattern="[0-9]*" />
+                                            <span asp-validation-for="@Model.Horsepower" class="text-danger"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -135,21 +117,39 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label asp-for="FuelType" class="form-label">Fuel Type</label>
-                                            <select asp-for="FuelType" class="form-select" asp-items="@(new SelectList(Model.FuelTypes ?? new List<AddCarFuelType>(), "Name", "Name", Model.FuelType))">
+                                            <label asp-for="@Model.Cylinders" class="form-label">Cylinders</label>
+                                            <input asp-for="@Model.Cylinders" class="form-control" type="number" min="1" max="20" placeholder="Enter number of cylinders" inputmode="numeric" pattern="[0-9]*" />
+                                            <span asp-validation-for="@Model.Cylinders" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label asp-for="@Model.EngineCode" class="form-label">Engine Code (Optional)</label>
+                                            <input asp-for="@Model.EngineCode" class="form-control" placeholder="e.g., K20A, 2JZ-GTE" />
+                                            <span asp-validation-for="@Model.EngineCode" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label asp-for="@Model.FuelTypeId" class="form-label">Fuel Type</label>
+                                            <select asp-for="@Model.FuelTypeId" class="form-select" asp-items="@(new SelectList(Model.FuelTypes, "Id", "Type"))">
                                                 <option value="">-- Select Fuel Type --</option>
                                             </select>
-                                            <span asp-validation-for="FuelType" class="text-danger"></span>
+                                            <span asp-validation-for="@Model.FuelTypeId" class="text-danger"></span>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label asp-for="Transmission" class="form-label">Transmission</label>
-                                            <select asp-for="Transmission" class="form-select" asp-items="@(new SelectList(Model.Transmissions ?? new List<AddCarTransmission>(), "Name", "Name", Model.Transmission))">
+                                            <label asp-for="@Model.TransmissionId" class="form-label">Transmission</label>
+                                            <select asp-for="@Model.TransmissionId" class="form-select" asp-items="@(new SelectList(Model.Transmissions, "Id", "Type"))">
                                                 <option value="">-- Select Transmission --</option>
                                             </select>
-                                            <span asp-validation-for="Transmission" class="text-danger"></span>
+                                            <span asp-validation-for="@Model.TransmissionId" class="text-danger"></span>
                                         </div>
                                     </div>
                                 </div>

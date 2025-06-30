@@ -1,25 +1,26 @@
 using System.ComponentModel.DataAnnotations;
 using CarSellingPlatform.Data.Models;
-
+using static CarSellingPlatform.Data.Common.Car;
 namespace CarSellingPlatform.Web.ViewModels.Car;
 
 public class AddCarViewModel
 {
     [Required]
-    public string Brand { get; set; } = null!;
+    public Guid BrandId { get; set; }
 
     [Required]
-    public string Model { get; set; } = null!;
+    [StringLength(ModelMaxLength, MinimumLength = ModelMinLength)]
+    public string CarModel { get; set; } = null!;
 
     [Required]
+    [StringLength(DescriptionMaxLength, MinimumLength = DescriptionMinLength)]
     public string Description { get; set; } = null!;
-
-    [Required]
+    
     [Display(Name = "Image URL")]
     public string? ImageUrl { get; set; } 
 
     [Required]
-    [Range(0.01, double.MaxValue)]
+    [Range(1, 10_000_000)]
     public decimal Price { get; set; }
 
     [Required]
@@ -30,9 +31,10 @@ public class AddCarViewModel
     public string Color { get; set; } = null!;
 
     [Required]
-    public string Category { get; set; } = null!;
+    public Guid CategoryId { get; set; }
 
     [Required]
+    [RegularExpression(@"^\d+\.\d+[Ll]?$", ErrorMessage = "Please enter a valid displacement (e.g., 2.0L")]
     public string Displacement { get; set; } = null!;
 
     [Required]
@@ -46,10 +48,10 @@ public class AddCarViewModel
     public string? EngineCode { get; set; }
 
     [Required]
-    public string FuelType { get; set; } = null!;
+    public Guid FuelTypeId { get; set; }
 
     [Required]
-    public string Transmission { get; set; } = null!;
+    public Guid TransmissionId { get; set; } 
 
     public IEnumerable<AddCarBrand>? Brands { get; set; }
     public IEnumerable<AddCarCategory>? Categories { get; set; }

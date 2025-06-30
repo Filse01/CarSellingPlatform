@@ -3,7 +3,7 @@ using CarSellingPlatform.Services.Core.Contracts;
 using CarSellingPlatform.Web.ViewModels.Car;
 using Microsoft.EntityFrameworkCore;
 
-namespace CarSellingPlatform.Services.Core.CarInfo;
+namespace CarSellingPlatform.Services.Core;
 
 public class CarInfoService : ICarInfoService
 {
