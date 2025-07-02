@@ -3,6 +3,7 @@ using CarSellingPlatform.Data.Models;
 using CarSellingPlatform.Services.Core.Contracts;
 using CarSellingPlatform.Web.ViewModels.Car;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarSellingPlatform.Services.Core;
 
@@ -16,6 +17,36 @@ public class CarService : ICarService
         _dbContext = dbContext;
         _userManager = userManager;
     }
+
+    public async Task<IEnumerable<IndexCarViewModel>> ListAllAsync()
+    {
+        IEnumerable<IndexCarViewModel> allCars = await this._dbContext
+            .Cars
+            .Include(c => c.Category)
+            .Include(c => c.FuelType)
+            .Include(c => c.Brand)
+            .Include(c => c.Engine)
+            .Include(c => c.Transmission)
+            .AsNoTracking()
+            .Select(c => new IndexCarViewModel()
+            {
+                Id = c.Id,
+                BrandName = c.Brand.Name,
+                CategoryName = c.Category.Name,
+                CarModel = c.Model,
+                Description = c.Description,
+                HorsePower = c.Engine.Horsepower,
+                Color = c.Color,
+                TransmissionTypeName = c.Transmission.Type,
+                Year = c.Year,
+                Displacement = c.Engine.Displacement,
+                Price = c.Price,
+                FuelTypeName = c.FuelType.Type,
+                ImageUrl = c.ImageUrl,
+            }).ToListAsync();
+        return allCars;
+    }
+
     public async Task<bool> AddCarAsync(string userId, AddCarViewModel model)
     {
         bool opResult = false;

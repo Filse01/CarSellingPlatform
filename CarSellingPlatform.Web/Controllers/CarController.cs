@@ -16,12 +16,13 @@ public class CarController : BaseController
         _carService = carService;
     }
     
-    // [AllowAnonymous]
-    // Task<IActionResult> Index()
-    // {
-    //     string? userId = GetUserId();
-    //     return View();
-    // }
+    [AllowAnonymous]
+    public async Task<IActionResult> Index()
+    {
+        string? userId = GetUserId();
+        var cars = await _carService.ListAllAsync();
+        return View(cars);
+    }
     [HttpGet]
     public async Task<IActionResult> AddCar()
     {
