@@ -4,6 +4,8 @@ using CarSellingPlatform.Data;
 using CarSellingPlatform.Data.Interfaces.Repository;
 using CarSellingPlatform.Data.Repository;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarSellingPlatform.Web
 {
