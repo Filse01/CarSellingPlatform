@@ -26,4 +26,6 @@ public class IndexCarViewModel
     public int Year { get; set; }
     
     public decimal Price { get; set; }
+    
+    public bool IsUserSeller { get; set; }
 }
