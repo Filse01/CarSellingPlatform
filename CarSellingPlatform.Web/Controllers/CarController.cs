@@ -20,8 +20,19 @@ public class CarController : BaseController
     public async Task<IActionResult> Index()
     {
         string? userId = GetUserId();
-        var cars = await _carService.ListAllAsync();
+        var cars = await _carService.ListAllAsync(userId);
         return View(cars);
+    }
+    [HttpGet]
+    public async Task<IActionResult> Details(Guid id)
+    {
+        string? userId = GetUserId();
+        DetailsCarViewModel? car = await _carService.GetDetailsCarAsync(id, userId);
+        if (car == null)
+        {
+            return this.RedirectToAction(nameof(Index));
+        }
+        return View(car);
     }
     [HttpGet]
     public async Task<IActionResult> AddCar()
@@ -49,6 +60,6 @@ public class CarController : BaseController
         {
             return View(model);
         }
-        return RedirectToPage("/Index");
+        return RedirectToAction(nameof(Index));
     }
 }

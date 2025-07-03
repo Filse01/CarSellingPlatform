@@ -23,7 +23,7 @@ public class CarService : ICarService
         _userManager = userManager;
     }
 
-    public async Task<IEnumerable<IndexCarViewModel>> ListAllAsync()
+    public async Task<IEnumerable<IndexCarViewModel>> ListAllAsync(string? userId)
     {
         IEnumerable<IndexCarViewModel> allCars = await _carRepository.GetAllAttached()
             .Include(c => c.Category)
@@ -47,6 +47,8 @@ public class CarService : ICarService
                 Price = c.Price,
                 FuelTypeName = c.FuelType.Type,
                 ImageUrl = c.ImageUrl,
+                IsUserSeller = userId != null ?
+                    c.SellerId.ToLower() == userId.ToLower() : false
             }).ToListAsync();
         return allCars;
     }
@@ -87,5 +89,43 @@ public class CarService : ICarService
             opResult = true;
         }
         return opResult;
+    }
+
+    public async Task<DetailsCarViewModel> GetDetailsCarAsync(Guid? id, string userId)
+    {
+        DetailsCarViewModel? model = null;
+        if (id.HasValue)
+        {
+            Car carModel = await _carRepository
+                .GetAllAttached()
+                .Include(c => c.Category)
+                .Include(c => c.FuelType)
+                .Include(c => c.Brand)
+                .Include(c => c.Engine)
+                .Include(c => c.Transmission)
+                .AsNoTracking()
+                .SingleOrDefaultAsync(c => c.Id == id.Value);
+            if (carModel != null)
+            {
+                model = new DetailsCarViewModel()
+                {
+                    Id = carModel.Id,
+                    BrandName = carModel.Brand.Name,
+                    CategoryName = carModel.Category.Name,
+                    CarModel = carModel.Model,
+                    Description = carModel.Description,
+                    HorsePower = carModel.Engine.Horsepower,
+                    Color = carModel.Color,
+                    TransmissionTypeName = carModel.Transmission.Type,
+                    Year = carModel.Year,
+                    ImageUrl = carModel.ImageUrl,
+                    Displacement = carModel.Engine.Displacement,
+                    Price = carModel.Price,
+                    FuelTypeName = carModel.FuelType.Type,
+                    IsUserSeller = userId != null ? carModel.SellerId.ToLower() == userId.ToLower() : false
+                };
+            }
+        }
+        return model;
     }
 }
