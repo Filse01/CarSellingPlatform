@@ -7,12 +7,12 @@ namespace CarSellingPlatform.Data.Repository;
 
 public class BaseRepository<TEntity, TKey> : IRepository<TEntity, TKey> where TEntity: class
 {
-    private readonly DbContext _dbContext;
+    private readonly CarSellingPlatformDbContext _dbContext;
     private readonly DbSet<TEntity> _dbSet;
-    public BaseRepository(DbContext dbContext, DbSet<TEntity> dbSet)
+    public BaseRepository(CarSellingPlatformDbContext dbContext)
     {
         _dbContext = dbContext;
-        _dbSet = this._dbContext.Set<TEntity>();
+        _dbSet = dbContext.Set<TEntity>();
     }
     public TEntity? GetById(TKey id)
     {

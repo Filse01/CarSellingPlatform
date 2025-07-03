@@ -1,27 +1,31 @@
 using CarSellingPlatform.Data;
+using CarSellingPlatform.Data.Interfaces.Repository;
 using CarSellingPlatform.Data.Models;
+using CarSellingPlatform.Data.Repository;
 using CarSellingPlatform.Services.Core.Contracts;
 using CarSellingPlatform.Web.ViewModels.Car;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CarSellingPlatform.Services.Core;
 
 public class CarService : ICarService
 {
-    private readonly CarSellingPlatformDbContext _dbContext;
+    private readonly IRepository<Car,Guid> _carRepository;
+    private readonly IRepository<Engine, Guid> _engineRepository;
     private readonly UserManager<IdentityUser> _userManager;
 
-    public CarService(CarSellingPlatformDbContext dbContext, UserManager<IdentityUser> userManager)
+    public CarService(IRepository<Car, Guid> carRepository, IRepository<Engine, Guid> engineRepository, UserManager<IdentityUser> userManager)
     {
-        _dbContext = dbContext;
+        _carRepository = carRepository;
+        _engineRepository = engineRepository;
         _userManager = userManager;
     }
 
     public async Task<IEnumerable<IndexCarViewModel>> ListAllAsync()
     {
-        IEnumerable<IndexCarViewModel> allCars = await this._dbContext
-            .Cars
+        IEnumerable<IndexCarViewModel> allCars = await _carRepository.GetAllAttached()
             .Include(c => c.Category)
             .Include(c => c.FuelType)
             .Include(c => c.Brand)
@@ -56,13 +60,13 @@ public class CarService : ICarService
         {
             Engine newEngine = new Engine()
             {
-                Id = new Guid(),
+                Id = Guid.NewGuid(),
                 Cylinders = model.Cylinders,
                 Displacement = model.Displacement,
                 Horsepower = model.Horsepower,
                 EngineCode = model.EngineCode,
             };
-            await _dbContext.Engines.AddAsync(newEngine);
+            await _engineRepository.AddAsync(newEngine);
             Car newCar = new Car()
             {
                 BrandId = model.BrandId,
@@ -78,8 +82,8 @@ public class CarService : ICarService
                 TransmissionId = model.TransmissionId,
                 FuelTypeId = model.FuelTypeId,
             };
-            await _dbContext.Cars.AddAsync(newCar);
-            await _dbContext.SaveChangesAsync();
+            await _carRepository.AddAsync(newCar);
+            await _carRepository.SaveChangesAsync();
             opResult = true;
         }
         return opResult;
