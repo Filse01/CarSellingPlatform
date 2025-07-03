@@ -1,6 +1,10 @@
 using CarSellingPlatform.Services.Core;
 using CarSellingPlatform.Services.Core.Contracts;
 using CarSellingPlatform.Data;
+using CarSellingPlatform.Data.Interfaces.Repository;
+using CarSellingPlatform.Data.Repository;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+
 namespace CarSellingPlatform.Web
 {
 
@@ -32,7 +36,7 @@ namespace CarSellingPlatform.Web
             builder.Services.AddScoped<IUserManager, UserManagerService>();
             builder.Services.AddScoped<ICarInfoService, CarInfoService>();
             builder.Services.AddScoped<ICarService, CarService>();
-
+            builder.Services.AddScoped(typeof(IRepository<,>), typeof(BaseRepository<,>));
             WebApplication? app = builder.Build();
             
             if (app.Environment.IsDevelopment())
