@@ -128,4 +128,50 @@ public class CarService : ICarService
         }
         return model;
     }
+
+    public async Task<EditCarViewModel> GetEditCarAsync(Guid? id, string userId)
+    {
+        EditCarViewModel model = null;
+        Engine oldEngine = null;
+        if (id.HasValue)
+        {
+            Car? editCar = await _carRepository.GetAllAttached()
+                .AsNoTracking()
+                .SingleOrDefaultAsync(c => c.Id == id.Value);
+            Engine editEngine = await _engineRepository.GetAllAttached()
+                .AsNoTracking()
+                .SingleOrDefaultAsync(c => c.Id == editCar.EngineId);
+            if (editCar != null && editCar.SellerId.ToLower() == userId.ToLower())
+            {
+                oldEngine = new Engine()
+                {
+                    Id = editEngine.Id,
+                    Displacement = editEngine.Displacement,
+                    Cylinders = editEngine.Cylinders,
+                    Horsepower = editEngine.Horsepower,
+                    EngineCode = editEngine.EngineCode,
+                };
+                model = new EditCarViewModel()
+                {
+                    BrandId = editCar.BrandId,
+                    CarModel = editCar.Model,
+                    Description = editCar.Description,
+                    Price = editCar.Price,
+                    Color = editCar.Color,
+                    TransmissionId = editCar.TransmissionId,
+                    FuelTypeId = editCar.FuelTypeId,
+                    Year = editCar.Year,
+                    Displacement = oldEngine.Displacement,
+                    Horsepower = oldEngine.Horsepower,
+                    EngineCode = oldEngine.EngineCode,
+                    ImageUrl = editCar.ImageUrl,
+                    SellerId = userId,
+                    Cylinders = oldEngine.Cylinders,
+                    CategoryId = editCar.CategoryId,
+                };
+            }
+            
+        }
+        return model;
+    }
 }

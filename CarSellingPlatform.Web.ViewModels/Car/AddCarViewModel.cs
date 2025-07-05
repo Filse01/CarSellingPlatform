@@ -14,7 +14,7 @@ public class AddCarViewModel
 
     [Required]
     [StringLength(DescriptionMaxLength, MinimumLength = DescriptionMinLength)]
-    public string Description { get; set; } = null!;
+    public string? Description { get; set; } = null!;
     
     [Display(Name = "Image URL")]
     public string? ImageUrl { get; set; } 

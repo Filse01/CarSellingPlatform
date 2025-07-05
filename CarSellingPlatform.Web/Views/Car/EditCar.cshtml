@@ -1,0 +1,247 @@
+@model CarSellingPlatform.Web.ViewModels.Car.EditCarViewModel
+
+@{
+    ViewData["Title"] = "Edit Car";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">Edit Car</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="EditCar" method="post">
+                        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+                        
+                        @Html.HiddenFor(m => m.SellerId)
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="BrandId" class="form-label">Brand</label>
+                                    <select asp-for="BrandId" class="form-select" asp-items="@(new SelectList(Model.Brands, "Id", "Name"))">
+                                        <option value="">Select a brand</option>
+                                    </select>
+                                    <span asp-validation-for="BrandId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="CarModel" class="form-label">Model</label>
+                                    <input asp-for="CarModel" class="form-control" placeholder="Enter car model" />
+                                    <span asp-validation-for="CarModel" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label">Description</label>
+                            <textarea asp-for="Description" class="form-control" rows="4" placeholder="Enter car description"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ImageUrl" class="form-label">Image URL</label>
+                            <input asp-for="ImageUrl" class="form-control" placeholder="Enter image URL (optional)" />
+                            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Price" class="form-label">Price ($)</label>
+                                    <input asp-for="Price" class="form-control" type="number" step="0.01" min="1" max="10000000" placeholder="Enter price" />
+                                    <span asp-validation-for="Price" class="text-danger"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Year" class="form-label">Year</label>
+                                    <input asp-for="Year" class="form-control" type="number" min="1886" max="2100" placeholder="Enter year" />
+                                    <span asp-validation-for="Year" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Color" class="form-label">Color</label>
+                                    <input asp-for="Color" class="form-control" placeholder="Enter color" />
+                                    <span asp-validation-for="Color" class="text-danger"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="CategoryId" class="form-label">Category</label>
+                                    <select asp-for="CategoryId" class="form-select" asp-items="@(new SelectList(Model.Categories, "Id", "Name"))">
+                                        <option value="">Select a category</option>
+                                    </select>
+                                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Displacement" class="form-label">Engine Displacement</label>
+                                    <input asp-for="Displacement" class="form-control" placeholder="e.g., 2.0L" />
+                                    <small class="form-text text-muted">Format: 2.0L or 2.0l</small>
+                                    <span asp-validation-for="Displacement" class="text-danger"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Horsepower" class="form-label">Horsepower</label>
+                                    <input asp-for="Horsepower" class="form-control" type="number" min="1" max="2000" placeholder="Enter horsepower" />
+                                    <span asp-validation-for="Horsepower" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Cylinders" class="form-label">Cylinders</label>
+                                    <input asp-for="Cylinders" class="form-control" type="number" min="1" max="20" placeholder="Enter number of cylinders" />
+                                    <span asp-validation-for="Cylinders" class="text-danger"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="EngineCode" class="form-label">Engine Code</label>
+                                    <input asp-for="EngineCode" class="form-control" placeholder="Enter engine code (optional)" />
+                                    <span asp-validation-for="EngineCode" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="FuelTypeId" class="form-label">Fuel Type</label>
+                                    <select asp-for="FuelTypeId" class="form-select" asp-items="@(new SelectList(Model.FuelTypes, "Id", "Type"))">
+                                        <option value="">Select fuel type</option>
+                                    </select>
+                                    <span asp-validation-for="FuelTypeId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="TransmissionId" class="form-label">Transmission</label>
+                                    <select asp-for="TransmissionId" class="form-select" asp-items="@(new SelectList(Model.Transmissions, "Id", "Type"))">
+                                        <option value="">Select transmission</option>
+                                    </select>
+                                    <span asp-validation-for="TransmissionId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a asp-action="Details" asp-route-id="@Model.SellerId" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back to Details
+                            </a>
+                            <div>
+                                <button type="submit" class="btn btn-primary me-2">
+                                    <i class="fas fa-save"></i> Save Changes
+                                </button>
+                                <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .car-header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .specs-highlight h3 {
+        margin-bottom: 15px;
+        font-size: 1.2em;
+    }
+    
+    .description-section h3 {
+        color: #2c3e50;
+        margin-bottom: 15px;
+        font-size: 1.3em;
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #10ac84 0%, #00d2d3 100%);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-secondary {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover,
+    .btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        color: white;
+        text-decoration: none;
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .car-content {
+            grid-template-columns: 1fr;
+        }
+        
+        .details-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .specs-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .car-header h1 {
+            font-size: 2em;
+        }
+
+        .seller-badge {
+            position: static;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+        }
+    }
+</style>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -8,4 +8,5 @@ public interface ICarService
     Task<bool> AddCarAsync(string userId,AddCarViewModel model);
 
     Task<DetailsCarViewModel> GetDetailsCarAsync(Guid? id, string userId);
+    Task<EditCarViewModel> GetEditCarAsync(Guid? id, string userId);
 }

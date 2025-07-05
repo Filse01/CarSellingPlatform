@@ -62,4 +62,17 @@ public class CarController : BaseController
         }
         return RedirectToAction(nameof(Index));
     }
+
+    [HttpGet]
+    public async Task<IActionResult> EditCar(Guid id)
+    {
+        string? userId = GetUserId();
+            
+        EditCarViewModel? car = await _carService.GetEditCarAsync(id, userId);
+        car.Categories = await this._carInfoService.GetCategoriesAsync();
+        car.Brands = await this._carInfoService.GetBrandsAsync();
+        car.FuelTypes = await this._carInfoService.GetFuelTypesAsync();
+        car.Transmissions = await this._carInfoService.GetTransmissionsAsync();
+        return View(car);
+    }
 }
