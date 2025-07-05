@@ -153,6 +153,7 @@ public class CarService : ICarService
                 };
                 model = new EditCarViewModel()
                 {
+                    Id = editCar.Id,
                     BrandId = editCar.BrandId,
                     CarModel = editCar.Model,
                     Description = editCar.Description,
@@ -168,10 +169,44 @@ public class CarService : ICarService
                     SellerId = userId,
                     Cylinders = oldEngine.Cylinders,
                     CategoryId = editCar.CategoryId,
+                    EngineId = oldEngine.Id
                 };
             }
             
         }
         return model;
+    }
+
+    public async Task<bool> EditCarAsync(string userId,EditCarViewModel model)
+    {
+        bool opResult = false;
+        var user = await _userManager.FindByIdAsync(userId);
+
+        Car updatedCar = await _carRepository.GetAllAttached()
+            .SingleOrDefaultAsync(c => c.Id == model.Id);
+        Engine updatedEngine = await _engineRepository.GetAllAttached()
+            .SingleOrDefaultAsync(c => c.Id == updatedCar.EngineId);
+        if (updatedCar != null && user != null)
+        {
+            updatedCar.Model = model.CarModel;
+            updatedCar.ImageUrl = model.ImageUrl;
+            updatedCar.Description = model.Description;
+            updatedCar.Price = model.Price;
+            updatedCar.Color = model.Color;
+            updatedCar.TransmissionId = model.TransmissionId;
+            updatedCar.FuelTypeId = model.FuelTypeId;
+            updatedCar.Year = model.Year;
+            updatedCar.BrandId = model.BrandId;
+            updatedCar.CategoryId = model.CategoryId;
+            updatedEngine.Cylinders = model.Cylinders;
+            updatedEngine.Horsepower = model.Horsepower;
+            updatedEngine.EngineCode = model.EngineCode;
+            await _carRepository.UpdateAsync(updatedCar);
+            await _engineRepository.UpdateAsync(updatedEngine);
+            await _carRepository.SaveChangesAsync();
+            await _engineRepository.SaveChangesAsync();
+            opResult = true;
+        }
+        return opResult;
     }
 }

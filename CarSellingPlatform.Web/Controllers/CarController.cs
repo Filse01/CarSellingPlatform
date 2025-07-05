@@ -75,4 +75,21 @@ public class CarController : BaseController
         car.Transmissions = await this._carInfoService.GetTransmissionsAsync();
         return View(car);
     }
+
+    [HttpPost]
+    public async Task<IActionResult> EditCar(EditCarViewModel model)
+    {
+        var userId = GetUserId();
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        bool editResult = await _carService.EditCarAsync(userId, model);
+        if (editResult == false)
+        {
+            return View(model);
+        }
+        return this.RedirectToAction(nameof(Details), new { id = model.Id });
+    }
 }
