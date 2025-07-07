@@ -209,4 +209,42 @@ public class CarService : ICarService
         }
         return opResult;
     }
+
+    public async Task<DeleteCarViewModel> GetDeleteCarAsync(Guid? id, string userId)
+    {
+        DeleteCarViewModel model = null;
+        if (id.HasValue)
+        {
+            Car? deleteCar = _carRepository.GetAllAttached()
+                .Include(c => c.Seller)
+                .AsNoTracking()
+                .SingleOrDefault(c => c.Id == id.Value);
+            if (deleteCar != null && deleteCar.SellerId.ToLower() == userId.ToLower())
+            {
+                model = new DeleteCarViewModel()
+                {
+                    Id = deleteCar.Id,
+                    CarModel = deleteCar.Model,
+                    Seller = deleteCar.Seller.UserName,
+                    SellerId = userId,
+                };
+            }
+        }
+        return model;
+    }
+
+    public async Task<bool> SoftDeleteCarAsync(DeleteCarViewModel model, string userId)
+    {
+        bool opResult = false;
+        var user = await _userManager.FindByIdAsync(userId);
+        Car deletedCar = await _carRepository.SingleOrDefaultAsync(c => c.Id == model.Id);
+        if (user != null && deletedCar != null)
+        {
+            deletedCar.IsDeleted = true;
+            await _carRepository.UpdateAsync(deletedCar);
+            await _carRepository.SaveChangesAsync();
+            opResult = true;
+        }
+        return opResult;
+    }
 }

@@ -17,12 +17,14 @@ public class CarController : BaseController
     }
     
     [AllowAnonymous]
+    [HttpGet]
     public async Task<IActionResult> Index()
     {
         string? userId = GetUserId();
         var cars = await _carService.ListAllAsync(userId);
         return View(cars);
     }
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> Details(Guid id)
     {
@@ -91,5 +93,26 @@ public class CarController : BaseController
             return View(model);
         }
         return this.RedirectToAction(nameof(Details), new { id = model.Id });
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> DeleteCar(Guid id)
+    {
+        string? userId = GetUserId();
+        DeleteCarViewModel? car = await _carService.GetDeleteCarAsync(id, userId);
+        if (car == null)
+        {
+            return this.RedirectToAction(nameof(Index));
+        }
+        return View(car);
+    }
+
+
+    [HttpPost]
+    public async Task<IActionResult> DeleteCar(DeleteCarViewModel model)
+    {
+        bool deleteResult = await _carService
+            .SoftDeleteCarAsync(model,GetUserId());
+        return RedirectToAction(nameof(Index));
     }
 }
