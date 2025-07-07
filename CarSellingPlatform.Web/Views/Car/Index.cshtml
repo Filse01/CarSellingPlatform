@@ -1,4 +1,4 @@
-@model IEnumerable<CarSellingPlatform.Web.ViewModels.Car.IndexCarViewModel>
+@model CarSellingPlatform.Web.ViewModels.Car.PagedListViewModel<CarSellingPlatform.Web.ViewModels.Car.IndexCarViewModel>
 
 @{
     ViewData["Title"] = "Cars for Sale";
@@ -12,10 +12,10 @@
         </div>
     </div>
 
-    @if (Model != null && Model.Any())
+    @if (Model?.Items != null && Model.Items.Any())
     {
         <div class="row">
-            @foreach (var car in Model)
+            @foreach (var car in Model.Items)
             {
                 <div class="col-12 mb-4">
                     <div class="card car-card shadow-sm h-100">
@@ -146,11 +146,38 @@
             }
         </div>
         
-        <!-- Pagination placeholder -->
-        <div class="row mt-4">
-            <div class="col-12 d-flex justify-content-center">
-                <!-- Add pagination controls here if needed -->
-            </div>
+        <div class="col-12 d-flex justify-content-center">
+            <nav>
+                <ul class="pagination">
+                    @if (Model.HasPreviousPage)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber - 1)">Previous</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                    }
+
+                    <li class="page-item disabled">
+                        <span class="page-link">
+                            Page @Model.PageNumber of @Model.TotalPages
+                        </span>
+                    </li>
+
+                    @if (Model.HasNextPage)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber + 1)">Next</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item disabled"><span class="page-link">Next</span></li>
+                    }
+                </ul>
+            </nav>
         </div>
     }
     else

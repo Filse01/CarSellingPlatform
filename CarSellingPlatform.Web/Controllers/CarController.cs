@@ -18,11 +18,13 @@ public class CarController : BaseController
     
     [AllowAnonymous]
     [HttpGet]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int page =1)
     {
+        const int pageSize = 10;
         string? userId = GetUserId();
-        var cars = await _carService.ListAllAsync(userId);
-        return View(cars);
+
+        var pagedCars = await _carService.ListPagedAsync(userId, page, pageSize);
+        return View(pagedCars);
     }
     [AllowAnonymous]
     [HttpGet]

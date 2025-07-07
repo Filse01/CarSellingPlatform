@@ -1,16 +1,72 @@
 [
   {
-    "Id": "15dc2a7f-bf21-4ad9-a0d4-59d04521b119",
-    "Displacement": "2.5L",
-    "Horsepower": 182,
+    "Id": "a1e0d3f2-09ae-4e15-b28f-c2cb6c158401",
+    "Displacement": "1.6L",
+    "Horsepower": 130,
     "Cylinders": 4,
-    "EngineCode": "QR25DE"
+    "EngineCode": "G4FD"
   },
   {
-    "Id": "81bc3f93-7501-4710-9bc1-fbe68777c8d4",
-    "Displacement": "1.8L",
-    "Horsepower": 132,
+    "Id": "b4e7f798-84b0-4e5e-bf3e-d15790814e4e",
+    "Displacement": "2.0L",
+    "Horsepower": 158,
     "Cylinders": 4,
-    "EngineCode": "2ZR-FE"
+    "EngineCode": "R20A3"
+  },
+  {
+    "Id": "c77b9b6c-8578-4af3-a06f-674aa3eebc44",
+    "Displacement": "1.5L",
+    "Horsepower": 120,
+    "Cylinders": 3,
+    "EngineCode": "B38A15"
+  },
+  {
+    "Id": "d19fdf47-92d5-45d2-89e6-4ed8c2df51a9",
+    "Displacement": "2.2L",
+    "Horsepower": 174,
+    "Cylinders": 4,
+    "EngineCode": "DW12"
+  },
+  {
+    "Id": "e9474b92-1e87-4fd6-a6fd-8eb66c6602e4",
+    "Displacement": "2.4L",
+    "Horsepower": 185,
+    "Cylinders": 4,
+    "EngineCode": "K24W"
+  },
+  {
+    "Id": "f0019a66-b775-45c1-874c-7781944cfc55",
+    "Displacement": "3.0L",
+    "Horsepower": 255,
+    "Cylinders": 6,
+    "EngineCode": "N52"
+  },
+  {
+    "Id": "01de5895-18cc-4e33-bf6c-1eb47cb37869",
+    "Displacement": "2.5L",
+    "Horsepower": 200,
+    "Cylinders": 4,
+    "EngineCode": "SkyActiv-G"
+  },
+  {
+    "Id": "1afacc86-7a5d-48d3-9e30-7f72c2b3f005",
+    "Displacement": "2.7L",
+    "Horsepower": 159,
+    "Cylinders": 4,
+    "EngineCode": "2TR-FE"
+  },
+  {
+    "Id": "2c1d23dc-6e61-4376-a1a7-42f336bd4d0f",
+    "Displacement": "1.8L",
+    "Horsepower": 140,
+    "Cylinders": 4,
+    "EngineCode": "LJ7"
+  },
+  {
+    "Id": "358b4e9f-c52f-4a4e-8f1e-5c1ec32c885b",
+    "Displacement": "1.2L",
+    "Horsepower": 110,
+    "Cylinders": 3,
+    "EngineCode": "EB2DT"
   }
 ]

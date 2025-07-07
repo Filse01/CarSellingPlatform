@@ -23,16 +23,22 @@ public class CarService : ICarService
         _userManager = userManager;
     }
 
-    public async Task<IEnumerable<IndexCarViewModel>> ListAllAsync(string? userId)
+    public async Task<PagedListViewModel<IndexCarViewModel>> ListPagedAsync(string? userId, int pageNumber, int pageSize)
     {
-        IEnumerable<IndexCarViewModel> allCars = await _carRepository.GetAllAttached()
+        var query = _carRepository.GetAllAttached()
             .Include(c => c.Category)
             .Include(c => c.FuelType)
             .Include(c => c.Brand)
             .Include(c => c.Engine)
             .Include(c => c.Transmission)
-            .AsNoTracking()
-            .Select(c => new IndexCarViewModel()
+            .AsNoTracking();
+
+        int totalCount = await query.CountAsync();
+
+        var cars = await query
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .Select(c => new IndexCarViewModel
             {
                 Id = c.Id,
                 BrandName = c.Brand.Name,
@@ -49,8 +55,15 @@ public class CarService : ICarService
                 ImageUrl = c.ImageUrl,
                 IsUserSeller = userId != null ?
                     c.SellerId.ToLower() == userId.ToLower() : false
-            }).ToListAsync();
-        return allCars;
+            })
+            .ToListAsync();
+
+        return new PagedListViewModel<IndexCarViewModel>
+        {
+            Items = cars,
+            PageNumber = pageNumber,
+            TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
+        };
     }
 
     public async Task<bool> AddCarAsync(string userId, AddCarViewModel model)

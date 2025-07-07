@@ -4,7 +4,8 @@ namespace CarSellingPlatform.Services.Core.Contracts;
 
 public interface ICarService
 {
-    Task<IEnumerable<IndexCarViewModel>> ListAllAsync(string? userId);
+    Task<PagedListViewModel<IndexCarViewModel>> ListPagedAsync(string? userId, int pageNumber, int pageSize);
+
     Task<bool> AddCarAsync(string userId,AddCarViewModel model);
 
     Task<DetailsCarViewModel> GetDetailsCarAsync(Guid? id, string userId);
