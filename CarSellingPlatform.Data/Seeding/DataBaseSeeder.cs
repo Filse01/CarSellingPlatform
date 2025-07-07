@@ -34,6 +34,8 @@ public static class DataBaseSeeder
         await ImportTransmissionsFromJsonAsync(context);
         
         await ImportEnginesFromJsonAsync(context);
+
+        await ImportCarsFromJsonAsync(context);
     }
 
     private static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
@@ -144,10 +146,26 @@ public static class DataBaseSeeder
         var engines = JsonSerializer.Deserialize<List<Engine>>(enginesJson);
         if(engines!=null&& engines.Count>0)
         {
-            List<Guid> enginesNames = engines.Select(e => e.Id).ToList();
-            if (await context.Engines.AnyAsync(e => enginesNames.Contains(e.Id)) == false)
+            List<Guid> engineIds = engines.Select(e => e.Id).ToList();
+            if (await context.Engines.AnyAsync(e => engineIds.Contains(e.Id)) == false)
             {
                 await context.Engines.AddRangeAsync(engines);
+                await context.SaveChangesAsync();
+            }
+        }
+    }
+
+    public static async Task ImportCarsFromJsonAsync(CarSellingPlatformDbContext context)
+    {
+        var path = Path.Combine("..", "CarSellingPlatform.Data", "Seeding", "Input", "Cars.json");
+        string carJson = File.ReadAllText(path);
+        var cars = JsonSerializer.Deserialize<List<Car>>(carJson);
+        if (cars != null && cars.Count > 0)
+        {
+            List<Guid> carIds = cars.Select(c => c.Id).ToList();
+            if (await context.Cars.AnyAsync(c => carIds.Contains(c.Id)) == false)
+            {
+                await context.Cars.AddRangeAsync(cars);
                 await context.SaveChangesAsync();
             }
         }
