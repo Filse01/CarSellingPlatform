@@ -1,0 +1,16 @@
+[
+  {
+    "Id": "15dc2a7f-bf21-4ad9-a0d4-59d04521b119",
+    "Displacement": "2.5L",
+    "Horsepower": 182,
+    "Cylinders": 4,
+    "EngineCode": "QR25DE"
+  },
+  {
+    "Id": "81bc3f93-7501-4710-9bc1-fbe68777c8d4",
+    "Displacement": "1.8L",
+    "Horsepower": 132,
+    "Cylinders": 4,
+    "EngineCode": "2ZR-FE"
+  }
+]

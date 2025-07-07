@@ -32,6 +32,8 @@ public static class DataBaseSeeder
         await ImportFuelTypesFromJsonAsync(context);
         
         await ImportTransmissionsFromJsonAsync(context);
+        
+        await ImportEnginesFromJsonAsync(context);
     }
 
     private static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
@@ -130,6 +132,22 @@ public static class DataBaseSeeder
             if (await context.FuelTypes.AnyAsync(f => fuelTypesNames.Contains(f.Type)) == false)
             {
                 await context.FuelTypes.AddRangeAsync(fuelTypes);
+                await context.SaveChangesAsync();
+            }
+        }
+    }
+
+    public static async Task ImportEnginesFromJsonAsync(CarSellingPlatformDbContext context)
+    {
+        var path = Path.Combine("..", "CarSellingPlatform.Data", "Seeding", "Input", "Engines.json");
+        string enginesJson = File.ReadAllText(path);
+        var engines = JsonSerializer.Deserialize<List<Engine>>(enginesJson);
+        if(engines!=null&& engines.Count>0)
+        {
+            List<Guid> enginesNames = engines.Select(e => e.Id).ToList();
+            if (await context.Engines.AnyAsync(e => enginesNames.Contains(e.Id)) == false)
+            {
+                await context.Engines.AddRangeAsync(engines);
                 await context.SaveChangesAsync();
             }
         }
