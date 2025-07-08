@@ -123,6 +123,7 @@ public class CarService : ICarService
                 model = new DetailsCarViewModel()
                 {
                     Id = carModel.Id,
+                    Cylinders = carModel.Engine.Cylinders,
                     BrandName = carModel.Brand.Name,
                     CategoryName = carModel.Category.Name,
                     CarModel = carModel.Model,

@@ -68,5 +68,12 @@
     "Horsepower": 110,
     "Cylinders": 3,
     "EngineCode": "EB2DT"
+  },
+  {
+    "Id": "96761a09-55e6-488b-b076-595d7afe6039",
+    "Displacement": "1.9L",
+    "Horsepower": 110,
+    "Cylinders": 7,
+    "EngineCode": "197A"
   }
 ]

@@ -158,5 +158,21 @@
     "EngineId": "358b4e9f-c52f-4a4e-8f1e-5c1ec32c885b",
     "TransmissionId": "14BC8985-44B6-43E4-9EE7-6D7287158774",
     "FuelTypeId": "C89106C0-20E3-4B8E-8EF7-F05CC2136DDE"
+  },
+  {
+    "Id": "9f2c7dc6-e83b-4a2d-b490-24f0a46c8f0b",
+    "BrandId": "C943D38C-0BFB-4A72-B781-098E63845344",
+    "Model": "Leon",
+    "Description": "Sporty hatchback with a modern design and great handling.",
+    "ImageUrl": "https://www.auto-press.net/gallery/article/images_big/gallery_picture_0547597001718726226.jpg",
+    "Price": 11300,
+    "Year": 2020,
+    "Color": "Orange",
+    "IsDeleted": false,
+    "SellerId": "60ddf6fb-82b7-44a2-9969-28611fc1b065",
+    "CategoryId": "17ED1CA9-4A48-4B40-B3A6-B2AD9DA1620E",
+    "EngineId": "96761A09-55E6-488B-B076-595D7AFE6039",
+    "TransmissionId": "14BC8985-44B6-43E4-9EE7-6D7287158774",
+    "FuelTypeId": "C89106C0-20E3-4B8E-8EF7-F05CC2136DDE"
   }
 ]

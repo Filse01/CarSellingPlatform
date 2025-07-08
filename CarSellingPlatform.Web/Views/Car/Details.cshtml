@@ -1,4 +1,4 @@
-@model CarSellingPlatform.Web.ViewModels.Car.IndexCarViewModel
+@model CarSellingPlatform.Web.ViewModels.Car.DetailsCarViewModel
 
 @{
     ViewData["Title"] = $"{Model.Year} {Model.BrandName} {Model.CarModel}";
@@ -356,8 +356,8 @@
                             <div class="spec-label">HP</div>
                         </div>
                         <div class="spec-item">
-                            <div class="spec-value">@Model.Year</div>
-                            <div class="spec-label">Model Year</div>
+                            <div class="spec-value">@Model.Cylinders</div>
+                            <div class="spec-label">Cylinders</div>
                         </div>
                         <div class="spec-item">
                             <div class="spec-value">@Model.Displacement</div>

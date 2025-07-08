@@ -82,12 +82,14 @@ public static class DataBaseSeeder
 
         if (brands != null && brands.Count > 0)
         {
-            List<string> brandIds = brands.Select(b => b.Name).ToList();
-            if (await context.Brands.AnyAsync(b => brandIds.Contains(b.Name)) == false)
+            foreach (var brand in brands)
             {
-                await context.Brands.AddRangeAsync(brands);
-                await context.SaveChangesAsync();
+                if (await context.Brands.AnyAsync(e => brand.Name == e.Name) == false)
+                {
+                    await context.Brands.AddAsync(brand);
+                }
             }
+            await context.SaveChangesAsync();
         }
     }
 
@@ -146,12 +148,15 @@ public static class DataBaseSeeder
         var engines = JsonSerializer.Deserialize<List<Engine>>(enginesJson);
         if(engines!=null&& engines.Count>0)
         {
-            List<Guid> engineIds = engines.Select(e => e.Id).ToList();
-            if (await context.Engines.AnyAsync(e => engineIds.Contains(e.Id)) == false)
+            //List<Guid> engineIds = engines.Select(e => e.Id).ToList();
+            foreach (var engine in engines)
             {
-                await context.Engines.AddRangeAsync(engines);
-                await context.SaveChangesAsync();
+                if (await context.Engines.AnyAsync(e => engine.Id == e.Id) == false)
+                {
+                    await context.Engines.AddAsync(engine);
+                }
             }
+            await context.SaveChangesAsync();
         }
     }
 
@@ -162,12 +167,14 @@ public static class DataBaseSeeder
         var cars = JsonSerializer.Deserialize<List<Car>>(carJson);
         if (cars != null && cars.Count > 0)
         {
-            List<Guid> carIds = cars.Select(c => c.Id).ToList();
-            if (await context.Cars.AnyAsync(c => carIds.Contains(c.Id)) == false)
+            foreach (var car in cars)
             {
-                await context.Cars.AddRangeAsync(cars);
-                await context.SaveChangesAsync();
+                if (await context.Cars.AnyAsync(e => car.Id == e.Id) == false)
+                {
+                    await context.Cars.AddAsync(car);
+                }
             }
+            await context.SaveChangesAsync();
         }
     }
     
