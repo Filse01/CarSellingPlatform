@@ -59,6 +59,8 @@ public class CarService : ICarService
                 IsUserSeller = userId != null ?
                     c.SellerId.ToLower() == userId.ToLower() : false,
                 SellerId = c.SellerId,
+                IsUserFavorite = userId != null ?
+                    c.UserCars.Any(c => c.UserId.ToLower() == userId.ToLower()) : false,
             })
             .ToListAsync();
 
@@ -303,5 +305,28 @@ public class CarService : ICarService
             PageNumber = pageNumber,
             TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
         };
+    }
+
+    public async Task<bool> AddCarToFavoritesAsync(string userId, Guid carId)
+    {
+        bool opResult = false;
+        var user = await _userManager.FindByIdAsync(userId);
+        Car favCar = await _carRepository.GetByIdAsync(carId);
+        if (user != null && favCar != null && favCar.SellerId.ToLower() != userId.ToLower())
+        {
+            UserCar? userCar = await _userCarRepository.SingleOrDefaultAsync(c => c.UserId.ToLower() == userId.ToLower() && c.CarId == favCar.Id);
+            if (userCar == null)
+            {
+                userCar = new UserCar()
+                {
+                    UserId = userId,
+                    CarId = carId
+                };
+                await _userCarRepository.AddAsync(userCar);
+                await _userCarRepository.SaveChangesAsync();
+                opResult = true;
+            }
+        }
+        return opResult;
     }
 }

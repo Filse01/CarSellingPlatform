@@ -126,4 +126,20 @@ public class CarController : BaseController
         var pagedFavoriteCars = await _carService.GetFavoriteCarsAsync(userId, page, pageSize);
         return View(pagedFavoriteCars);
     }
+
+    [HttpPost]
+    public async Task<IActionResult> AddFavoriteCars(Guid id)
+    {
+        string? userId = GetUserId();
+        if (id == null)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+        bool opResult = await _carService.AddCarToFavoritesAsync(userId, id);
+        if (opResult == false)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+        return RedirectToAction(nameof(FavoriteCars));
+    }
 }

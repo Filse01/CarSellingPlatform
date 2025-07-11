@@ -28,5 +28,6 @@ public class IndexCarViewModel
     public decimal Price { get; set; }
     
     public bool IsUserSeller { get; set; }
+    public bool IsUserFavorite { get; set; }
     public string SellerId { get; set; } = null!;
 }
