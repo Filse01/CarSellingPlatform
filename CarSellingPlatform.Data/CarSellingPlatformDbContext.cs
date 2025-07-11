@@ -1,12 +1,13 @@
 ﻿using System.Reflection;
-using CarSellingPlatform.Data.Models;
+using CarSellingPlatform.Data.Models.Car;
+using CarSellingPlatform.Data.Models.Chat;
 
 namespace CarSellingPlatform.Data
 {
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
 
-    public class CarSellingPlatformDbContext : IdentityDbContext
+    public class CarSellingPlatformDbContext : IdentityDbContext<ApplicationUser>
     {
         public CarSellingPlatformDbContext(DbContextOptions<CarSellingPlatformDbContext> options)
             : base(options)

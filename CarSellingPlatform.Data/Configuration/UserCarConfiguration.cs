@@ -1,4 +1,4 @@
-using CarSellingPlatform.Data.Models;
+using CarSellingPlatform.Data.Models.Car;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

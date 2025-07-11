@@ -1,6 +1,7 @@
 using System.Text.Json;
 using CarSellingPlatform.Data;
-using CarSellingPlatform.Data.Models;
+using CarSellingPlatform.Data.Models.Car;
+using CarSellingPlatform.Data.Models.Chat;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,15 +14,15 @@ public static class DataBaseSeeder
     {
         using var scope = serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<CarSellingPlatformDbContext>();
-        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
         // Ensure database is created
         await context.Database.EnsureCreatedAsync();
-
+        
         // Seed roles
         await SeedRolesAsync(roleManager);
-
+        
         // Seed admin user
         await SeedAdminUserAsync(userManager);
         
@@ -34,7 +35,7 @@ public static class DataBaseSeeder
         await ImportTransmissionsFromJsonAsync(context);
         
         await ImportEnginesFromJsonAsync(context);
-
+        
         await ImportCarsFromJsonAsync(context);
     }
 
@@ -51,19 +52,22 @@ public static class DataBaseSeeder
         }
     }
 
-    private static async Task SeedAdminUserAsync(UserManager<IdentityUser> userManager)
+    private static async Task SeedAdminUserAsync(UserManager<ApplicationUser> userManager)
     {
         const string email = "admin@admin.com";
         const string password = "Test1234@";
-
+        const string firstName = "Admin";
+        const string lastName = "Admin";
         var existingUser = await userManager.FindByEmailAsync(email);
         if (existingUser == null)
         {
-            var adminUser = new IdentityUser
+            var adminUser = new ApplicationUser()
             {
                 UserName = email,
                 Email = email,
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                FirstName = firstName,
+                LastName = lastName,
             };
 
             var result = await userManager.CreateAsync(adminUser, password);

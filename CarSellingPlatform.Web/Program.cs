@@ -2,7 +2,9 @@ using CarSellingPlatform.Services.Core;
 using CarSellingPlatform.Services.Core.Contracts;
 using CarSellingPlatform.Data;
 using CarSellingPlatform.Data.Interfaces.Repository;
+using CarSellingPlatform.Data.Models.Chat;
 using CarSellingPlatform.Data.Repository;
+using CarSellingPlatform.Web.Hubs;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -28,7 +30,7 @@ namespace CarSellingPlatform.Web
                 });
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services
-                .AddDefaultIdentity<IdentityUser>(options =>
+                .AddDefaultIdentity<ApplicationUser>(options =>
                 {
                     options.SignIn.RequireConfirmedAccount = false;
                 })
@@ -39,6 +41,7 @@ namespace CarSellingPlatform.Web
             builder.Services.AddScoped<ICarInfoService, CarInfoService>();
             builder.Services.AddScoped<ICarService, CarService>();
             builder.Services.AddScoped(typeof(IRepository<,>), typeof(BaseRepository<,>));
+            builder.Services.AddSignalR();
             WebApplication? app = builder.Build();
             
             if (app.Environment.IsDevelopment())
@@ -53,7 +56,7 @@ namespace CarSellingPlatform.Web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.MapHub<ChatHub>("/ChatHub");
             app.UseRouting();
 
             app.UseAuthentication();

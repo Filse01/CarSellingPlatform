@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace CarSellingPlatform.Data.Models;
+namespace CarSellingPlatform.Data.Models.Car;
 
 public class Engine
 {

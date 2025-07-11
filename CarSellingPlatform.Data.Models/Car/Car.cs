@@ -1,7 +1,8 @@
 using System.ComponentModel.DataAnnotations;
+using CarSellingPlatform.Data.Models.Chat;
 using Microsoft.AspNetCore.Identity;
 
-namespace CarSellingPlatform.Data.Models;
+namespace CarSellingPlatform.Data.Models.Car;
 using static CarSellingPlatform.Data.Common.Car;
 public class Car
 {
@@ -29,7 +30,7 @@ public class Car
     public bool IsDeleted { get; set; }
     [Required]
     public string SellerId { get; set; } = null!;
-    public IdentityUser Seller { get; set; } = null!;
+    public ApplicationUser Seller { get; set; } = null!;
     public Guid CategoryId { get; set; }
     
     public Category Category { get; set; } = null!;

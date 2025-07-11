@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using static CarSellingPlatform.Data.Common.Car;
-namespace CarSellingPlatform.Data.Models;
+namespace CarSellingPlatform.Data.Models.Car;
 
 public class Brand
 {

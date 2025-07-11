@@ -12,4 +12,8 @@
     <ProjectReference Include="..\CarSellingPlatform.Services.AutoMapping\CarSellingPlatform.Services.AutoMapping.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Chat\" />
+  </ItemGroup>
+
 </Project>

@@ -1,6 +1,7 @@
 using CarSellingPlatform.Data;
 using CarSellingPlatform.Data.Interfaces.Repository;
-using CarSellingPlatform.Data.Models;
+using CarSellingPlatform.Data.Models.Car;
+using CarSellingPlatform.Data.Models.Chat;
 using CarSellingPlatform.Data.Repository;
 using CarSellingPlatform.Services.Core.Contracts;
 using CarSellingPlatform.Web.ViewModels.Car;
@@ -14,9 +15,9 @@ public class CarService : ICarService
 {
     private readonly IRepository<Car,Guid> _carRepository;
     private readonly IRepository<Engine, Guid> _engineRepository;
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public CarService(IRepository<Car, Guid> carRepository, IRepository<Engine, Guid> engineRepository, UserManager<IdentityUser> userManager)
+    public CarService(IRepository<Car, Guid> carRepository, IRepository<Engine, Guid> engineRepository, UserManager<ApplicationUser> userManager)
     {
         _carRepository = carRepository;
         _engineRepository = engineRepository;
@@ -54,7 +55,8 @@ public class CarService : ICarService
                 FuelTypeName = c.FuelType.Type,
                 ImageUrl = c.ImageUrl,
                 IsUserSeller = userId != null ?
-                    c.SellerId.ToLower() == userId.ToLower() : false
+                    c.SellerId.ToLower() == userId.ToLower() : false,
+                SellerId = c.SellerId,
             })
             .ToListAsync();
 

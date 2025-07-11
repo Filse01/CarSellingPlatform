@@ -1,4 +1,5 @@
 using CarSellingPlatform.Data;
+using CarSellingPlatform.Data.Models.Chat;
 using CarSellingPlatform.Services.Core.Contracts;
 using CarSellingPlatform.Web.ViewModels.UserManager;
 using Microsoft.AspNetCore.Identity;
@@ -9,9 +10,9 @@ namespace CarSellingPlatform.Services.Core;
 public class UserManagerService : IUserManager
 {
     private readonly CarSellingPlatformDbContext _context;
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public UserManagerService(CarSellingPlatformDbContext context, UserManager<IdentityUser> userManager)
+    public UserManagerService(CarSellingPlatformDbContext context, UserManager<ApplicationUser> userManager)
     {
         _context = context;
         _userManager = userManager;
