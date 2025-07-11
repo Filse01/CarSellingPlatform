@@ -15,13 +15,15 @@ public class CarService : ICarService
 {
     private readonly IRepository<Car,Guid> _carRepository;
     private readonly IRepository<Engine, Guid> _engineRepository;
+    private readonly IRepository<UserCar, Guid> _userCarRepository;
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public CarService(IRepository<Car, Guid> carRepository, IRepository<Engine, Guid> engineRepository, UserManager<ApplicationUser> userManager)
+    public CarService(IRepository<Car, Guid> carRepository, IRepository<Engine, Guid> engineRepository,IRepository<UserCar, Guid> userCarRepository ,UserManager<ApplicationUser> userManager)
     {
         _carRepository = carRepository;
         _engineRepository = engineRepository;
         _userManager = userManager;
+        _userCarRepository = userCarRepository;
     }
 
     public async Task<PagedListViewModel<IndexCarViewModel>> ListPagedAsync(string? userId, int pageNumber, int pageSize)
@@ -262,5 +264,44 @@ public class CarService : ICarService
             opResult = true;
         }
         return opResult;
+    }
+
+    public async Task<PagedListViewModel<FavoriteCarViewModel>?> GetFavoriteCarsAsync(string userId, int pageNumber, int pageSize)
+    {
+        IEnumerable<FavoriteCarViewModel>? favoriteCars = null;
+        var user = await _userManager.FindByIdAsync(userId);
+        var query =  _userCarRepository.GetAllAttached()
+            .Include(c => c.Car)
+            .AsNoTracking();
+        int totalCount = await query.CountAsync();
+        if (user != null)
+        {
+            
+            favoriteCars = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(c => new FavoriteCarViewModel()
+                {
+                    BrandName = c.Car.Brand.Name,
+                    CarModel = c.Car.Model,
+                    ImageUrl = c.Car.ImageUrl,
+                    Description = c.Car.Description,
+                    Price = c.Car.Price,
+                    CategoryName = c.Car.Category.Name,
+                    FuelTypeName = c.Car.FuelType.Type,
+                    TransmissionTypeName = c.Car.Transmission.Type,
+                    HorsePower = c.Car.Engine.Horsepower,
+                    Color = c.Car.Color,
+                    Displacement = c.Car.Engine.Displacement,
+                    Year = c.Car.Year,
+                    SellerId = c.Car.SellerId,
+                }).ToListAsync();
+        }
+        return new PagedListViewModel<FavoriteCarViewModel>
+        {
+            Items = favoriteCars,
+            PageNumber = pageNumber,
+            TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
+        };
     }
 }

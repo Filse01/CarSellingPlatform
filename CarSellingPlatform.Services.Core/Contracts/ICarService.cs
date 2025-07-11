@@ -14,4 +14,5 @@ public interface ICarService
     Task<bool> EditCarAsync(string userId,EditCarViewModel model);
     Task<DeleteCarViewModel> GetDeleteCarAsync(Guid? id, string userId);
     Task<bool> SoftDeleteCarAsync(DeleteCarViewModel model, string userId);
+    Task<PagedListViewModel<FavoriteCarViewModel>?> GetFavoriteCarsAsync(string userId, int pageNumber, int pageSize);
 }

@@ -56,12 +56,10 @@ namespace CarSellingPlatform.Web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.MapHub<ChatHub>("/ChatHub");
             app.UseRouting();
-
             app.UseAuthentication();
             app.UseAuthorization();
-
+            app.MapHub<ChatHub>("/ChatHub");
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");

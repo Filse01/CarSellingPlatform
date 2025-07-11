@@ -14,10 +14,9 @@ connection.start().then(function() {
 });
 
 document.getElementById("sendButton").addEventListener("click", function (event) {
-    var user = document.getElementById("user").value;
     var message = document.getElementById("message").value;
     
-    connection.invoke("SendMessage", user, message).catch(function(err) {
+    connection.invoke("SendMessage", message).catch(function(err) {
         console.error(err.toString());
     });
     event.preventDefault();

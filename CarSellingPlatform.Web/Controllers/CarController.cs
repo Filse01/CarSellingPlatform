@@ -117,4 +117,13 @@ public class CarController : BaseController
             .SoftDeleteCarAsync(model,GetUserId());
         return RedirectToAction(nameof(Index));
     }
+
+    [HttpGet]
+    public async Task<IActionResult> FavoriteCars(int? id, int page =1)
+    {
+        const int pageSize = 10;
+        string userId = GetUserId();
+        var pagedFavoriteCars = await _carService.GetFavoriteCarsAsync(userId, page, pageSize);
+        return View(pagedFavoriteCars);
+    }
 }

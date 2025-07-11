@@ -1,0 +1,309 @@
+@model CarSellingPlatform.Web.ViewModels.Car.PagedListViewModel<CarSellingPlatform.Web.ViewModels.Car.FavoriteCarViewModel>
+
+@{
+    ViewData["Title"] = "Cars for Sale";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-4 text-center mb-3">Cars for Sale</h1>
+            <p class="text-center text-muted">Find your perfect car from our extensive collection</p>
+        </div>
+    </div>
+
+    @if (Model?.Items != null && Model.Items.Any())
+    {
+        <div class="row">
+            @foreach (var car in Model.Items)
+            {
+                <div class="col-12 mb-4">
+                    <div class="card car-card shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <!-- Car Image -->
+                                <div class="col-md-3 col-lg-2">
+                                    <div class="car-image-container">
+                                        @if (!string.IsNullOrEmpty(car.ImageUrl))
+                                        {
+                                            <img src="@car.ImageUrl" 
+                                                 alt="@car.CarModel" 
+                                                 class="img-fluid rounded car-image"
+                                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                        }
+                                        <div class="bg-light rounded d-flex align-items-center justify-content-center car-placeholder @(string.IsNullOrEmpty(car.ImageUrl) ? "" : "d-none")" 
+                                             style="height: 120px;">
+                                            <i class="fas fa-car fa-3x text-muted"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Car Details -->
+                                <div class="col-md-6 col-lg-7">
+                                    <h5 class="card-title mb-2">@car.BrandName @car.CarModel (@car.CategoryName)</h5>
+                                    <p class="card-text text-muted mb-2">@car.Description</p>
+                                    
+                                    <div class="row text-sm">
+                                        <div class="col-6 col-lg-4 mb-1">
+                                            <small class="text-muted">
+                                                <i class="fas fa-calendar-alt me-1"></i>
+                                                Year: <strong>@car.Year</strong>
+                                            </small>
+                                        </div>
+                                        <div class="col-6 col-lg-4 mb-1">
+                                            <small class="text-muted">
+                                                <i class="fas fa-horse me-1"></i>
+                                                HP: <strong>@car.HorsePower</strong>
+                                            </small>
+                                        </div>
+                                        <div class="col-6 col-lg-4 mb-1">
+                                            <small class="text-muted">
+                                                <i class="fas fa-palette me-1"></i>
+                                                Color: <strong>@car.Color</strong>
+                                            </small>
+                                        </div>
+                                        <div class="col-6 col-lg-4 mb-1">
+                                            <small class="text-muted">
+                                                <i class="fas fa-cog me-1"></i>
+                                                Engine Displacement: <strong>@car.Displacement</strong>
+                                            </small>
+                                        </div>
+                                        <div class="col-6 col-lg-4 mb-1">
+                                            <small class="text-muted">
+                                                <i class="fas fa-cog me-1"></i>
+                                                Fuel Type: <strong>@car.FuelTypeName</strong>
+                                            </small>
+                                        </div>
+                                        <div class="col-6 col-lg-4 mb-1">
+                                            <small class="text-muted">
+                                                <i class="fas fa-cog me-1"></i>
+                                                Transmission: <strong>@car.TransmissionTypeName</strong>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Price and Actions -->
+                                <div class="col-md-3 col-lg-3 text-center">
+                                    <div class="price-section d-none d-md-block">
+                                        <h3 class="text-primary fw-bold mb-3">
+                                            $@car.Price.ToString("N0")
+                                        </h3>
+                                        @if (!car.IsUserSeller)
+                                        {
+                                            <div class="d-grid gap-2">
+                                                <a href="@Url.Action("Details", "Car", new { id = car.Id })"
+                                                   class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-eye me-1"></i>
+                                                    View Details
+                                                </a>
+                                                <a asp-controller="Chat" asp-action="Index"
+                                                   asp-route-carId="@car.Id" asp-route-sellerId="@car.SellerId"
+                                                   class="btn btn-primary">
+                                                    Contact Seller
+                                                </a>
+
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="d-grid gap-2">
+                                                <a href="@Url.Action("EditCar", "Car", new { id = car.Id })"
+                                                   class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-eye me-1"></i>
+                                                    Edit
+                                                </a>
+                                                </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Mobile Price Section -->
+                            <div class="row d-md-none">
+                                <div class="col-12">
+                                    <div class="price-section mobile-price-section text-center">
+                                        <h3 class="text-primary fw-bold mb-3">
+                                            $@car.Price.ToString("N0")
+                                        </h3>
+                                        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                                            <a href="@Url.Action("Details", "Car", new { id = car.Id })" 
+                                               class="btn btn-primary btn-sm">
+                                                <i class="fas fa-eye me-1"></i>
+                                                View Details
+                                            </a>
+                                            <a href="@Url.Action("Contact", "Car", new { id = car.Id })" 
+                                               class="btn btn-outline-secondary btn-sm">
+                                                <i class="fas fa-phone me-1"></i>
+                                                Contact Seller
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        
+        <div class="col-12 d-flex justify-content-center">
+            <nav>
+                <ul class="pagination">
+                    @if (Model.HasPreviousPage)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber - 1)">Previous</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                    }
+
+                    <li class="page-item disabled">
+                        <span class="page-link">
+                            Page @Model.PageNumber of @Model.TotalPages
+                        </span>
+                    </li>
+
+                    @if (Model.HasNextPage)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber + 1)">Next</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item disabled"><span class="page-link">Next</span></li>
+                    }
+                </ul>
+            </nav>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-12 text-center">
+                <div class="alert alert-info" role="alert">
+                    <i class="fas fa-info-circle me-2"></i>
+                    You have not added any cars to favorites.
+                    </div>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .car-header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .car-image {
+        width: 100%;
+        max-width: 500px;
+        height: 300px;
+        border-radius: 15px;
+        object-fit: cover;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .car-image:hover {
+        transform: scale(1.05);
+    }
+    .specs-highlight h3 {
+        margin-bottom: 15px;
+        font-size: 1.2em;
+    }
+    
+    .description-section h3 {
+        color: #2c3e50;
+        margin-bottom: 15px;
+        font-size: 1.3em;
+    }
+    
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+
+    .btn-primary:hover,
+    .btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        color: white;
+        text-decoration: none;
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+    .car-header h1 {
+        font-size: 2em;
+    }
+
+    }
+
+    .car-card {
+        transition: transform 0.2s ease-in-out;
+        border: 1px solid #e0e0e0;
+    }
+
+    .car-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
+    }
+
+    .price-section h3 {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        color: white !important;
+        padding: 15px 25px;
+        border-radius: 50px;
+        font-size: 1.8em;
+        font-weight: bold;
+        margin-bottom: 30px;
+        display: inline-block;
+        box-shadow: 0 10px 25px rgba(238, 90, 36, 0.3);
+    }
+
+    .text-sm small {
+        font-size: 0.875rem;
+    }
+
+    .mobile-price-section {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .car-image-container {
+        position: relative;
+        height: 120px;
+    }
+
+    .car-image {
+        width: 100%;
+        height: 120px;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .car-placeholder {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+</style>
