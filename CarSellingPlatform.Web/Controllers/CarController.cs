@@ -142,4 +142,17 @@ public class CarController : BaseController
         }
         return RedirectToAction(nameof(FavoriteCars));
     }
+
+    [HttpPost]
+    public async Task<IActionResult> RemoveFavoriteCars(Guid id)
+    {
+        string? userId = GetUserId();
+        
+        bool opResult = await _carService.RemoveCarFromFavoritesAsync(userId, id);
+        if (opResult == false)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+        return RedirectToAction(nameof(FavoriteCars));
+    }
 }

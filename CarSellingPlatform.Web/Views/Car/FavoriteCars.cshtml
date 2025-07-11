@@ -102,6 +102,10 @@
                                                    class="btn btn-primary">
                                                     Contact Seller
                                                 </a>
+                                                <form asp-controller="Car" asp-action="RemoveFavoriteCars" asp-route-id="@car.Id" method="post" style="display:inline;">
+                                                    <button type="submit" class="btn btn-primary">Remove
+                                                    </button>
+                                                </form>
 
                                             </div>
                                         }

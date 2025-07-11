@@ -284,6 +284,7 @@ public class CarService : ICarService
                 .Take(pageSize)
                 .Select(c => new FavoriteCarViewModel()
                 {
+                    Id = c.Car.Id,
                     BrandName = c.Car.Brand.Name,
                     CarModel = c.Car.Model,
                     ImageUrl = c.Car.ImageUrl,
@@ -323,6 +324,25 @@ public class CarService : ICarService
                     CarId = carId
                 };
                 await _userCarRepository.AddAsync(userCar);
+                await _userCarRepository.SaveChangesAsync();
+                opResult = true;
+            }
+        }
+        return opResult;
+    }
+
+    public async Task<bool> RemoveCarFromFavoritesAsync(string userId, Guid carId)
+    {
+        bool opResult = false;
+        var user = await _userManager.FindByIdAsync(userId);
+        Car deletedCar = await _carRepository.SingleOrDefaultAsync(c => c.Id == carId);
+        if (user != null && deletedCar != null)
+        {
+            UserCar? userCar = await _userCarRepository.SingleOrDefaultAsync(c => c.UserId.ToLower() == userId.ToLower()
+            && c.CarId == carId);
+            if (userCar != null)
+            {
+                _userCarRepository.HardDelete(userCar);
                 await _userCarRepository.SaveChangesAsync();
                 opResult = true;
             }
