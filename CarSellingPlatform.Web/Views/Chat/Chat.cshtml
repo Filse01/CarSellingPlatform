@@ -1,0 +1,26 @@
+@{
+    ViewData["Title"] = "Chat;";
+}
+
+<div class="row g-3">
+    <div class="col-auto">
+        <label for="message" >Message</label>
+        <input type="text" class="form-control" id="message" placeholder="Message">
+    </div>
+    <div class="col-auto">
+        <a href="#" id="sendButton" class="btn btn-primary mb-3">Send Message</a>
+    </div>
+    <div class="row g-3">
+        <div class="col-md-12">
+            <label for="chatHistory" class="form-label">Chat History</label>
+            <ul id="chatHistory"></ul>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/site.js"></script>
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+}

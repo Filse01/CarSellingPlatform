@@ -40,6 +40,7 @@ namespace CarSellingPlatform.Web
             builder.Services.AddScoped<IUserManager, UserManagerService>();
             builder.Services.AddScoped<ICarInfoService, CarInfoService>();
             builder.Services.AddScoped<ICarService, CarService>();
+            builder.Services.AddScoped<IChatService, ChatService>();
             builder.Services.AddScoped(typeof(IRepository<,>), typeof(BaseRepository<,>));
             builder.Services.AddSignalR();
             WebApplication? app = builder.Build();

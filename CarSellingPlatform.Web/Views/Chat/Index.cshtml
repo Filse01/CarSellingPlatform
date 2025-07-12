@@ -1,26 +1,96 @@
+@model IEnumerable<CarSellingPlatform.Web.ViewModels.Chat.IndexChatViewModel>
+
 @{
-    ViewData["Title"] = "Chat;";
+    ViewData["Title"] = "Chats";
 }
 
-<div class="row g-3">
-   <div class="col-auto">
-        <label for="message" >Message</label>
-        <input type="text" class="form-control" id="message" placeholder="Message">
-    </div>
-    <div class="col-auto">
-        <a href="#" id="sendButton" class="btn btn-primary mb-3">Send Message</a>
-    </div>
-    <div class="row g-3">
-        <div class="col-md-12">
-            <label for="chatHistory" class="form-label">Chat History</label>
-            <ul id="chatHistory"></ul>
-        </div>
-    </div>
-</div>
+<h2>Chats</h2>
 
-@section Scripts
-{
-    <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
-    <script src="~/js/site.js"></script>
-    <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
-}
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Buyer</th>
+        <th>Seller</th>
+        <th>Car</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var chat in Model)
+    {
+        <tr>
+            <td>@chat.User</td>
+            <td>@chat.Seller</td>
+            <td>@chat.CarModel</td>
+            <td>
+                <a class="btn btn-primary" asp-controller="Chat" asp-action="Chat" asp-route-id="@chat.Id">
+                    Open Chat
+                </a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+<style>
+    .car-header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+    
+    .specs-highlight h3 {
+        margin-bottom: 15px;
+        font-size: 1.2em;
+    }
+    
+    .description-section h3 {
+        color: #2c3e50;
+        margin-bottom: 15px;
+        font-size: 1.3em;
+    }
+    
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+
+    .btn-primary:hover{
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        color: white;
+        text-decoration: none;
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+    .car-header h1 {
+        font-size: 2em;
+    }
+
+    }
+    .price-section h3 {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        color: white !important;
+        padding: 15px 25px;
+        border-radius: 50px;
+        font-size: 1.8em;
+        font-weight: bold;
+        margin-bottom: 30px;
+        display: inline-block;
+        box-shadow: 0 10px 25px rgba(238, 90, 36, 0.3);
+    }
+
+    .text-sm small {
+        font-size: 0.875rem;
+    }
+    
+</style>

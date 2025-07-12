@@ -8,7 +8,6 @@ namespace CarSellingPlatform.Services.Core;
 public class CarInfoService : ICarInfoService
 {
     private readonly CarSellingPlatformDbContext _context;
-
     public CarInfoService(CarSellingPlatformDbContext context)
     {
         _context = context;
