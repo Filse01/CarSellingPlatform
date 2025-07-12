@@ -21,6 +21,10 @@ namespace CarSellingPlatform.Data
         public DbSet<Engine> Engines { get; set; }
         public DbSet<Transmission> Transmissions { get; set; }
         public DbSet<Brand> Brands { get; set; }
+        
+        public DbSet<Chat> Chats { get; set; }
+        
+        public DbSet<Message> Messages { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
