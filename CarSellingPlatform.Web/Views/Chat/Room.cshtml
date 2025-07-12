@@ -1,0 +1,150 @@
+@model CarSellingPlatform.Web.ViewModels.Chat.ChatViewModel
+@{
+ViewData["Title"] = "Chat Room";
+}
+
+<h1>Chat</h1>
+
+<!-- Main container for the chat interface -->
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <!-- Chat history will be displayed here -->
+            <div id="chat-window" class="border rounded p-3 mb-3" style="height: 400px; overflow-y: scroll;">
+                <ul id="chatHistory" class="list-unstyled">
+                    <!-- Messages will be dynamically added here -->
+                </ul>
+            </div>
+
+            <!-- Message input form -->
+            <div class="row g-2">
+                <div class="col">
+                    <input type="text" class="form-control" id="message" placeholder="Type your message..." autocomplete="off">
+                </div>
+                <div class="col-auto">
+                    <button id="sendButton" class="btn btn-primary" type="button">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+<!-- Reference the SignalR client library -->
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+
+<!-- Inline script to handle all chat logic -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // 1. GET THE CHAT ID FROM THE SERVER-SIDE MODEL
+        // This is the most reliable way to pass server data to your script.
+        const currentChatId = "@Model.ChatId";
+
+        // 2. SETUP THE SIGNALR CONNECTION
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl(`/ChatHub?chatId=${currentChatId}`) // Pass chatId in the query string
+            .withAutomaticReconnect() // Recommended for better user experience
+            .build();
+
+        // Get references to UI elements
+        const sendButton = document.getElementById("sendButton");
+        const messageInput = document.getElementById("message");
+        const chatHistoryList = document.getElementById("chatHistory");
+        const chatWindow = document.getElementById("chat-window");
+
+        // Disable the send button until the connection is established
+        sendButton.disabled = true;
+
+        // Utility function to scroll the chat window to the bottom
+        function scrollToBottom() {
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        // 3. DEFINE CLIENT-SIDE HUB METHODS
+
+        // This function is called by the hub when a new message is received
+        connection.on("ReceiveMessage", function (user, message) {
+            const li = document.createElement("li");
+            li.className = "mb-2";
+            // Note: Using textContent to prevent HTML injection attacks
+            li.innerHTML = `<strong>${user}:</strong>`;
+
+            const messageText = document.createElement('span');
+            messageText.textContent = ` ${message}`;
+            li.appendChild(messageText);
+
+            chatHistoryList.appendChild(li);
+            scrollToBottom();
+        });
+
+        // This function is called by the hub to load the initial message history
+        connection.on("LoadHistory", function (history) {
+            chatHistoryList.innerHTML = ''; // Clear any existing messages
+            history.forEach(function (item) {
+                const li = document.createElement("li");
+                li.className = "mb-2";
+                li.innerHTML = `<strong>${item.user}:</strong>`;
+
+                const messageText = document.createElement('span');
+                messageText.textContent = ` ${item.message}`;
+                li.appendChild(messageText);
+
+                chatHistoryList.appendChild(li);
+            });
+            scrollToBottom();
+        });
+
+        // 4. START THE CONNECTION AND WIRE UP EVENTS
+        async function start() {
+            try {
+                await connection.start();
+                console.log("SignalR Connected.");
+                sendButton.disabled = false;
+
+                // Once connected, invoke the hub method to get the chat history
+                await connection.invoke("GetChatHistory", currentChatId);
+
+            } catch (err) {
+                console.error(err);
+                // Keep the button disabled if connection fails
+                setTimeout(start, 5000); // Attempt to reconnect every 5 seconds
+            }
+        };
+
+        connection.onclose(async () => {
+            sendButton.disabled = true;
+            console.log("SignalR Connection Closed.");
+            await start(); // Attempt to restart the connection
+        });
+
+        // Function to send a message
+        async function sendMessage() {
+            const message = messageInput.value;
+            if (message && message.trim() !== "") {
+                try {
+                    // Invoke the "SendMessage" method on the hub
+                    await connection.invoke("SendMessage", message, currentChatId);
+                    messageInput.value = ""; // Clear input field
+                    messageInput.focus();
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+        }
+
+        // Add event listeners
+        sendButton.addEventListener("click", sendMessage);
+        messageInput.addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // Prevent form submission
+                sendMessage();
+            }
+        });
+
+        // Start the connection
+        start();
+    });
+</script>
+}

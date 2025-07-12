@@ -26,7 +26,7 @@ public class ChatService : IChatService
         var user = await _userManager.FindByIdAsync(userId);
         IEnumerable<IndexChatViewModel> chats = await _chatRepository.GetAllAttached()
             .Include(c => c.Car)
-            .Where(c => c.UserId == user.Id)
+            .Where(c => c.UserId == user.Id || c.SellerId == user.Id)
             .Select(c => new IndexChatViewModel()
             {
                 Id = c.Id,
