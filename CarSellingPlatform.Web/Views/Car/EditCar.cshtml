@@ -150,11 +150,12 @@
                             <a asp-action="Details" asp-route-id="@Model.SellerId" class="btn btn-secondary">
                                 <i class="fas fa-arrow-left"></i> Back to Details
                             </a>
-                            <div>
-                                <button type="submit" class="btn btn-primary me-2">
+
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary">
                                     <i class="fas fa-save"></i> Save Changes
                                 </button>
-                                <a asp-controller="Car" asp-action="DeleteCar" asp-route-id="@Model.Id" class="btn btn-danger d-flex justify-content-center align-items-center flex-fill mx-1">
+                                <a asp-controller="Car" asp-action="DeleteCar" asp-route-id="@Model.Id" class="btn btn-secondary">
                                     <i class="fas fa-trash"></i> Delete
                                 </a>
                             </div>
@@ -185,6 +186,17 @@
     
     .btn-primary {
         background: linear-gradient(135deg, #10ac84 0%, #00d2d3 100%);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .btn-secondary {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
         color: white;
         padding: 12px 24px;
         border-radius: 25px;

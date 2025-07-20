@@ -31,21 +31,15 @@ ViewData["Title"] = "Chat Room";
 
 @section Scripts
 {
-<!-- Reference the SignalR client library -->
 <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
-
-<!-- Inline script to handle all chat logic -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-
-        // 1. GET THE CHAT ID FROM THE SERVER-SIDE MODEL
-        // This is the most reliable way to pass server data to your script.
+        
         const currentChatId = "@Model.ChatId";
 
-        // 2. SETUP THE SIGNALR CONNECTION
         const connection = new signalR.HubConnectionBuilder()
-            .withUrl(`/ChatHub?chatId=${currentChatId}`) // Pass chatId in the query string
-            .withAutomaticReconnect() // Recommended for better user experience
+            .withUrl(`/ChatHub?chatId=${currentChatId}`) 
+            .withAutomaticReconnect() 
             .build();
 
         // Get references to UI elements

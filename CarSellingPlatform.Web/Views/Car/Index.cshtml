@@ -97,17 +97,21 @@
                                                     <i class="fas fa-eye me-1"></i>
                                                     View Details
                                                 </a>
-                                                <a asp-controller="Chat" asp-action="Create"
-                                                   asp-route-carId="@car.Id" asp-route-sellerId="@car.SellerId"
-                                                   class="btn btn-primary">
-                                                    Contact Seller
-                                                </a>
+                                                
                                                 @if (User?.Identity?.IsAuthenticated == true && !car.IsUserSeller && !car.IsUserFavorite)
                                                 {
-                                                    <form asp-controller="Car" asp-action="AddFavoriteCars" method="post" class="w-50">
-                                                        <input type="hidden" name="id" value="@car.Id" />
-                                                        <button type="submit" class="btn btn-primary w-100">Add to Favorites</button>
-                                                    </form>
+                                                    <div class="d-flex gap-2 align-items-center">
+                                                        <form asp-controller="Car" asp-action="AddFavoriteCars" method="post">
+                                                            <input type="hidden" name="id" value="@car.Id" />
+                                                            <button type="submit" class="btn btn-primary">Add to Favorites</button>
+                                                        </form>
+
+                                                        <a asp-controller="Chat" asp-action="Create"
+                                                           asp-route-carId="@car.Id" asp-route-sellerId="@car.SellerId"
+                                                           class="btn btn-primary">
+                                                            Contact Seller
+                                                        </a>
+                                                    </div>
                                                 }
 
                                             </div>

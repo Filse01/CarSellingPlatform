@@ -6,4 +6,5 @@ public class IndexChatViewModel
     public string User { get; set; } = null!;
     public string Seller { get; set; } = null!;
     public string CarModel { get; set; } = null!;
+    public string CarBrand { get; set; } = null!;
 }

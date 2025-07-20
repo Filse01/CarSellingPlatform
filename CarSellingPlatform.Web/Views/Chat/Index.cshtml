@@ -11,7 +11,9 @@
     <tr>
         <th>Buyer</th>
         <th>Seller</th>
-        <th>Car</th>
+        <th>Brand</th>
+        <th>Model</th>
+        <th></th>
         <th></th>
     </tr>
     </thead>
@@ -21,10 +23,16 @@
         <tr>
             <td>@chat.User</td>
             <td>@chat.Seller</td>
+            <td>@chat.CarBrand</td>
             <td>@chat.CarModel</td>
             <td>
                 <a class="btn btn-primary" asp-controller="Chat" asp-action="Room" asp-route-id="@chat.Id">
                     Open Chat
+                </a>
+            </td>
+            <td>
+                <a asp-controller="Chat" asp-action="Delete" asp-route-id="@chat.Id" class="btn btn-secondary">
+                    <i class="fas fa-trash"></i> Delete Chat
                 </a>
             </td>
         </tr>
@@ -52,6 +60,17 @@
     
     .btn-primary {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .btn-secondary {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
         color: white;
         padding: 12px 24px;
         border-radius: 25px;

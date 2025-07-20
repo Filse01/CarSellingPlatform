@@ -26,6 +26,7 @@ public class ChatService : IChatService
         var user = await _userManager.FindByIdAsync(userId);
         IEnumerable<IndexChatViewModel> chats = await _chatRepository.GetAllAttached()
             .Include(c => c.Car)
+            .ThenInclude(c => c.Brand)
             .Where(c => c.UserId == user.Id || c.SellerId == user.Id)
             .Select(c => new IndexChatViewModel()
             {
@@ -33,6 +34,7 @@ public class ChatService : IChatService
                 User = c.User.FirstName + " " + c.User.LastName,
                 Seller = c.Seller.FirstName + " " + c.Seller.LastName,
                 CarModel = c.Car.Model,
+                CarBrand = c.Car.Brand.Name,
             }).ToArrayAsync();
         return chats;
     }
@@ -60,6 +62,19 @@ public class ChatService : IChatService
             }
         }
         
+        return opResult;
+    }
+
+    public async Task<bool> DeleteAsync(Guid chatId)
+    {
+        var opResult = false;
+        var chat = await _chatRepository.SingleOrDefaultAsync(c => c.Id == chatId);
+        if (chat != null)
+        {
+            _chatRepository.HardDelete(chat);
+            await _chatRepository.SaveChangesAsync();
+            opResult = true;
+        }
         return opResult;
     }
 }

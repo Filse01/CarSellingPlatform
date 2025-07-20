@@ -20,7 +20,8 @@ public class ChatController : BaseController
         IEnumerable<IndexChatViewModel> chats = await _chatService.ListAllChat(userId);
         return View(chats);
     }
-[HttpPost]
+    
+    [HttpPost]
     public async Task<IActionResult> Create(Guid carId)
     {
         var userId = GetUserId();
@@ -34,14 +35,21 @@ public class ChatController : BaseController
     [HttpGet("Chat/Room/{chatId}")]
     public async Task<IActionResult> Room(Guid chatId)
     {
-        // You would typically perform validation here to ensure the
-        // current user is allowed to be in this chat.
-
         var viewModel = new ChatViewModel
         {
             ChatId = chatId
         };
 
         return View(viewModel);
+    }
+
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        bool delete = await _chatService.DeleteAsync(id);
+        if (delete == false)
+        {
+            return RedirectToAction("Index");
+        }
+        return RedirectToAction("Index");
     }
 }
