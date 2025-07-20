@@ -5,6 +5,7 @@ using CarSellingPlatform.Data.Interfaces.Repository;
 using CarSellingPlatform.Data.Models.Chat;
 using CarSellingPlatform.Data.Repository;
 using CarSellingPlatform.Web.Hubs;
+using CarSellingPlatform.Web.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -37,10 +38,7 @@ namespace CarSellingPlatform.Web
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<CarSellingPlatformDbContext>();
             builder.Services.AddControllersWithViews();
-            builder.Services.AddScoped<IUserManager, UserManagerService>();
-            builder.Services.AddScoped<ICarInfoService, CarInfoService>();
-            builder.Services.AddScoped<ICarService, CarService>();
-            builder.Services.AddScoped<IChatService, ChatService>();
+            builder.Services.RegisterUserDefinedServices(typeof(ICarService).Assembly);
             builder.Services.AddScoped(typeof(IRepository<,>), typeof(BaseRepository<,>));
             builder.Services.AddSignalR();
             WebApplication? app = builder.Build();

@@ -7,12 +7,12 @@ namespace CarSellingPlatform.Web.Controllers;
 
 public class UserManagementController : BaseController
 {
-    private readonly IUserManager _userManagerService;
+    private readonly IUserManagerService _userManagerServiceService;
 
     
-    public UserManagementController(IUserManager userManagerService)
+    public UserManagementController(IUserManagerService userManagerServiceService)
     {
-        _userManagerService = userManagerService;
+        _userManagerServiceService = userManagerServiceService;
     }
     
     [AllowAnonymous]
@@ -20,7 +20,7 @@ public class UserManagementController : BaseController
     public async Task<IActionResult> Index()
     {
         string userId = GetUserId();
-        var allUsers =await this._userManagerService.GetAllUsersAsync(userId);
+        var allUsers =await this._userManagerServiceService.GetAllUsersAsync(userId);
         return View(allUsers);
     }
 
@@ -28,7 +28,7 @@ public class UserManagementController : BaseController
     [AllowAnonymous]
     public async Task<IActionResult> UpdateUserRole(string userId, string selectedRole)
     {
-        var success = await _userManagerService.UpdateUserRoleAsync(userId, selectedRole);
+        var success = await _userManagerServiceService.UpdateUserRoleAsync(userId, selectedRole);
 
         TempData["SuccessMessage"] = success
             ? "User role updated successfully."

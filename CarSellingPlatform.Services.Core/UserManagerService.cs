@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CarSellingPlatform.Services.Core;
 
-public class UserManagerService : IUserManager
+public class UserManagerService : IUserManagerService
 {
     private readonly CarSellingPlatformDbContext _context;
     private readonly UserManager<ApplicationUser> _userManager;
