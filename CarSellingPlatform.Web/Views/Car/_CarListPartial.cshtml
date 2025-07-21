@@ -1,22 +1,4 @@
 @model CarSellingPlatform.Web.ViewModels.Car.PagedListViewModel<CarSellingPlatform.Web.ViewModels.Car.IndexCarViewModel>
-
-@{
-    ViewData["Title"] = "Cars for Sale";
-}
-
-<div class="container-fluid">
-    <div class="row mb-4">
-        <div class="col-12">
-            <h1 class="display-4 text-center mb-3">Cars for Sale</h1>
-            <p class="text-center text-muted">Find your perfect car from our extensive collection</p>
-        </div>
-    </div>
-    <div class="row mb-4">
-        <div class="col-md-6 mb-2">
-            <input id="searchInput" class="form-control" placeholder="Search by model or brand..." />
-        </div>
-    </div>
-    <div id="carResults">
     @if (Model?.Items != null && Model.Items.Any())
     {
         <div class="row">
@@ -169,7 +151,7 @@
                     @if (Model.HasPreviousPage)
                     {
                         <li class="page-item">
-                            <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber - 1)">Previous</a>
+                            <a href="@Url.Action("Filter", new { page = Model.PageNumber - 1 })" class="page-link">Previous</a>
                         </li>
                     }
                     else
@@ -208,9 +190,6 @@
             </div>
         </div>
     }
-    </div>
-</div>
-
 <style>
     .car-header h1 {
         font-size: 2.5em;
@@ -324,35 +303,3 @@
         bottom: 0;
     }
 </style>
-@section Scripts {
-    <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const searchInput = document.getElementById("searchInput");
-
-        function loadCars(page = 1) {
-            const search = searchInput.value;
-            const baseUrl = '@Url.Action("Filter", "Car")'
-            fetch(`${baseUrl}?page=${page}&search=${encodeURIComponent(search)}`, {
-                headers: {
-                    "X-Requested-With": "XMLHttpRequest"
-                }
-            })
-            .then(res => res.text())
-            .then(html => {
-                document.getElementById("carResults").innerHTML = html;
-
-                // Re-bind pagination links
-                document.querySelectorAll("#carResults .page-link").forEach(link => {
-                    link.addEventListener("click", function (e) {
-                        e.preventDefault();
-                        const page = new URL(link.href).searchParams.get("page");
-                        loadCars(page);
-                    });
-                });
-            });
-        }
-
-        searchInput.addEventListener("input", () => loadCars(1));
-    });
-</script>
-}

@@ -15,8 +15,8 @@ public class UserManagementController : BaseController
         _userManagerServiceService = userManagerServiceService;
     }
     
-    [AllowAnonymous]
     [HttpGet]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Index()
     {
         string userId = GetUserId();
@@ -25,7 +25,7 @@ public class UserManagementController : BaseController
     }
 
     [HttpPost]
-    [AllowAnonymous]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateUserRole(string userId, string selectedRole)
     {
         var success = await _userManagerServiceService.UpdateUserRoleAsync(userId, selectedRole);

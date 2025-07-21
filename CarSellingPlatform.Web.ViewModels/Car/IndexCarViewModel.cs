@@ -7,6 +7,7 @@ public class IndexCarViewModel
     public string? ImageUrl { get; set; }
     public string BrandName { get; set; }
     
+    public Guid BrandId { get; set; }
     public string CarModel { get; set; } = null!;
     
     public string Description { get; set; } = null!;
@@ -30,4 +31,5 @@ public class IndexCarViewModel
     public bool IsUserSeller { get; set; }
     public bool IsUserFavorite { get; set; }
     public string SellerId { get; set; } = null!;
+    public IEnumerable<AddCarBrand>? Brands { get; set; }
 }

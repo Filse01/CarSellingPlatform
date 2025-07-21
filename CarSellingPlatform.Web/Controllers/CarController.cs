@@ -28,6 +28,16 @@ public class CarController : BaseController
     }
     [AllowAnonymous]
     [HttpGet]
+    public async Task<IActionResult> Filter(string search = "", int page = 1)
+    {
+        const int pageSize = 10;
+        string? userId = GetUserId();
+        var pagedCars = await _carService.ListPagedAsync(userId, page, pageSize, search);
+        
+        return PartialView("_CarListPartial", pagedCars);
+    }
+    [AllowAnonymous]
+    [HttpGet]
     public async Task<IActionResult> Details(Guid id)
     {
         string? userId = GetUserId();

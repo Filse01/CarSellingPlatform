@@ -26,7 +26,7 @@ public class CarService : ICarService
         _userCarRepository = userCarRepository;
     }
 
-    public async Task<PagedListViewModel<IndexCarViewModel>> ListPagedAsync(string? userId, int pageNumber, int pageSize)
+    public async Task<PagedListViewModel<IndexCarViewModel>> ListPagedAsync(string? userId, int pageNumber, int pageSize, string? search = null)
     {
         var query = _carRepository.GetAllAttached()
             .Include(c => c.Category)
@@ -36,6 +36,13 @@ public class CarService : ICarService
             .Include(c => c.Transmission)
             .AsNoTracking();
 
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            string loweredSearch = search.ToLower();
+            query = query.Where(c =>
+                c.Model.ToLower().Contains(loweredSearch) ||
+                c.Brand.Name.ToLower().Contains(loweredSearch));
+        }
         int totalCount = await query.CountAsync();
 
         var cars = await query
@@ -44,6 +51,7 @@ public class CarService : ICarService
             .Select(c => new IndexCarViewModel
             {
                 Id = c.Id,
+                BrandId = c.Brand.Id,
                 BrandName = c.Brand.Name,
                 CategoryName = c.Category.Name,
                 CarModel = c.Model,
