@@ -22,17 +22,22 @@ public class CarController : BaseController
     {
         const int pageSize = 10;
         string? userId = GetUserId();
-
+        var brands = await _carInfoService.GetBrandsAsync();
         var pagedCars = await _carService.ListPagedAsync(userId, page, pageSize);
+        pagedCars.Brands = brands.Select(b => new AddCarBrand
+        {
+            Id = b.Id,
+            Name = b.Name
+        });
         return View(pagedCars);
     }
     [AllowAnonymous]
     [HttpGet]
-    public async Task<IActionResult> Filter(string search = "", int page = 1)
+    public async Task<IActionResult> Filter(string search = "", Guid? brandId = null,int page = 1)
     {
         const int pageSize = 10;
         string? userId = GetUserId();
-        var pagedCars = await _carService.ListPagedAsync(userId, page, pageSize, search);
+        var pagedCars = await _carService.ListPagedAsync(userId, page, pageSize, search, brandId);
         
         return PartialView("_CarListPartial", pagedCars);
     }

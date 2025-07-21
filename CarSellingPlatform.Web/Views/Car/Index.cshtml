@@ -16,6 +16,15 @@
             <input id="searchInput" class="form-control" placeholder="Search by model or brand..." />
         </div>
     </div>
+    <div class="col-md-6">
+        <select id="brandFilter" class="form-select">
+            <option value="">-- All Brands --</option>
+            @foreach (var brand in Model.Items)  // ✅ You'll need to pass Brands to the ViewModel
+            {
+                <option value="@brand.BrandId">@brand.BrandName</option>
+            }
+        </select>
+    </div>
     <div id="carResults">
     @if (Model?.Items != null && Model.Items.Any())
     {
@@ -328,11 +337,12 @@
     <script>
     document.addEventListener("DOMContentLoaded", function () {
         const searchInput = document.getElementById("searchInput");
-
+        const brandFilter = document.getElementById("brandFilter");
         function loadCars(page = 1) {
             const search = searchInput.value;
+            const brandId = brandFilter.value;
             const baseUrl = '@Url.Action("Filter", "Car")'
-            fetch(`${baseUrl}?page=${page}&search=${encodeURIComponent(search)}`, {
+            fetch(`${baseUrl}?page=${page}&search=${encodeURIComponent(search)}&brandId=${encodeURIComponent(brandId)}`, {
                 headers: {
                     "X-Requested-With": "XMLHttpRequest"
                 }
@@ -349,10 +359,12 @@
                         loadCars(page);
                     });
                 });
-            });
+            })
+                .catch(err => console.log(err));
         }
 
         searchInput.addEventListener("input", () => loadCars(1));
+        brandFilter.addEventListener("change", () => loadCars(1));
     });
 </script>
 }

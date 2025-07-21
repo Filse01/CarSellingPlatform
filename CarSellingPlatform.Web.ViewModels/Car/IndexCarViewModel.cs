@@ -31,5 +31,5 @@ public class IndexCarViewModel
     public bool IsUserSeller { get; set; }
     public bool IsUserFavorite { get; set; }
     public string SellerId { get; set; } = null!;
-    public IEnumerable<AddCarBrand>? Brands { get; set; }
+    public IEnumerable<AddCarBrand> Brands { get; set; }
 }
