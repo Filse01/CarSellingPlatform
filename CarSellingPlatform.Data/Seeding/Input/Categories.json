@@ -1,12 +1,12 @@
 [
-{ "Name": "Sedan" },
-{ "Name": "Coupe" },
-{ "Name": "Hatchback" },
-{ "Name": "SUV" },
-{ "Name": "Convertible" },
-{ "Name": "Wagon" },
-{ "Name": "Pickup Truck" },
-{ "Name": "Van" },
-{ "Name": "Crossover" },
-{ "Name": "Sports Car" }
+{"Id": "299BF14C-C82B-4390-A730-4AC0A8406D0B", "Name": "Sedan" },
+{"Id": "323A79BE-5A39-4717-9B45-359AF67130EE", "Name": "Coupe" },
+{"Id": "18BF100A-3EAD-436F-9BD0-5398F9119894", "Name": "Hatchback" },
+{"Id": "B0835A46-556E-4608-9BBA-FA58D0B3540C", "Name": "SUV" },
+{"Id": "23CEE5D1-95D1-47FD-A74E-309F140BA7EF", "Name": "Convertible" },
+{"Id": "D7968589-10B6-4B09-9039-12A97565FB79", "Name": "Wagon" },
+{"Id": "00FD9119-45BF-4303-AFC9-A8C6FAADAD0D", "Name": "Pickup Truck" },
+{"Id": "EE5BCC16-36DB-4C6E-92FA-D0AAB637F12C", "Name": "Van" },
+{"Id": "4CCBE5FF-745B-460F-BC6B-41255438A87D", "Name": "Crossover" },
+{"Id": "0BC5196F-F886-4A25-8EC9-8A10F73090A8", "Name": "Sports Car" }
 ]

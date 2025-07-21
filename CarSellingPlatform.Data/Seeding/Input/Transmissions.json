@@ -1,5 +1,5 @@
 [
-  { "Type": "Manual" },
-  { "Type": "Automatic"},
-  { "Type": "CVT"}
+  {"Id":"E63345C2-8E5E-470F-B76D-EFF0E3B177C8", "Type": "Manual" },
+  {"Id":"067446DE-F743-4824-8E6F-F880197C842A", "Type": "Automatic"},
+  {"Id":"3DAFEA8C-42C9-4078-9256-9F6102C0F3AE", "Type": "CVT"}
 ]

@@ -1,5 +1,5 @@
 [
-  { "Type": "Petrol" },
-  { "Type": "Diesel"},
-  { "Type": "LPG"}
+  {"Id":"AC5C3C7C-7367-4E63-BD6C-C701F890A2DB", "Type": "Petrol" },
+  {"Id":"B1A6073D-3731-49F2-A198-44E1EB606B4A", "Type": "Diesel"},
+  {"Id":"7919D077-71A7-4F15-9FAF-A81DD37015A7", "Type": "LPG"}
 ]
