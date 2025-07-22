@@ -5,14 +5,14 @@
 }
 
 <div class="container-fluid">
-    <div class="row mb-4">
+    <div class="row mb-4 text-center">
         <div class="col-12">
-            <h1 class="display-4 text-center mb-3">Cars for Sale</h1>
-            <p class="text-center text-muted">Find your perfect car from our extensive collection</p>
+            <h1 class="display-4 mb-3">Cars for Sale</h1>
+            <p class="text-muted">Find your perfect car from our extensive collection</p>
         </div>
     </div>
 
-    @if (Model?.Items != null && Model.Items.Any())
+    @if (Model?.Items?.Any() == true)
     {
         <div class="row">
             @foreach (var car in Model.Items)
@@ -21,127 +21,63 @@
                     <div class="card car-card shadow-sm h-100">
                         <div class="card-body">
                             <div class="row align-items-center">
-                                <!-- Car Image -->
+                                <!-- Image -->
                                 <div class="col-md-3 col-lg-2">
                                     <div class="car-image-container">
                                         @if (!string.IsNullOrEmpty(car.ImageUrl))
                                         {
-                                            <img src="@car.ImageUrl" 
-                                                 alt="@car.CarModel" 
-                                                 class="img-fluid rounded car-image"
+                                            <img src="@car.ImageUrl" alt="@car.CarModel" class="img-fluid rounded car-image"
                                                  onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
                                         }
-                                        <div class="bg-light rounded d-flex align-items-center justify-content-center car-placeholder @(string.IsNullOrEmpty(car.ImageUrl) ? "" : "d-none")" 
-                                             style="height: 120px;">
+                                        <div class="bg-light rounded d-flex align-items-center justify-content-center car-placeholder @(string.IsNullOrEmpty(car.ImageUrl) ? "" : "d-none")" style="height: 120px;">
                                             <i class="fas fa-car fa-3x text-muted"></i>
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <!-- Car Details -->
+
+                                <!-- Details -->
                                 <div class="col-md-6 col-lg-7">
                                     <h5 class="card-title mb-2">@car.BrandName @car.CarModel (@car.CategoryName)</h5>
                                     <p class="card-text text-muted mb-2">@car.Description</p>
-                                    
                                     <div class="row text-sm">
-                                        <div class="col-6 col-lg-4 mb-1">
-                                            <small class="text-muted">
-                                                <i class="fas fa-calendar-alt me-1"></i>
-                                                Year: <strong>@car.Year</strong>
-                                            </small>
-                                        </div>
-                                        <div class="col-6 col-lg-4 mb-1">
-                                            <small class="text-muted">
-                                                <i class="fas fa-horse me-1"></i>
-                                                HP: <strong>@car.HorsePower</strong>
-                                            </small>
-                                        </div>
-                                        <div class="col-6 col-lg-4 mb-1">
-                                            <small class="text-muted">
-                                                <i class="fas fa-palette me-1"></i>
-                                                Color: <strong>@car.Color</strong>
-                                            </small>
-                                        </div>
-                                        <div class="col-6 col-lg-4 mb-1">
-                                            <small class="text-muted">
-                                                <i class="fas fa-cog me-1"></i>
-                                                Engine Displacement: <strong>@car.Displacement</strong>
-                                            </small>
-                                        </div>
-                                        <div class="col-6 col-lg-4 mb-1">
-                                            <small class="text-muted">
-                                                <i class="fas fa-cog me-1"></i>
-                                                Fuel Type: <strong>@car.FuelTypeName</strong>
-                                            </small>
-                                        </div>
-                                        <div class="col-6 col-lg-4 mb-1">
-                                            <small class="text-muted">
-                                                <i class="fas fa-cog me-1"></i>
-                                                Transmission: <strong>@car.TransmissionTypeName</strong>
-                                            </small>
-                                        </div>
+                                        <div class="col-6 col-lg-4 mb-1"><small class="text-muted"><i class="fas fa-calendar-alt me-1"></i>Year: <strong>@car.Year</strong></small></div>
+                                        <div class="col-6 col-lg-4 mb-1"><small class="text-muted"><i class="fas fa-horse me-1"></i>HP: <strong>@car.HorsePower</strong></small></div>
+                                        <div class="col-6 col-lg-4 mb-1"><small class="text-muted"><i class="fas fa-palette me-1"></i>Color: <strong>@car.Color</strong></small></div>
+                                        <div class="col-6 col-lg-4 mb-1"><small class="text-muted"><i class="fas fa-cog me-1"></i>Engine: <strong>@car.Displacement</strong></small></div>
+                                        <div class="col-6 col-lg-4 mb-1"><small class="text-muted"><i class="fas fa-gas-pump me-1"></i>Fuel: <strong>@car.FuelTypeName</strong></small></div>
+                                        <div class="col-6 col-lg-4 mb-1"><small class="text-muted"><i class="fas fa-cogs me-1"></i>Transmission: <strong>@car.TransmissionTypeName</strong></small></div>
                                     </div>
                                 </div>
-                                
-                                <!-- Price and Actions -->
-                                <div class="col-md-3 col-lg-3 text-center">
-                                    <div class="price-section d-none d-md-block">
-                                        <h3 class="text-primary fw-bold mb-3">
-                                            $@car.Price.ToString("N0")
-                                        </h3>
-                                        @if (!car.IsUserSeller)
-                                        {
-                                            <div class="d-grid gap-2">
-                                                <a href="@Url.Action("Details", "Car", new { id = car.Id })"
-                                                   class="btn btn-primary btn-sm">
-                                                    <i class="fas fa-eye me-1"></i>
-                                                    View Details
-                                                </a>
-                                                <a asp-controller="Chat" asp-action="Index"
-                                                   asp-route-carId="@car.Id" asp-route-sellerId="@car.SellerId"
-                                                   class="btn btn-primary">
-                                                    Contact Seller
-                                                </a>
-                                                <form asp-controller="Car" asp-action="RemoveFavoriteCars" asp-route-id="@car.Id" method="post" style="display:inline;">
-                                                    <button type="submit" class="btn btn-primary">Remove
-                                                    </button>
-                                                </form>
 
-                                            </div>
+                                <!-- Price + Actions -->
+                                <div class="col-md-3 text-center mt-3 mt-md-0">
+                                    <h3 class="text-primary fw-bold mb-3">$@car.Price.ToString("N0")</h3>
+
+                                    <div class="d-grid gap-2">
+                                        @if (car.IsUserSeller)
+                                        {
+                                            <a href="@Url.Action("EditCar", "Car", new { id = car.Id })" class="btn btn-primary btn-sm">
+                                                <i class="fas fa-pen me-1"></i> Edit
+                                            </a>
                                         }
                                         else
                                         {
-                                            <div class="d-grid gap-2">
-                                                <a href="@Url.Action("EditCar", "Car", new { id = car.Id })"
-                                                   class="btn btn-primary btn-sm">
-                                                    <i class="fas fa-eye me-1"></i>
-                                                    Edit
-                                                </a>
-                                                </div>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Mobile Price Section -->
-                            <div class="row d-md-none">
-                                <div class="col-12">
-                                    <div class="price-section mobile-price-section text-center">
-                                        <h3 class="text-primary fw-bold mb-3">
-                                            $@car.Price.ToString("N0")
-                                        </h3>
-                                        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                                            <a href="@Url.Action("Details", "Car", new { id = car.Id })" 
+                                            <a href="@Url.Action("Details", "Car", new { id = car.Id })" class="btn btn-primary btn-sm">
+                                                <i class="fas fa-eye me-1"></i> View Details
+                                            </a>
+
+                                            <a asp-controller="Chat" asp-action="Index"
+                                               asp-route-carId="@car.Id" asp-route-sellerId="@car.SellerId"
                                                class="btn btn-primary btn-sm">
-                                                <i class="fas fa-eye me-1"></i>
-                                                View Details
+                                                <i class="fas fa-comments me-1"></i> Contact Seller
                                             </a>
-                                            <a href="@Url.Action("Contact", "Car", new { id = car.Id })" 
-                                               class="btn btn-outline-secondary btn-sm">
-                                                <i class="fas fa-phone me-1"></i>
-                                                Contact Seller
-                                            </a>
-                                        </div>
+
+                                            <form asp-controller="Car" asp-action="RemoveFavoriteCars" asp-route-id="@car.Id" method="post">
+                                                <button type="submit" class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-heart-broken me-1"></i> Remove
+                                                </button>
+                                            </form>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -150,37 +86,22 @@
                 </div>
             }
         </div>
-        
+
+        <!-- Pagination -->
         <div class="col-12 d-flex justify-content-center">
             <nav>
                 <ul class="pagination">
-                    @if (Model.HasPreviousPage)
-                    {
-                        <li class="page-item">
-                            <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber - 1)">Previous</a>
-                        </li>
-                    }
-                    else
-                    {
-                        <li class="page-item disabled"><span class="page-link">Previous</span></li>
-                    }
-
-                    <li class="page-item disabled">
-                        <span class="page-link">
-                            Page @Model.PageNumber of @Model.TotalPages
-                        </span>
+                    <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+                        <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber - 1)">Previous</a>
                     </li>
 
-                    @if (Model.HasNextPage)
-                    {
-                        <li class="page-item">
-                            <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber + 1)">Next</a>
-                        </li>
-                    }
-                    else
-                    {
-                        <li class="page-item disabled"><span class="page-link">Next</span></li>
-                    }
+                    <li class="page-item disabled">
+                        <span class="page-link">Page @Model.PageNumber of @Model.TotalPages</span>
+                    </li>
+
+                    <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+                        <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber + 1)">Next</a>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -189,10 +110,10 @@
     {
         <div class="row">
             <div class="col-12 text-center">
-                <div class="alert alert-info" role="alert">
+                <div class="alert alert-info">
                     <i class="fas fa-info-circle me-2"></i>
                     You have not added any cars to favorites.
-                    </div>
+                </div>
             </div>
         </div>
     }
