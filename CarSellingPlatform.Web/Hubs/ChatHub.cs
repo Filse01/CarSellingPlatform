@@ -54,7 +54,7 @@ public class ChatHub : Hub
 
         // Retrieve the user's name to display in the chat
         var user = await _context.Users.FindAsync(userId);
-        var userName = user?.UserName ?? "Anonymous";
+        var userName = user?.FirstName + " " + user?.LastName ?? "Anonymous";
 
         // Broadcast the message to all clients in the same chat group
         await Clients.Group(chatId).SendAsync("ReceiveMessage", userName, message);
@@ -72,7 +72,7 @@ public class ChatHub : Hub
         var history = await _context.Messages
             .Where(m => m.ChatId == chatGuid)
             .OrderBy(m => m.CreatedAt)
-            .Select(m => new { user = m.Creator.UserName, message = m.Text }) // Project to an anonymous object
+            .Select(m => new { user = m.Creator.FirstName + " " + m.Creator.LastName, message = m.Text }) // Project to an anonymous object
             .ToListAsync();
 
         // Send the history only to the client that requested it
