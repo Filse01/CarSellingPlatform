@@ -1,11 +1,12 @@
 using CarSellingPlatform.Services.Core.Contracts;
 using CarSellingPlatform.Services.Core;
+using CarSellingPlatform.Web.Areas.Admin.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarSellingPlatform.Web.Controllers;
-
-public class UserManagementController : BaseController
+[Area("Admin")]
+public class UserManagementController : BaseAdminController
 {
     private readonly IUserManagerService _userManagerServiceService;
 
