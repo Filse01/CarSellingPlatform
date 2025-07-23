@@ -24,4 +24,8 @@
     <ProjectReference Include="..\CarSellingPlatform.Web.ViewModels\CarSellingPlatform.Web.ViewModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\UserManagement\" />
+  </ItemGroup>
+
 </Project>

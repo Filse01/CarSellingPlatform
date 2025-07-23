@@ -60,6 +60,10 @@ namespace CarSellingPlatform.Web
             app.UseAuthorization();
             app.MapHub<ChatHub>("/ChatHub");
             app.MapControllerRoute(
+                name : "areas",
+                pattern : "{area}/{controller=Home}/{action=Index}/{id?}"
+            );
+            app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
