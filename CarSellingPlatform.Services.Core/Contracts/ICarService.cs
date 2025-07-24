@@ -17,4 +17,5 @@ public interface ICarService
     Task<PagedListViewModel<FavoriteCarViewModel>?> GetFavoriteCarsAsync(string userId, int pageNumber, int pageSize);
     Task<bool> AddCarToFavoritesAsync(string userId, Guid carId);
     Task<bool> RemoveCarFromFavoritesAsync(string userId, Guid carId);
+    Task<PagedListViewModel<MyCarsViewModel>> MyCarsPagedAsync(string? userId, int pageNumber, int pageSize);
 }

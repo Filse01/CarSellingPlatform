@@ -361,4 +361,33 @@ public class CarService : ICarService
         }
         return opResult;
     }
+
+    public async Task<PagedListViewModel<MyCarsViewModel>> MyCarsPagedAsync(string? userId, int pageNumber, int pageSize)
+    {
+        var query = _carRepository.GetAllAttached()
+            .Include(c => c.Brand)
+            .Where(c => c.SellerId == userId)
+            .AsNoTracking();
+        int totalCount = await query.CountAsync();
+
+        var cars = await query
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .Select(c => new MyCarsViewModel
+            {
+                Id = c.Id,
+                ImageUrl = c.ImageUrl,
+                Brand = c.Brand.Name,
+                CarModel = c.Model,
+                Price = c.Price,
+            })
+            .ToListAsync();
+
+        return new PagedListViewModel<MyCarsViewModel>
+        {
+            Items = cars,
+            PageNumber = pageNumber,
+            TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
+        };
+    }
 }

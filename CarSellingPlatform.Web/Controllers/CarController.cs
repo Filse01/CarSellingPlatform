@@ -170,4 +170,13 @@ public class CarController : BaseController
         }
         return RedirectToAction(nameof(FavoriteCars));
     }
+
+    [HttpGet]
+    public async Task<IActionResult> MyCars(int? id, int page = 1)
+    {
+        const int pageSize = 10;
+        string? userId = GetUserId();
+        var pagedMyCars = await _carService.MyCarsPagedAsync(userId, page, pageSize);
+        return View(pagedMyCars);
+    }
 }
