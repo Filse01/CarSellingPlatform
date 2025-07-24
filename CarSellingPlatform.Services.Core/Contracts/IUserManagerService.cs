@@ -7,4 +7,5 @@ public interface IUserManagerService
     Task<IEnumerable<UserManagementIndexViewModel>> GetAllUsersAsync(string userId);
     
     Task<bool> UpdateUserRoleAsync(string userId, string selectedRole);
+    Task<bool> DeleteUser(string userId);
 }

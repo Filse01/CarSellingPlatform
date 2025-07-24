@@ -9,11 +9,11 @@ namespace CarSellingPlatform.Web.Controllers;
 public class UserManagementController : BaseAdminController
 {
     private readonly IUserManagerService _userManagerServiceService;
-
-    
-    public UserManagementController(IUserManagerService userManagerServiceService)
+    private readonly IUserManagerService _userManagerService;
+    public UserManagementController(IUserManagerService userManagerServiceService, IUserManagerService userManagerService)
     {
         _userManagerServiceService = userManagerServiceService;
+        _userManagerService = userManagerService;
     }
     
     [HttpGet]
@@ -35,6 +35,16 @@ public class UserManagementController : BaseAdminController
             ? "User role updated successfully."
             : "Failed to update user role.";
 
+        return RedirectToAction(nameof(Index));
+    }
+    [HttpPost]
+    public async Task<IActionResult> DeleteUser(string id)
+    {
+        bool opResult = await _userManagerService.DeleteUser(id);
+        if (opResult == false)
+        {
+            return RedirectToAction(nameof(Index));
+        }
         return RedirectToAction(nameof(Index));
     }
 }
