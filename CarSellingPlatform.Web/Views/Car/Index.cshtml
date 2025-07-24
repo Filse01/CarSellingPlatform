@@ -67,35 +67,42 @@
 
                                     <!-- Price + Actions -->
                                     <div class="col-md-3 text-center mt-3 mt-md-0">
-                                        <h3 class="text-primary fw-bold mb-3">$@car.Price.ToString("N0")</h3>
+                                        <div class="price-section d-none d-md-block">
+                                            <h3 class="text-primary fw-bold mb-3">
+                                                $@car.Price.ToString("N0")
+                                            </h3>
 
-                                        <div class="d-grid gap-2">
-                                            @if (car.IsUserSeller)
-                                            {
-                                                <a href="@Url.Action("EditCar", "Car", new { id = car.Id })" class="btn btn-primary btn-sm">
-                                                    <i class="fas fa-pen me-1"></i> Edit
-                                                </a>
-                                            }
-                                            else
-                                            {
-                                                <a href="@Url.Action("Details", "Car", new { id = car.Id })" class="btn btn-primary btn-sm">
-                                                    <i class="fas fa-eye me-1"></i> View Details
-                                                </a>
-
-                                                @if (User?.Identity?.IsAuthenticated == true && !car.IsUserFavorite)
+                                            <div class="d-grid gap-2">
+                                                @if (car.IsUserSeller)
                                                 {
-                                                    <a asp-controller="Chat" asp-action="Create"
-                                                       asp-route-carId="@car.Id" asp-route-sellerId="@car.SellerId"
-                                                       class="btn btn-primary btn-sm">
-                                                        Contact Seller
+                                                    <a href="@Url.Action("EditCar", "Car", new { id = car.Id })" class="btn btn-primary btn-sm">
+                                                        <i class="fas fa-pen me-1"></i> Edit
                                                     </a>
-                                                    <form asp-controller="Car" asp-action="AddFavoriteCars" method="post" class="d-inline">
-                                                        <input type="hidden" name="id" value="@car.Id" />
-                                                        <button type="submit" class="btn btn-primary btn-sm">Add to Favorites</button>
-                                                    </form>
-
                                                 }
-                                            }
+                                                else
+                                                {
+                                                    <a href="@Url.Action("Details", "Car", new { id = car.Id })" class="btn btn-primary btn-sm">
+                                                        <i class="fas fa-eye me-1"></i> View Details
+                                                    </a>
+
+                                                    @if (User?.Identity?.IsAuthenticated == true && !car.IsUserFavorite)
+                                                    {
+                                                        <div class="d-flex gap-2 align-items-center">
+                                                            <form asp-controller="Car" asp-action="AddFavoriteCars" method="post">
+                                                                <input type="hidden" name="id" value="@car.Id"/>
+                                                                <button type="submit" class="btn btn-primary">Add to Favorites</button>
+                                                            </form>
+
+                                                            <form method="post" asp-controller="Chat" asp-action="Create" asp-route-carId="@car.Id">
+                                                                <button type="submit" class="btn btn-primary">
+                                                                    Contact Seller
+                                                                </button>
+                                                            </form>
+                                                        </div>
+
+                                                    }
+                                                }
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
