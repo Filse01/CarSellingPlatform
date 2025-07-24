@@ -19,6 +19,7 @@ public interface IRepository<TEntity, TKey>
     Task AddRangeAsync(TEntity[] entities);
     bool Delete(TEntity entity);
     bool HardDelete(TEntity entity);
+    bool HardDeleteRange(IEnumerable<TEntity> entities);
     bool Update(TEntity entity);
     Task<bool> UpdateAsync(TEntity entity);
   void SaveChanges();

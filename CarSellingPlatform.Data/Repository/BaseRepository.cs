@@ -95,8 +95,13 @@ public class BaseRepository<TEntity, TKey> : IRepository<TEntity, TKey> where TE
         int updatedCount = this._dbContext.SaveChanges();
         return updatedCount > 0;
     }
-    
 
+    public bool HardDeleteRange(IEnumerable<TEntity> entities)
+    {
+        _dbSet.RemoveRange(entities);
+        int updatedCount = this._dbContext.SaveChanges();
+        return updatedCount > 0;
+    }
     public bool Update(TEntity entity)
     {
         try
