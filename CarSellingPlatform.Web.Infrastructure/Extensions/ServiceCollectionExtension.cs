@@ -1,4 +1,6 @@
 using System.Reflection;
+using CarSellingPlatform.Web.Infrastructure.Middlewares;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CarSellingPlatform.Web.Infrastructure.Extensions;
@@ -23,5 +25,11 @@ public static class ServiceCollectionExtension
             services.AddScoped(serviceInterface, serviceClass);
         }
         return services;
+    }
+
+    public static IApplicationBuilder UserAdminRedirection(this IApplicationBuilder app)
+    {
+        app.UseMiddleware<AdminRedirectionMiddleware>();
+        return app;
     }
 }

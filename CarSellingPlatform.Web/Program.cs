@@ -58,6 +58,7 @@ namespace CarSellingPlatform.Web
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UserAdminRedirection();
             app.MapHub<ChatHub>("/ChatHub");
             app.MapControllerRoute(
                 name : "areas",

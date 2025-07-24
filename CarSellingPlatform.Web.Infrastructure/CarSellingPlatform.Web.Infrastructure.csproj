@@ -11,6 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Microsoft.AspNetCore.Http.Abstractions">
+      <HintPath>..\..\..\.nuget\packages\microsoft.aspnetcore.app.ref\8.0.15\ref\net8.0\Microsoft.AspNetCore.Http.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
       <HintPath>..\..\..\.nuget\packages\microsoft.aspnetcore.app.ref\8.0.15\ref\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
     </Reference>
