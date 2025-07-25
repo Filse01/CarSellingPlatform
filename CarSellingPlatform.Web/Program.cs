@@ -8,6 +8,7 @@ using CarSellingPlatform.Web.Hubs;
 using CarSellingPlatform.Web.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarSellingPlatform.Web
@@ -37,7 +38,11 @@ namespace CarSellingPlatform.Web
                 })
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<CarSellingPlatformDbContext>();
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews()
+                .AddMvcOptions(options =>
+                {
+                    options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+                });
             builder.Services.RegisterUserDefinedServices(typeof(ICarService).Assembly);
             builder.Services.AddScoped(typeof(IRepository<,>), typeof(BaseRepository<,>));
             builder.Services.AddSignalR();
