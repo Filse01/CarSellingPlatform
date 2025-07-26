@@ -1,5 +1,5 @@
 @using CarSellingPlatform.Web.ViewModels.UserManager
-@model IEnumerable<UserManagementIndexViewModel>
+@model CarSellingPlatform.Web.ViewModels.Car.PagedListViewModel<UserManagementIndexViewModel>
 
 @{
     ViewData["Title"] = "User Management";
@@ -26,71 +26,87 @@
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead class="table-dark">
-                                <tr>
-                                    <th>Email</th>
-                                    <th>Roles</th>
-                                    <th>Email Confirmed</th>
-                                    <th class="text-center" style="width: 160px;">Action</th>
-                                </tr>
+                            <tr>
+                                <th>Email</th>
+                                <th>Roles</th>
+                                <th>Email Confirmed</th>
+                                <th class="text-center" style="width: 160px;">Action</th>
+                            </tr>
                             </thead>
                             <tbody>
-                                @foreach (var user in Model)
-                                {
-                                    <tr>
-                                        <form asp-controller="UserManagement" asp-action="UpdateUserRole" method="post">
-                                            <td>
-                                                @user.UserName
-                                                <input type="hidden" name="UserId" value="@user.Id" />
-                                            </td>
-                                            <td>
-                                                @foreach (var role in user.Roles)
+                            @foreach (var user in Model.Items)
+                            {
+                                <tr>
+                                    <form asp-controller="UserManagement" asp-action="UpdateUserRole" method="post">
+                                        <td>
+                                            @user.UserName
+                                            <input type="hidden" name="UserId" value="@user.Id" />
+                                        </td>
+                                        <td>
+                                            @foreach (var role in user.Roles)
+                                            {
+                                                @role
+                                            }
+                                            <select name="SelectedRole" class="form-select">
+                                                @foreach (var role in availableRoles)
                                                 {
-                                                    @role
+                                                    <option value="@role" selected="@(user.Roles.Contains(role) ? "selected" : null)">
+                                                        @role
+                                                    </option>
                                                 }
-                                                <select name="SelectedRole" class="form-select">
-                                                    @foreach (var role in availableRoles)
-                                                    {
-                                                        <option value="@role" selected="@(user.Roles.Contains(role) ? "selected" : null)">
-                                                            @role
-                                                        </option>
-                                                    }
-                                                </select>
-                                            </td>
-                                            <td>
-                                                @if (user.EmailConfirmed)
-                                                {
-                                                    <span class="badge bg-success">
-                                                        <i class="fas fa-check"></i> Confirmed
-                                                    </span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="badge bg-warning text-dark">
-                                                        <i class="fas fa-times"></i> Pending
-                                                    </span>
-                                                }
-                                            </td>
-                                            <td>
-                                                <div class="d-flex align-items-center" >
-                                                    <form method="post" asp-area="Admin" asp-controller="UserManagement" asp-action="UpdateUserRole" asp-route-id="@user.Id" class="me-2" >
-                                                        <button type="submit" class="btn btn-sm btn-primary">
-                                                            <i class="fas fa-save"></i> Save
-                                                        </button>
-                                                    </form>
-                                                    <form asp-area="Admin" asp-controller="UserManagement" asp-action="DeleteUser" asp-route-id="@user.Id" method="post">
-                                                        <button type="submit" class="btn btn-primary btn-sm">
-                                                            <i class="fas fa-heart-broken me-1"></i> Delete
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </td>
-                                        </form>
-                                    </tr>
-                                }
+                                            </select>
+                                        </td>
+                                        <td>
+                                            @if (user.EmailConfirmed)
+                                            {
+                                                <span class="badge bg-success">
+                                                    <i class="fas fa-check"></i> Confirmed
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning text-dark">
+                                                    <i class="fas fa-times"></i> Pending
+                                                </span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center" >
+                                                <form method="post" asp-area="Admin" asp-controller="UserManagement" asp-action="UpdateUserRole" asp-route-id="@user.Id" class="me-2" >
+                                                    <button type="submit" class="btn btn-sm btn-primary">
+                                                        <i class="fas fa-save"></i> Save
+                                                    </button>
+                                                </form>
+                                                <form asp-area="Admin" asp-controller="UserManagement" asp-action="DeleteUser" asp-route-id="@user.Id" method="post">
+                                                    <button type="submit" class="btn btn-primary btn-sm">
+                                                        <i class="fas fa-heart-broken me-1"></i> Delete
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </form>
+                                </tr>
+                            }
                             </tbody>
                         </table>
+                        <div class="col-12 d-flex justify-content-center">
+                            <nav>
+                                <ul class="pagination">
+                                    <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+                                        <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber - 1)">Previous</a>
+                                    </li>
 
-                        @if (!Model.Any())
+                                    <li class="page-item disabled">
+                                        <span class="page-link">Page @Model.PageNumber of @Model.TotalPages</span>
+                                    </li>
+
+                                    <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+                                        <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber + 1)">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        @if (!Model.Items.Any())
                         {
                             <div class="text-center py-4">
                                 <p class="text-muted">No users found.</p>

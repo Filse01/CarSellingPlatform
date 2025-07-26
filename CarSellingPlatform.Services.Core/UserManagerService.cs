@@ -2,6 +2,8 @@ using CarSellingPlatform.Data;
 using CarSellingPlatform.Data.Interfaces.Repository;
 using CarSellingPlatform.Data.Models.Chat;
 using CarSellingPlatform.Services.Core.Contracts;
+using CarSellingPlatform.Web.ViewModels.Car;
+using CarSellingPlatform.Web.ViewModels.CarManagement;
 using CarSellingPlatform.Web.ViewModels.UserManager;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +19,7 @@ public class UserManagerService : IUserManagerService
         _userManager = userManager;
         _chatRepository = chatRepository;
     }
-    public async Task<IEnumerable<UserManagementIndexViewModel>> GetAllUsersAsync(string userId)
+    public async Task<PagedListViewModel<UserManagementIndexViewModel>> ListPagedAsync(string? userId, int pageNumber, int pageSize)
     {
         var allUsers = await _userManager.Users.ToListAsync();
         var users = new List<UserManagementIndexViewModel>();
@@ -34,8 +36,13 @@ public class UserManagerService : IUserManagerService
                 EmailConfirmed = user.EmailConfirmed,
             });
         }
-    
-        return users;
+        int totalCount = allUsers.Count();
+        return new PagedListViewModel<UserManagementIndexViewModel>
+        {
+            Items = users,
+            PageNumber = pageNumber,
+            TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
+        };
     }
 
     public async Task<bool> UpdateUserRoleAsync(string userId, string selectedRole)

@@ -18,10 +18,11 @@ public class UserManagementController : BaseAdminController
     
     [HttpGet]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int page=1)
     {
+        const int pageSize = 10;
         string userId = GetUserId();
-        var allUsers =await this._userManagerServiceService.GetAllUsersAsync(userId);
+        var allUsers =await this._userManagerServiceService.ListPagedAsync(userId, page, pageSize);
         return View(allUsers);
     }
 
