@@ -20,19 +20,32 @@ public class CarManagementService : ICarManagementService
         _engineRepository = engineRepository;
         _userManager = userManager;
     }
-    public async Task<IEnumerable<CarManagementIndexView>> GetAllUCars()
+    public async Task<PagedListViewModel<CarManagementIndexView>> ListPagedAsync(string? userId, int pageNumber, int pageSize)
     {
-        var cars = _carRepository.GetAllAttached()
+        var query = _carRepository.GetAllAttached()
+            .Include(c => c.Brand)
+            .AsNoTracking();
+        int totalCount = await query.CountAsync();
+        var cars = await query
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
             .Select(c => new CarManagementIndexView
             {
                 Id = c.Id,
-                Brand = c.Brand.Name,
                 Model = c.Model,
-                SellerName = c.Seller.FirstName + " " + c.Seller.LastName,
+                Brand = c.Brand.Name,
                 Year = c.Year,
-                Email = c.Seller.Email
-            }).ToList();
-        return cars;
+                SellerName = c.Seller.FirstName + " " + c.Seller.LastName,
+                Email = c.Seller.Email,
+            })
+            .ToListAsync();
+
+        return new PagedListViewModel<CarManagementIndexView>
+        {
+            Items = cars,
+            PageNumber = pageNumber,
+            TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
+        };
     }
     public async Task<EditCarViewModel> GetEditCarAsync(Guid? id, string userId)
     {

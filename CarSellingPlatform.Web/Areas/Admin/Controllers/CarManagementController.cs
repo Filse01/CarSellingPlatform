@@ -14,10 +14,12 @@ public class CarManagementController : BaseAdminController
         _carInfoService = carInfoService;
     }
     // GET
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int page =1)
     {
-        var allCars = await _carManagementService.GetAllUCars();
-        return View(allCars);
+        const int pageSize = 10;
+        string? userId = GetUserId();
+        var pagedCars = await _carManagementService.ListPagedAsync(userId, page, pageSize);
+        return View(pagedCars);
     }
     [HttpGet]
     public async Task<IActionResult> EditCar(Guid id)

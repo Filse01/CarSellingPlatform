@@ -1,5 +1,5 @@
 @using CarSellingPlatform.Web.ViewModels.CarManagement
-@model IEnumerable<CarManagementIndexView>
+@model CarSellingPlatform.Web.ViewModels.Car.PagedListViewModel<CarManagementIndexView>
 <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0">All Cars</h5>
@@ -8,55 +8,71 @@
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead class="table-dark">
-                                <tr>
-                                    <th>Brand</th>
-                                    <th>Model</th>
-                                    <th>Year</th>
-                                    <th>Seller</th>
-                                    <th>Email</th>
-                                    <th class="text-center" style="width: 160px;">Action</th>
-                                </tr>
+                            <tr>
+                                <th>Brand</th>
+                                <th>Model</th>
+                                <th>Year</th>
+                                <th>Seller</th>
+                                <th>Email</th>
+                                <th class="text-center" style="width: 160px;">Action</th>
+                            </tr>
                             </thead>
                             <tbody>
-                                @foreach (var car in Model)
-                                {
-                                    <tr>
-                                        <form asp-controller="CarManagement" asp-action="DeleteCar" method="post">
-                                            <td>
-                                                @car.Brand
-                                                <input type="hidden" name="UserId" value="@car.Id" />
-                                            </td>
-                                            <td>
-                                                @car.Model
-                                            </td>
-                                            <td>
-                                                @car.Year
-                                            </td>
-                                            <td>
-                                                @car.SellerName
-                                            </td>
-                                            <td>
-                                                @car.Email
-                                            </td>
-                                            <td>
-                                                <div class="d-flex align-items-center" >
-                                                    <div class="d-grid gap-2">
-                                                        <a href="@Url.Action("EditCar", "CarManagement", new { id = car.Id })" class="btn btn-primary btn-sm">
-                                                            <i class="fas fa-pen me-1"></i> Edit
-                                                        </a>
-                                                    </div>
-                                                    <a asp-controller="CarManagement" asp-action="DeleteCar" asp-route-id="@car.Id" class="btn btn-secondary">
-                                                        <i class="fas fa-trash"></i> Delete 
+                            @foreach (var car in Model.Items)
+                            {
+                                <tr>
+                                    <form asp-controller="CarManagement" asp-action="DeleteCar" method="post">
+                                        <td>
+                                            @car.Brand
+                                            <input type="hidden" name="UserId" value="@car.Id" />
+                                        </td>
+                                        <td>
+                                            @car.Model
+                                        </td>
+                                        <td>
+                                            @car.Year
+                                        </td>
+                                        <td>
+                                            @car.SellerName
+                                        </td>
+                                        <td>
+                                            @car.Email
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center" >
+                                                <div class="d-grid gap-2">
+                                                    <a href="@Url.Action("EditCar", "CarManagement", new { id = car.Id })" class="btn btn-primary btn-sm">
+                                                        <i class="fas fa-pen me-1"></i> Edit
                                                     </a>
                                                 </div>
-                                            </td>
-                                        </form>
-                                    </tr>
-                                }
+                                                <a asp-controller="CarManagement" asp-action="DeleteCar" asp-route-id="@car.Id" class="btn btn-secondary">
+                                                    <i class="fas fa-trash"></i> Delete 
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </form>
+                                </tr>
+                            }
                             </tbody>
                         </table>
+                        <div class="col-12 d-flex justify-content-center">
+                            <nav>
+                                <ul class="pagination">
+                                    <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+                                        <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber - 1)">Previous</a>
+                                    </li>
 
-                        @if (!Model.Any())
+                                    <li class="page-item disabled">
+                                        <span class="page-link">Page @Model.PageNumber of @Model.TotalPages</span>
+                                    </li>
+
+                                    <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+                                        <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber + 1)">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        @if (!Model.Items.Any())
                         {
                             <div class="text-center py-4">
                                 <p class="text-muted">No users found.</p>
