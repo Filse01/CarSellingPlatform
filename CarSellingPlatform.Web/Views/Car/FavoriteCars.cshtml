@@ -54,30 +54,9 @@
                                     <h3 class="text-primary fw-bold mb-3">$@car.Price.ToString("N0")</h3>
 
                                     <div class="d-grid gap-2">
-                                        @if (car.IsUserSeller)
-                                        {
                                             <a href="@Url.Action("EditCar", "Car", new { id = car.Id })" class="btn btn-primary btn-sm">
                                                 <i class="fas fa-pen me-1"></i> Edit
                                             </a>
-                                        }
-                                        else
-                                        {
-                                            <a href="@Url.Action("Details", "Car", new { id = car.Id })" class="btn btn-primary btn-sm">
-                                                <i class="fas fa-eye me-1"></i> View Details
-                                            </a>
-
-                                            <a asp-controller="Chat" asp-action="Index"
-                                               asp-route-carId="@car.Id" asp-route-sellerId="@car.SellerId"
-                                               class="btn btn-primary btn-sm">
-                                                <i class="fas fa-comments me-1"></i> Contact Seller
-                                            </a>
-
-                                            <form asp-controller="Car" asp-action="RemoveFavoriteCars" asp-route-id="@car.Id" method="post">
-                                                <button type="submit" class="btn btn-primary btn-sm">
-                                                    <i class="fas fa-heart-broken me-1"></i> Remove
-                                                </button>
-                                            </form>
-                                        }
                                     </div>
                                 </div>
                             </div>
