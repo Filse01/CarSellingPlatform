@@ -26,26 +26,26 @@ namespace CarSellingPlatform.Web.Controllers
             return View();
         }
 
-        // [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        // public IActionResult Error(int? statusCode)
-        // {
-        //     if (statusCode == null)
-        //     {
-        //         return View("UnathorizedError");
-        //     }
-        //     else if (statusCode == 401 || statusCode == 403)
-        //     {
-        //         return View("UnathorizedError");
-        //     }
-        //     else
-        //     {
-        //         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        //     }
-        // }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Error(int? statusCode)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            if (statusCode == 404)
+            {
+                return View("NotFoundError");
+            }
+            else if (statusCode == 401 || statusCode == 403)
+            {
+                return View("UnathorizedError");
+            }
+            else if (statusCode == 500)
+            {
+                return View("Error");
+            }
+            else
+            {
+                return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            }
         }
+        
     }
 }

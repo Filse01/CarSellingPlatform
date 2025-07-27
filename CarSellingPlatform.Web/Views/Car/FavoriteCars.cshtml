@@ -1,14 +1,14 @@
 @model CarSellingPlatform.Web.ViewModels.Car.PagedListViewModel<CarSellingPlatform.Web.ViewModels.Car.FavoriteCarViewModel>
 
 @{
-    ViewData["Title"] = "Cars for Sale";
+    ViewData["Title"] = "Favorite Cars";
 }
 
 <div class="container-fluid">
     <div class="row mb-4 text-center">
         <div class="col-12">
-            <h1 class="display-4 mb-3">Cars for Sale</h1>
-            <p class="text-muted">Find your perfect car from our extensive collection</p>
+            <h1 class="display-4 mb-3">Your Favorite Cars</h1>
+            <p class="text-muted">See what cars you have favorited</p>
         </div>
     </div>
 
@@ -54,9 +54,30 @@
                                     <h3 class="text-primary fw-bold mb-3">$@car.Price.ToString("N0")</h3>
 
                                     <div class="d-grid gap-2">
+                                        @if (car.IsUserSeller)
+                                        {
                                             <a href="@Url.Action("EditCar", "Car", new { id = car.Id })" class="btn btn-primary btn-sm">
                                                 <i class="fas fa-pen me-1"></i> Edit
                                             </a>
+                                        }
+                                        else
+                                        {
+                                            <a href="@Url.Action("Details", "Car", new { id = car.Id })" class="btn btn-primary btn-sm">
+                                                <i class="fas fa-eye me-1"></i> View Details
+                                            </a>
+
+                                            <a asp-controller="Chat" asp-action="Index"
+                                               asp-route-carId="@car.Id" asp-route-sellerId="@car.SellerId"
+                                               class="btn btn-primary btn-sm">
+                                                <i class="fas fa-comments me-1"></i> Contact Seller
+                                            </a>
+
+                                            <form asp-controller="Car" asp-action="RemoveFavoriteCars" asp-route-id="@car.Id" method="post">
+                                                <button type="submit" class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-heart-broken me-1"></i> Remove
+                                                </button>
+                                            </form>
+                                        }
                                     </div>
                                 </div>
                             </div>

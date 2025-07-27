@@ -1,0 +1,15 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+body > .container {
+    flex: 1;
+}
+.footer {
+    padding: 1rem 0;
+    background-color: #f8f9fa;
+    text-align: center;
+}

@@ -51,6 +51,13 @@ public class CarController : BaseController
         {
             return this.RedirectToAction(nameof(Index));
         }
+        string referrer = Request.Headers["Referer"].ToString();
+        string backUrl = Url.Action("Index", "Car");
+        if (!string.IsNullOrEmpty(referrer) && referrer.Contains("/Car/FavoriteCars"))
+        {
+            backUrl = referrer;
+        }
+        ViewBag.BackUrl = backUrl;
         return View(car);
     }
     [HttpGet]

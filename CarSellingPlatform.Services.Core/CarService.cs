@@ -134,6 +134,7 @@ public class CarService : ICarService
                 .Include(c => c.Brand)
                 .Include(c => c.Engine)
                 .Include(c => c.Transmission)
+                .Include(c => c.Seller)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(c => c.Id == id.Value);
             if (carModel != null)
@@ -154,7 +155,8 @@ public class CarService : ICarService
                     Displacement = carModel.Engine.Displacement,
                     Price = carModel.Price,
                     FuelTypeName = carModel.FuelType.Type,
-                    IsUserSeller = userId != null ? carModel.SellerId.ToLower() == userId.ToLower() : false
+                    IsUserSeller = userId != null ? carModel.SellerId.ToLower() == userId.ToLower() : false,
+                    PhoneNubmer = carModel.Seller.PhoneNumber
                 };
             }
         }

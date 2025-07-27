@@ -28,4 +28,10 @@
     <Folder Include="Views\UserManagement\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Areas\Admin\Views\Shared\_AdminLayout.css">
+      <DependentUpon>_AdminLayout.cshtml</DependentUpon>
+    </None>
+  </ItemGroup>
+
 </Project>

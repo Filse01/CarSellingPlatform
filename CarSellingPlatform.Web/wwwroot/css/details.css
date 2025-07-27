@@ -29,15 +29,13 @@
 }
 
 .seller-badge {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    color: white;
-    padding: 8px 16px;
+    background-color: #FF5733!important; /* Change this to your desired background color */
+    color: white; /* Text color */
+    padding: 8px 12px;
     border-radius: 20px;
-    font-size: 0.9em;
-    font-weight: 600;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    display: inline-block;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .owner-seller {
@@ -276,9 +274,13 @@
     }
 
     .seller-badge {
-        position: static;
-        margin-top: 10px;
+        background-color: #FF5733;!important; /* Change this to your desired background color */
+        color: white; /* Text color */
+        padding: 8px 12px;
+        border-radius: 20px;
         display: inline-block;
+        font-weight: bold;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
 
     .action-buttons {

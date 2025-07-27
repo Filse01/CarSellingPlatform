@@ -7,15 +7,13 @@
 <link rel="stylesheet" href="~/css/details.css"/>
 
 <div class="container-fluid">
-    <a href="@Url.Action("Index", "Car")" class="back-button">← Back to Cars</a>
+    <a href="@ViewBag.BackUrl" class="btn btn-secondary">← Back to Cars</a>
     
     <div class="car-details-container">
         <div class="car-header">
             <h1>@Model.Year @Model.BrandName @Model.CarModel</h1>
             <div class="car-brand">@Model.CategoryName</div>
-            <div class="seller-badge @(Model.IsUserSeller ? "owner-seller" : "dealer-seller")">
-                @(Model.IsUserSeller ? "Owner Seller" : "Dealer")
-            </div>
+            <div class="seller-badge">@Model.PhoneNubmer</div>
         </div>
 
         <div class="car-content">

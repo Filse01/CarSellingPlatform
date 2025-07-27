@@ -1,8 +1,17 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Welcome";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container text-center mt-5">
+    <h1 class="display-4">Welcome to CarSellingPlatform</h1>
+    <p class="lead">Buy and Sell Cars Easily!</p>
+
+    <div class="mt-4">
+        <a asp-controller="Car" asp-action="Index" class="btn btn-primary btn-lg">Browse Cars</a>
+        <a asp-controller="Car" asp-action="AddCar" class="btn btn-primary btn-lg">Sell Your Car</a>
+    </div>
+
+    <div class="mt-5">
+        <img src="https://car-images.bauersecure.com/wp-images/9629/0000994018f5-f982-40f8-8.jpg" class="img-fluid rounded" alt="Car Image">
+    </div>
 </div>
