@@ -5,6 +5,7 @@ using CarSellingPlatform.Data.Models.Chat;
 using CarSellingPlatform.Data.Repository;
 using CarSellingPlatform.Services.Core.Contracts;
 using CarSellingPlatform.Web.ViewModels.Car;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -71,6 +72,7 @@ public class CarService : ICarService
                 IsUserSeller = userId != null ?
                     c.SellerId.ToLower() == userId.ToLower() : false,
                 SellerId = c.SellerId,
+                ImageData = c.ImageData,
                 IsUserFavorite = userId != null ?
                     c.UserCars.Any(c => c.UserId.ToLower() == userId.ToLower()) : false,
             })
@@ -84,13 +86,23 @@ public class CarService : ICarService
         };
     }
 
-    public async Task<bool> AddCarAsync(string userId, AddCarViewModel model)
+    public async Task<bool> AddCarAsync(string userId, AddCarViewModel model, IFormFile? imageFile)
     {
         bool opResult = false;
         
         var user = _userManager.FindByIdAsync(userId);
         if (user != null)
         {
+            byte[] imageData = null;
+
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await imageFile.CopyToAsync(memoryStream);
+                    imageData = memoryStream.ToArray();
+                }
+            }
             Engine newEngine = new Engine()
             {
                 Id = Guid.NewGuid(),
@@ -114,6 +126,7 @@ public class CarService : ICarService
                 EngineId = newEngine.Id,
                 TransmissionId = model.TransmissionId,
                 FuelTypeId = model.FuelTypeId,
+                ImageData = imageData
             };
             await _carRepository.AddAsync(newCar);
             await _carRepository.SaveChangesAsync();
@@ -156,7 +169,8 @@ public class CarService : ICarService
                     Price = carModel.Price,
                     FuelTypeName = carModel.FuelType.Type,
                     IsUserSeller = userId != null ? carModel.SellerId.ToLower() == userId.ToLower() : false,
-                    PhoneNubmer = carModel.Seller.PhoneNumber
+                    PhoneNubmer = carModel.Seller.PhoneNumber,
+                    ImageData = carModel.ImageData,
                 };
             }
         }
@@ -203,7 +217,8 @@ public class CarService : ICarService
                     SellerId = userId,
                     Cylinders = oldEngine.Cylinders,
                     CategoryId = editCar.CategoryId,
-                    EngineId = oldEngine.Id
+                    EngineId = oldEngine.Id,
+                    ImageData = editCar.ImageData,
                 };
             }
             
@@ -211,7 +226,7 @@ public class CarService : ICarService
         return model;
     }
 
-    public async Task<bool> EditCarAsync(string userId,EditCarViewModel model)
+    public async Task<bool> EditCarAsync(string userId,EditCarViewModel model, IFormFile? imageFile)
     {
         bool opResult = false;
         var user = await _userManager.FindByIdAsync(userId);
@@ -222,6 +237,21 @@ public class CarService : ICarService
             .SingleOrDefaultAsync(c => c.Id == updatedCar.EngineId);
         if (updatedCar != null && user != null)
         {
+            byte[] imageData = null;
+
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await imageFile.CopyToAsync(memoryStream);
+                    imageData = memoryStream.ToArray();
+                }
+            }
+
+            if (updatedCar.ImageData != null && imageData != null)
+            {
+                updatedCar.ImageData = imageData;
+            }
             updatedCar.Model = model.CarModel;
             updatedCar.ImageUrl = model.ImageUrl;
             updatedCar.Description = model.Description;
@@ -382,6 +412,7 @@ public class CarService : ICarService
                 Brand = c.Brand.Name,
                 CarModel = c.Model,
                 Price = c.Price,
+                ImageData = c.ImageData
             })
             .ToListAsync();
 

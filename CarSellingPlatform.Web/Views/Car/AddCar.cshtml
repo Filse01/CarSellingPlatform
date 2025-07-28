@@ -15,7 +15,7 @@
                     </h2>
                 </div>
                 <div class="card-body">
-                    <form asp-action="AddCar" method="post" novalidate>
+                    <form asp-action="AddCar" method="post" enctype="multipart/form-data" novalidate>
                         <div class="row">
                             <!-- Basic Information -->
                             <div class="col-md-6">
@@ -77,13 +77,15 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="mb-3">
                             <label asp-for="@Model.ImageUrl" class="form-label">Image URL</label>
                             <input asp-for="@Model.ImageUrl" class="form-control" type="url" placeholder="https://example.com/car-image.jpg" />
                             <span asp-validation-for="@Model.ImageUrl" class="text-danger"></span>
                         </div>
-
+                        <div class="mb-3">
+                            <label for="ImageFile" class="form-label">Upload Image</label>
+                            <input type="file" id="ImageFile" name="ImageFile" class="form-control" accept="image/*" />
+                        </div>
                         <div class="mb-3">
                             <label asp-for="@Model.Description" class="form-label">Description</label>
                             <textarea asp-for="@Model.Description" class="form-control" rows="4" placeholder="Enter detailed description of the car..."></textarea>

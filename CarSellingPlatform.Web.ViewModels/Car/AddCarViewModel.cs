@@ -46,6 +46,8 @@ public class AddCarViewModel
     public int Cylinders { get; set; }
 
     public string? EngineCode { get; set; }
+    
+    public byte[]? ImageData { get; set; }
 
     [Required]
     public Guid FuelTypeId { get; set; }

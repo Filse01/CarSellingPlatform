@@ -8,4 +8,5 @@ public class MyCarsViewModel
     public string Model { get; set; } = null!;
     public string CarModel { get; set; } = null!;
     public decimal Price { get; set; }
+    public byte[]? ImageData { get; set; }
 }

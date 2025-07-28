@@ -13,13 +13,20 @@
                                     <div class="car-image-container">
                                         @if (!string.IsNullOrEmpty(car.ImageUrl))
                                         {
-                                            <img src="@car.ImageUrl" 
-                                                 alt="@car.CarModel" 
-                                                 class="img-fluid rounded car-image"
+                                            <!-- Use ImageUrl directly -->
+                                            <img src="@car.ImageUrl" alt="@car.CarModel" class="img-fluid rounded car-image"
                                                  onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
                                         }
-                                        <div class="bg-light rounded d-flex align-items-center justify-content-center car-placeholder @(string.IsNullOrEmpty(car.ImageUrl) ? "" : "d-none")" 
-                                             style="height: 120px;">
+                                        else if (car.ImageData != null && car.ImageData.Length > 0)
+                                        {
+                                            <!-- Use ImageData served from controller -->
+                                            <img src="@Url.Action("GetCarImage", "Car", new { id = car.Id })"
+                                                 alt="@car.CarModel" class="img-fluid rounded car-image"
+                                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                        }
+
+                                        <!-- Placeholder if no image exists -->
+                                        <div class="bg-light rounded d-flex align-items-center justify-content-center car-placeholder @((!string.IsNullOrEmpty(car.ImageUrl) || (car.ImageData != null && car.ImageData.Length > 0)) ? "d-none" : "")" style="height: 120px;">
                                             <i class="fas fa-car fa-3x text-muted"></i>
                                         </div>
                                     </div>

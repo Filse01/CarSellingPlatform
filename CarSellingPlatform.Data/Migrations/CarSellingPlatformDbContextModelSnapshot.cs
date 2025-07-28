@@ -35,7 +35,7 @@ namespace AspNetCoreArchTemplate.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brands", (string)null);
+                    b.ToTable("Brands");
                 });
 
             modelBuilder.Entity("CarSellingPlatform.Data.Models.Car.Car", b =>
@@ -64,6 +64,9 @@ namespace AspNetCoreArchTemplate.Data.Migrations
 
                     b.Property<Guid>("FuelTypeId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("ImageData")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
@@ -103,7 +106,7 @@ namespace AspNetCoreArchTemplate.Data.Migrations
 
                     b.HasIndex("TransmissionId");
 
-                    b.ToTable("Cars", (string)null);
+                    b.ToTable("Cars");
                 });
 
             modelBuilder.Entity("CarSellingPlatform.Data.Models.Car.Category", b =>
@@ -118,7 +121,7 @@ namespace AspNetCoreArchTemplate.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("CarSellingPlatform.Data.Models.Car.Engine", b =>
@@ -142,7 +145,7 @@ namespace AspNetCoreArchTemplate.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Engines", (string)null);
+                    b.ToTable("Engines");
                 });
 
             modelBuilder.Entity("CarSellingPlatform.Data.Models.Car.FuelType", b =>
@@ -157,7 +160,7 @@ namespace AspNetCoreArchTemplate.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FuelTypes", (string)null);
+                    b.ToTable("FuelTypes");
                 });
 
             modelBuilder.Entity("CarSellingPlatform.Data.Models.Car.Transmission", b =>
@@ -172,7 +175,7 @@ namespace AspNetCoreArchTemplate.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Transmissions", (string)null);
+                    b.ToTable("Transmissions");
                 });
 
             modelBuilder.Entity("CarSellingPlatform.Data.Models.Car.UserCar", b =>
@@ -187,7 +190,7 @@ namespace AspNetCoreArchTemplate.Data.Migrations
 
                     b.HasIndex("CarId");
 
-                    b.ToTable("UserCar", (string)null);
+                    b.ToTable("UserCar");
                 });
 
             modelBuilder.Entity("CarSellingPlatform.Data.Models.Chat.ApplicationUser", b =>
@@ -290,7 +293,7 @@ namespace AspNetCoreArchTemplate.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Chats", (string)null);
+                    b.ToTable("Chats");
                 });
 
             modelBuilder.Entity("CarSellingPlatform.Data.Models.Chat.Message", b =>
@@ -319,7 +322,7 @@ namespace AspNetCoreArchTemplate.Data.Migrations
 
                     b.HasIndex("CreatorId");
 
-                    b.ToTable("Messages", (string)null);
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

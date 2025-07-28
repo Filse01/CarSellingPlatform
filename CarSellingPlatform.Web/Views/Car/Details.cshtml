@@ -18,14 +18,24 @@
 
         <div class="car-content">
             <div class="image-section">
-                @if (!string.IsNullOrEmpty(Model.ImageUrl))
-                {
-                    <img src="@Model.ImageUrl" alt="@Model.BrandName @Model.CarModel" class="car-image" />
-                }
-                else
-                {
-                    <div class="no-image">No Image Available</div>
-                }
+                    @if (!string.IsNullOrEmpty(@Model.ImageUrl))
+                    {
+                        <!-- Use ImageUrl directly -->
+                        <img src="@Model.ImageUrl" alt="@Model.CarModel" class="img-fluid rounded car-image"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                    }
+                    else if (@Model.ImageData != null && @Model.ImageData.Length > 0)
+                    {
+                        <!-- Use ImageData served from controller -->
+                        <img src="@Url.Action("GetCarImage", "Car", new { id = @Model.Id })"
+                             alt="@Model.CarModel" class="img-fluid rounded car-image"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                    }
+
+                    <!-- Placeholder if no image exists -->
+                    <div class="bg-light rounded d-flex align-items-center justify-content-center car-placeholder @((!string.IsNullOrEmpty(@Model.ImageUrl) || (@Model.ImageData != null && @Model.ImageData.Length > 0)) ? "d-none" : "")" style="height: 120px;">
+                        <i class="fas fa-car fa-3x text-muted"></i>
+                    </div>
             </div>
 
             <div class="details-section">

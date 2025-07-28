@@ -1,3 +1,4 @@
+using CarSellingPlatform.Data;
 using CarSellingPlatform.Services.Core;
 using CarSellingPlatform.Services.Core.Contracts;
 using CarSellingPlatform.Web.ViewModels.Car;
@@ -10,10 +11,12 @@ public class CarController : BaseController
 {
     private readonly ICarInfoService _carInfoService;
     private readonly ICarService _carService;
-    public CarController(ICarInfoService carInfoService, ICarService carService)
+    private readonly CarSellingPlatformDbContext _context;
+    public CarController(ICarInfoService carInfoService, ICarService carService, CarSellingPlatformDbContext context)
     {
         _carInfoService = carInfoService;
         _carService = carService;
+        _context = context;
     }
     
     [AllowAnonymous]
@@ -43,7 +46,7 @@ public class CarController : BaseController
     }
     [AllowAnonymous]
     [HttpGet]
-    public async Task<IActionResult> Details(Guid id)
+    public async Task<IActionResult> Details(Guid id, IFormFile imageFile)
     {
         string? userId = GetUserId();
         DetailsCarViewModel? car = await _carService.GetDetailsCarAsync(id, userId);
@@ -74,14 +77,14 @@ public class CarController : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddCar(AddCarViewModel model)
+    public async Task<IActionResult> AddCar(AddCarViewModel model, IFormFile? imageFile)
     {
         var userId = GetUserId();
         if (!this.ModelState.IsValid)
         {
             return View(model);
         }
-        bool addResult = await _carService.AddCarAsync(userId, model);
+        bool addResult = await _carService.AddCarAsync(userId, model, imageFile);
         if (addResult == false)
         {
             return View(model);
@@ -99,11 +102,18 @@ public class CarController : BaseController
         car.Brands = await this._carInfoService.GetBrandsAsync();
         car.FuelTypes = await this._carInfoService.GetFuelTypesAsync();
         car.Transmissions = await this._carInfoService.GetTransmissionsAsync();
+        string referrer = Request.Headers["Referer"].ToString();
+        string backUrl = Url.Action("Index", "Car");
+        if (!string.IsNullOrEmpty(referrer) && referrer.Contains("/Car/MyCars"))
+        {
+            backUrl = referrer;
+        }
+        ViewBag.BackUrl = backUrl;
         return View(car);
     }
 
     [HttpPost]
-    public async Task<IActionResult> EditCar(EditCarViewModel model)
+    public async Task<IActionResult> EditCar(EditCarViewModel model, IFormFile? imageFile)
     {
         var userId = GetUserId();
         if (!ModelState.IsValid)
@@ -111,7 +121,7 @@ public class CarController : BaseController
             return View(model);
         }
 
-        bool editResult = await _carService.EditCarAsync(userId, model);
+        bool editResult = await _carService.EditCarAsync(userId, model, imageFile);
         if (editResult == false)
         {
             return View(model);
@@ -185,5 +195,17 @@ public class CarController : BaseController
         string? userId = GetUserId();
         var pagedMyCars = await _carService.MyCarsPagedAsync(userId, page, pageSize);
         return View(pagedMyCars);
+    }
+    [AllowAnonymous]
+    public IActionResult GetCarImage(Guid id)
+    {
+        var car = _context.Cars.FirstOrDefault(c => c.Id == id);
+        if (car != null && car.ImageData != null)
+        {
+            return File(car.ImageData, "image/jpeg"); // Adjust content type if needed
+        }
+
+        // Return a placeholder image or 404 if no image exists
+        return NotFound();
     }
 }

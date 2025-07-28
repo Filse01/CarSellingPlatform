@@ -47,6 +47,8 @@ public class Car
     
     public FuelType FuelType { get; set; } = null!;
     
+    public byte[]? ImageData { get; set; }
+    
     public ICollection<UserCar> UserCars { get; set; } = new HashSet<UserCar>();
     
     public ICollection<Chat.Chat> Chats { get; set; } = new HashSet<Chat.Chat>();
