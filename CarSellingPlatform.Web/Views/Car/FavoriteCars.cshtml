@@ -21,27 +21,23 @@
                     <div class="card car-card shadow-sm h-100">
                         <div class="card-body">
                             <div class="row align-items-center">
-                                <!-- Image -->
                                 <div class="col-md-3 col-lg-2">
                                     <div class="car-image-container">
                                         @if (!string.IsNullOrEmpty(car.ImageUrl))
                                         {
-                                            <!-- Use ImageUrl directly -->
                                             <img src="@car.ImageUrl" alt="@car.CarModel" class="img-fluid rounded car-image"
                                                  onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
                                         }
                                         else if (car.ImageData != null && car.ImageData.Length > 0)
                                         {
-                                            <!-- Use ImageData served from controller -->
                                             <img src="@Url.Action("GetCarImage", "Car", new { id = car.Id })"
                                                  alt="@car.CarModel" class="img-fluid rounded car-image"
                                                  onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
                                         }
-
-                                        <!-- Placeholder if no image exists -->
-                                        <div class="bg-light rounded d-flex align-items-center justify-content-center car-placeholder @((!string.IsNullOrEmpty(car.ImageUrl) || (car.ImageData != null && car.ImageData.Length > 0)) ? "d-none" : "")" style="height: 120px;">
-                                            <i class="fas fa-car fa-3x text-muted"></i>
-                                        </div>
+                                        else
+                                        {
+                                            <img src="~/image/no-photo.jpg" alt="No Image" class="img-fluid rounded car-image" />
+                                        }
                                     </div>
                                 </div>
 

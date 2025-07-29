@@ -423,4 +423,15 @@ public class CarService : ICarService
             TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
         };
     }
+
+    public async Task<(byte[] ImageData, string ContentType)?> GetCarImageByIdAsync(Guid id)
+    {
+        var car = await _carRepository.FirstOrDefaultAsync(c => c.Id == id);
+        if (car != null && car.ImageData != null)
+        {
+            return (car.ImageData, "image/jpeg"); // adjust ContentType if dynamic
+        }
+
+        return null;
+    }
 }

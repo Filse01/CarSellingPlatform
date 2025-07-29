@@ -197,15 +197,14 @@ public class CarController : BaseController
         return View(pagedMyCars);
     }
     [AllowAnonymous]
-    public IActionResult GetCarImage(Guid id)
+    public async Task<IActionResult> GetCarImage(Guid id)
     {
-        var car = _context.Cars.FirstOrDefault(c => c.Id == id);
-        if (car != null && car.ImageData != null)
+        var imageResult = await _carService.GetCarImageByIdAsync(id);
+        if (imageResult.HasValue)
         {
-            return File(car.ImageData, "image/jpeg"); // Adjust content type if needed
+            return File(imageResult.Value.ImageData, imageResult.Value.ContentType);
         }
 
-        // Return a placeholder image or 404 if no image exists
         return NotFound();
     }
 }

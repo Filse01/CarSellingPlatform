@@ -20,20 +20,17 @@
             <div class="image-section">
                     @if (!string.IsNullOrEmpty(@Model.ImageUrl))
                     {
-                        <!-- Use ImageUrl directly -->
                         <img src="@Model.ImageUrl" alt="@Model.CarModel" class="img-fluid rounded car-image"
                              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
                     }
                     else if (@Model.ImageData != null && @Model.ImageData.Length > 0)
                     {
-                        <!-- Use ImageData served from controller -->
                         <img src="@Url.Action("GetCarImage", "Car", new { id = @Model.Id })"
                              alt="@Model.CarModel" class="img-fluid rounded car-image"
                              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
                     }
                     else
                     {
-                        <!-- Fallback Default Image -->
                         <img src="~/image/no-photo.jpg" alt="No Image" class="img-fluid rounded car-image" />
                     }
             </div>
