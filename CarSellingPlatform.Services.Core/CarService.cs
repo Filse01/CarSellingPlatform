@@ -429,7 +429,7 @@ public class CarService : ICarService
         var car = await _carRepository.FirstOrDefaultAsync(c => c.Id == id);
         if (car != null && car.ImageData != null)
         {
-            return (car.ImageData, "image/jpeg"); // adjust ContentType if dynamic
+            return (car.ImageData, "image/jpeg"); 
         }
 
         return null;

@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
-using CarSellingPlatform.Data.Models;
+using CarSellingPlatform.GCommon;
+using static CarSellingPlatform.Data.Common.Engine;
 using static CarSellingPlatform.Data.Common.Car;
+
 namespace CarSellingPlatform.Web.ViewModels.Car;
 
 public class AddCarViewModel
@@ -17,17 +19,19 @@ public class AddCarViewModel
     public string? Description { get; set; } = null!;
     
     [Display(Name = "Image URL")]
+    [MaxLength(ImageUrlMaxLength)]
     public string? ImageUrl { get; set; } 
 
     [Required]
-    [Range(1, 10_000_000)]
+    [Range(PriceMinLength, PriceMaxLength)]
     public decimal Price { get; set; }
 
     [Required]
-    [Range(1886, 2100)]
+    [Range(YearMinLength, YearMaxLength)]
     public int Year { get; set; }
 
     [Required]
+    [MaxLength(ColorMaxLength)]
     public string Color { get; set; } = null!;
 
     [Required]
@@ -38,13 +42,13 @@ public class AddCarViewModel
     public string Displacement { get; set; } = null!;
 
     [Required]
-    [Range(1, 2000)]
+    [Range(HorsePowerMinLength, HorsePowerMaxLength)]
     public int Horsepower { get; set; }
 
-    [Required]
-    [Range(1, 20)]
+    [Required(ErrorMessage = ErrorMessages.Cylinders)]
+    [Range(CylinderMinLength, CylinderMaxLength)]
     public int Cylinders { get; set; }
-
+    [MaxLength(EngineCodeMaxLength)]
     public string? EngineCode { get; set; }
     
     public byte[]? ImageData { get; set; }
