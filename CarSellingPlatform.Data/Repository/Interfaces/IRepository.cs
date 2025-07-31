@@ -22,6 +22,6 @@ public interface IRepository<TEntity, TKey>
     bool HardDeleteRange(IEnumerable<TEntity> entities);
     bool Update(TEntity entity);
     Task<bool> UpdateAsync(TEntity entity);
-  void SaveChanges();
+    void SaveChanges();
     Task SaveChangesAsync();
 }
