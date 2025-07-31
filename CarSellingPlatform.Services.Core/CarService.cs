@@ -90,7 +90,7 @@ public class CarService : ICarService
     {
         bool opResult = false;
         
-        var user = _userManager.FindByIdAsync(userId);
+        var user = await _userManager.FindByIdAsync(userId);
         if (user != null)
         {
             byte[] imageData = null;
@@ -186,11 +186,15 @@ public class CarService : ICarService
             Car? editCar = await _carRepository.GetAllAttached()
                 .AsNoTracking()
                 .SingleOrDefaultAsync(c => c.Id == id.Value);
-            Engine editEngine = await _engineRepository.GetAllAttached()
-                .AsNoTracking()
-                .SingleOrDefaultAsync(c => c.Id == editCar.EngineId);
-            if (editCar != null && editCar.SellerId.ToLower() == userId.ToLower())
+           if (editCar != null && editCar.SellerId.ToLower() == userId.ToLower())
             {
+                Engine editEngine = await _engineRepository.GetAllAttached()
+                    .AsNoTracking()
+                    .SingleOrDefaultAsync(c => c.Id == editCar.EngineId);
+                if (editEngine == null)
+                {
+                    return null;
+                }
                 oldEngine = new Engine()
                 {
                     Id = editEngine.Id,
@@ -233,8 +237,16 @@ public class CarService : ICarService
 
         Car updatedCar = await _carRepository.GetAllAttached()
             .SingleOrDefaultAsync(c => c.Id == model.Id);
+        if (updatedCar == null || updatedCar.SellerId.ToLower() != userId.ToLower())
+        {
+            return false;
+        }
         Engine updatedEngine = await _engineRepository.GetAllAttached()
             .SingleOrDefaultAsync(c => c.Id == updatedCar.EngineId);
+        if (updatedEngine == null)
+        {
+            return false; // User or Engine not found
+        }
         if (updatedCar != null && user != null)
         {
             byte[] imageData = null;
@@ -265,6 +277,7 @@ public class CarService : ICarService
             updatedEngine.Cylinders = model.Cylinders;
             updatedEngine.Horsepower = model.Horsepower;
             updatedEngine.EngineCode = model.EngineCode;
+            updatedEngine.Displacement = model.Displacement;
             await _carRepository.UpdateAsync(updatedCar);
             await _engineRepository.UpdateAsync(updatedEngine);
             await _carRepository.SaveChangesAsync();
@@ -279,10 +292,10 @@ public class CarService : ICarService
         DeleteCarViewModel model = null;
         if (id.HasValue)
         {
-            Car? deleteCar = _carRepository.GetAllAttached()
+            Car? deleteCar = await _carRepository.GetAllAttached()
                 .Include(c => c.Seller)
                 .AsNoTracking()
-                .SingleOrDefault(c => c.Id == id.Value);
+                .SingleOrDefaultAsync(c => c.Id == id.Value);
             if (deleteCar != null && deleteCar.SellerId.ToLower() == userId.ToLower())
             {
                 model = new DeleteCarViewModel()
@@ -316,7 +329,12 @@ public class CarService : ICarService
     {
         IEnumerable<FavoriteCarViewModel>? favoriteCars = null;
         var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+        {
+            return null;
+        }
         var query =  _userCarRepository.GetAllAttached()
+            .Where(uc => uc.UserId == userId)
             .Include(c => c.Car)
             .AsNoTracking();
         int totalCount = await query.CountAsync();
@@ -434,4 +452,5 @@ public class CarService : ICarService
 
         return null;
     }
+    
 }
