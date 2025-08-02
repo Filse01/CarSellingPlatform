@@ -21,13 +21,18 @@ public class UserManagerService : IUserManagerService
     }
     public async Task<PagedListViewModel<UserManagementIndexViewModel>> ListPagedAsync(string? userId, int pageNumber, int pageSize)
     {
-        var allUsers = await _userManager.Users.ToListAsync();
-        var users = new List<UserManagementIndexViewModel>();
-    
-        foreach (var user in allUsers)
+        var query = _userManager.Users;
+
+        int totalCount = await query.CountAsync();
+        var usersViewModel = new List<UserManagementIndexViewModel>();
+        var paginatedUsers = await query
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+        foreach (var user in paginatedUsers)
         {
             var roles = await _userManager.GetRolesAsync(user);
-            users.Add(new UserManagementIndexViewModel()
+            usersViewModel.Add(new UserManagementIndexViewModel()
             {
                 Id = user.Id,
                 UserName = user.UserName,
@@ -36,10 +41,9 @@ public class UserManagerService : IUserManagerService
                 EmailConfirmed = user.EmailConfirmed,
             });
         }
-        int totalCount = allUsers.Count();
         return new PagedListViewModel<UserManagementIndexViewModel>
         {
-            Items = users,
+            Items = usersViewModel,
             PageNumber = pageNumber,
             TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
         };
@@ -66,22 +70,23 @@ public class UserManagerService : IUserManagerService
     }
     public async Task<bool> DeleteUser(string userId)
     {
-        bool opResult = false;
         var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+        {
+            return false;
+        }
         var sellerChats = await _chatRepository.GetAllAttached()
             .Where(c => c.SellerId == user.Id)
             .ToListAsync();
         var userChats = await _chatRepository.GetAllAttached()
             .Where(c => c.UserId == user.Id)
             .ToListAsync();
-        if (user != null)
-        {
-            _chatRepository.HardDeleteRange(sellerChats);
-            _chatRepository.HardDeleteRange(userChats);
-            await _chatRepository.SaveChangesAsync();
-            await _userManager.DeleteAsync(user);
-            opResult = true;
-        }
-        return opResult;
+
+        _chatRepository.HardDeleteRange(sellerChats); 
+        _chatRepository.HardDeleteRange(userChats); 
+        await _chatRepository.SaveChangesAsync(); 
+        var result = await _userManager.DeleteAsync(user); 
+        
+        return result.Succeeded;
     }
 }
