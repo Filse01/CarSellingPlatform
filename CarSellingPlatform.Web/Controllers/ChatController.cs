@@ -13,7 +13,6 @@ public class ChatController : BaseController
     {
         _chatService = chatService;
     }
-    [AllowAnonymous]
     public async Task<IActionResult> Index()
     {
         string? userId = GetUserId();
@@ -30,7 +29,8 @@ public class ChatController : BaseController
         {
             return RedirectToAction("Index");
         }
-        return RedirectToAction("Index");
+        Guid chatId = await _chatService.GetChatId(userId, carId);
+        return RedirectToAction("Room", new {id = chatId} );
     }
     [HttpGet("Chat/Room/{chatId}")]
     public async Task<IActionResult> Room(Guid chatId)

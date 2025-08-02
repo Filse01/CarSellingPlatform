@@ -8,4 +8,6 @@ public interface IChatService
     public Task<bool> CreateAsync(string userId, Guid carId);
     
     public Task<bool> DeleteAsync(Guid chatId);
+    
+    public Task<Guid> GetChatId(string userId, Guid carId);
 }
