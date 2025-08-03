@@ -203,7 +203,7 @@ public async Task GetEditCarAsync_ValidIdAndUserId_ReturnsCorrectEditCarViewMode
     [Test]
     public async Task GetEditCarAsync_ValidIdButDifferentUserId_ReturnsNull()
     {
-        // Arrange
+        
         var carId = Guid.NewGuid();
         var actualUserId = Guid.NewGuid().ToString();
         var requestingUserId = Guid.NewGuid().ToString();
@@ -245,7 +245,7 @@ public async Task GetEditCarAsync_ValidIdAndUserId_ReturnsCorrectEditCarViewMode
 [Test]
 public async Task EditCarAsync_ValidData_UpdatesCarAndEngineAndReturnsTrue()
 {
-    // Arrange
+    
     var userId = Guid.NewGuid().ToString();
     var carId = Guid.NewGuid();
     var engineId = Guid.NewGuid();
@@ -327,10 +327,10 @@ public async Task EditCarAsync_ValidData_UpdatesCarAndEngineAndReturnsTrue()
     _mockCarRepository.Setup(r => r.SaveChangesAsync()).Returns(Task.CompletedTask);
     _mockEngineRepository.Setup(r => r.SaveChangesAsync()).Returns(Task.CompletedTask);
 
-    // Act
+    
     var result = await carManagementService.EditCarAsync(userId, model);
 
-    // Assert
+    
     Assert.IsTrue(result);
 
     // Verify car was updated with correct values
@@ -362,7 +362,7 @@ public async Task EditCarAsync_ValidData_UpdatesCarAndEngineAndReturnsTrue()
 [Test]
 public async Task SoftDeleteCarAsync_ValidData_SetsIsDeletedTrueAndReturnsTrue()
 {
-    // Arrange
+    
     var userId = "user-123";
     var carId = Guid.NewGuid();
     
@@ -396,14 +396,13 @@ public async Task SoftDeleteCarAsync_ValidData_SetsIsDeletedTrueAndReturnsTrue()
     _mockCarRepository.Setup(r => r.UpdateAsync(It.IsAny<Car>())).ReturnsAsync(true);
     _mockCarRepository.Setup(r => r.SaveChangesAsync()).Returns(Task.CompletedTask);
 
-    // Act
+    
     var result = await carManagementService.SoftDeleteCarAsync(carId, userId);
 
-    // Assert
+    
     Assert.IsTrue(result);
     Assert.IsTrue(existingCar.IsDeleted);
-
-    // Verify all methods were called
+    
     userManagerMock.Verify(um => um.FindByIdAsync(userId), Times.Once);
     _mockCarRepository.Verify(r => r.SingleOrDefaultAsync(It.IsAny<Expression<Func<Car, bool>>>()), Times.Once);
     _mockCarRepository.Verify(r => r.UpdateAsync(existingCar), Times.Once);
@@ -412,7 +411,7 @@ public async Task SoftDeleteCarAsync_ValidData_SetsIsDeletedTrueAndReturnsTrue()
 [Test]
 public async Task SoftDeleteCarAsync_CarNotFound_ReturnsFalse()
 {
-    // Arrange
+    
     var userId = "user-123";
     var carId = Guid.NewGuid();
     
@@ -434,15 +433,14 @@ public async Task SoftDeleteCarAsync_CarNotFound_ReturnsFalse()
     );
     userManagerMock.Setup(um => um.FindByIdAsync(userId)).ReturnsAsync(user);
     _mockCarRepository.Setup(r => r.SingleOrDefaultAsync(It.IsAny<Expression<Func<Car, bool>>>()))
-        .ReturnsAsync((Car)null); // Car not found
+        .ReturnsAsync((Car)null); 
 
-    // Act
+    
     var result = await carManagementService.SoftDeleteCarAsync(carId, userId);
 
-    // Assert
+    
     Assert.IsFalse(result);
-
-    // Verify that update and save methods were not called
+    
     userManagerMock.Verify(um => um.FindByIdAsync(userId), Times.Once);
     _mockCarRepository.Verify(r => r.SingleOrDefaultAsync(It.IsAny<Expression<Func<Car, bool>>>()), Times.Once);
     _mockCarRepository.Verify(r => r.UpdateAsync(It.IsAny<Car>()), Times.Never);

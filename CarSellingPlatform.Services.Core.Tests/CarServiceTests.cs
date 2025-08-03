@@ -101,19 +101,19 @@ public class CarServiceTests
     [Test]
     public async Task ListPagedAsync_ShouldReturnCorrectlyPagedData_WhenNoFiltersApplied()
     {
-        // Arrange
+        
         var pageNumber = 1;
         var pageSize = 2;
 
-        // Act
+        
         var result = await _carService.ListPagedAsync(TestUserId, pageNumber, pageSize);
 
-        // Assert
+        
         Assert.IsNotNull(result);
         Assert.IsInstanceOf<PagedListViewModel<IndexCarViewModel>>(result);
         Assert.AreEqual(pageNumber, result.PageNumber);
-        Assert.AreEqual(2, result.Items.Count()); // Should be pageSize
-        Assert.AreEqual(2, result.TotalPages); // 3 items total / 2 per page = 2 pages
+        Assert.AreEqual(2, result.Items.Count()); 
+        Assert.AreEqual(2, result.TotalPages);
 
         var firstCar = result.Items.First();
         Assert.AreEqual("Camry", firstCar.CarModel);
@@ -128,15 +128,15 @@ public class CarServiceTests
     [Test]
     public async Task ListPagedAsync_ShouldReturnFilteredData_WhenSearchTermIsProvided()
     {
-        // Arrange
+        
         var pageNumber = 1;
         var pageSize = 5;
-        var searchTerm = "camry"; // Lowercase to test case-insensitivity
+        var searchTerm = "camry"; 
 
-        // Act
+        
         var result = await _carService.ListPagedAsync(TestUserId, pageNumber, pageSize, search: searchTerm);
 
-        // Assert
+        
         Assert.IsNotNull(result);
         Assert.AreEqual(1, result.Items.Count());
         Assert.AreEqual(1, result.TotalPages);
@@ -148,15 +148,15 @@ public class CarServiceTests
     [Test]
     public async Task ListPagedAsync_ShouldReturnEmptyResult_WhenNoCarsMatchFilter()
     {
-        // Arrange
+        
         var pageNumber = 1;
         var pageSize = 5;
         var searchTerm = "non-existent-model";
 
-        // Act
+        
         var result = await _carService.ListPagedAsync(TestUserId, pageNumber, pageSize, search: searchTerm);
 
-        // Assert
+        
         Assert.IsNotNull(result);
         Assert.IsEmpty(result.Items);
         Assert.AreEqual(0, result.TotalPages);
@@ -165,7 +165,7 @@ public class CarServiceTests
     [Test]
         public async Task AddCarAsync_WithValidDataAndImage_ShouldAddCarAndEngineAndReturnTrue()
         {
-            // Arrange
+            
             const string validUserId = "valid-user-id";
             var capturedCar = (Car)null;
             var capturedEngine = (Engine)null;
@@ -191,10 +191,10 @@ public class CarServiceTests
             _mockCarRepository.Setup(r => r.AddAsync(It.IsAny<Car>())).Callback<Car>(c => capturedCar = c).Returns(Task.CompletedTask);
             _mockCarRepository.Setup(r => r.SaveChangesAsync()).Returns(Task.CompletedTask);
 
-            // Act
+            
             var result = await _carService.AddCarAsync(validUserId, model, mockImageFile.Object);
 
-            // Assert
+            
             Assert.IsTrue(result);
             Assert.IsNotNull(capturedEngine);
             Assert.AreEqual(model.Horsepower, capturedEngine.Horsepower);
@@ -212,16 +212,16 @@ public class CarServiceTests
     [Test]
     public async Task AddCarAsync_WithInvalidUserId_ShouldNotAddEntitiesAndReturnFalse()
     {
-        // Arrange
+        
         const string invalidUserId = "invalid-user-id";
         var model = new AddCarViewModel();
 
         _mockUserManager.Setup(um => um.FindByIdAsync(invalidUserId)).ReturnsAsync((ApplicationUser)null);
 
-        // Act
+        
         var result = await _carService.AddCarAsync(invalidUserId, model, null);
 
-        // Assert
+        
         Assert.IsFalse(result);
         _mockUserManager.Verify(um => um.FindByIdAsync(invalidUserId), Times.Once);
         _mockEngineRepository.Verify(r => r.AddAsync(It.IsAny<Engine>()), Times.Never);
@@ -231,14 +231,14 @@ public class CarServiceTests
     [Test]
     public async Task GetDetailsCarAsync_WithValidId_ShouldReturnCorrectDetailsViewModel()
     {
-        // Arrange
+        
         var carToTest = _testCars.First(c => c.Model == "Camry");
         var carId = carToTest.Id;
             
-        // Act
+        
         var result = await _carService.GetDetailsCarAsync(carId, TestUserId);
 
-        // Assert
+        
         Assert.IsNotNull(result);
         Assert.IsInstanceOf<DetailsCarViewModel>(result);
 
@@ -252,51 +252,51 @@ public class CarServiceTests
     [Test]
     public async Task GetDetailsCarAsync_WithInvalidOrNonExistentId_ShouldReturnNull()
     {
-        // Arrange
+        
         var nonExistentId = Guid.NewGuid();
 
-        // Act
+        
         var result = await _carService.GetDetailsCarAsync(nonExistentId, TestUserId);
 
-        // Assert
+        
         Assert.IsNull(result);
     }
     [Test]
     public async Task GetEditCarAsync_WithValidIdAndCorrectOwner_ShouldReturnViewModel()
     {
-        // Arrange
+        
         var carToTest = _testCars.First();
         var carId = carToTest.Id;
         var ownerId = TestUserId;
 
-        // Act
+        
         var result = await _carService.GetEditCarAsync(carId, ownerId);
 
-        // Assert
+        
         Assert.IsNotNull(result);
         Assert.IsInstanceOf<EditCarViewModel>(result);
         Assert.AreEqual(carId, result.Id);
         Assert.AreEqual(carToTest.Model, result.CarModel);
-        Assert.AreEqual(ownerId, result.SellerId); // Check if correct sellerId is assigned
+        Assert.AreEqual(ownerId, result.SellerId); 
     }
     [Test]
     public async Task GetEditCarAsync_WithValidIdButWrongOwner_ShouldReturnNull()
     {
-        // Arrange
+        
         var carToTest = _testCars.First();
         var carId = carToTest.Id;
         var wrongOwnerId = "this-is-not-the-owner";
 
-        // Act
+        
         var result = await _carService.GetEditCarAsync(carId, wrongOwnerId);
 
-        // Assert
+        
         Assert.IsNull(result);
     }
     [Test]
     public async Task EditCarAsync_WithValidData_ShouldUpdateCarAndEngineAndReturnTrue()
     {
-        // Arrange
+        
         var carToUpdate = _testCars.First();
         var model = new EditCarViewModel
         {
@@ -314,18 +314,18 @@ public class CarServiceTests
         _mockEngineRepository.Setup(r => r.UpdateAsync(It.IsAny<Engine>())).Returns(Task.FromResult(true));
         _mockCarRepository.Setup(r => r.SaveChangesAsync()).Returns(Task.CompletedTask);
 
-        // Act
+        
         var result = await _carService.EditCarAsync(TestUserId, model, null);
 
-        // Assert
+        
         Assert.IsTrue(result);
 
-        // Verify the original object in our list was modified
+        
         Assert.AreEqual("Camry Updated", carToUpdate.Model);
         Assert.AreEqual(2023, carToUpdate.Year);
         Assert.AreEqual(210, carToUpdate.Engine.Horsepower);
 
-        // Verify repository methods were called
+        
         _mockCarRepository.Verify(r => r.UpdateAsync(It.IsAny<Car>()), Times.Once);
         _mockEngineRepository.Verify(r => r.UpdateAsync(It.IsAny<Engine>()), Times.Once);
         _mockCarRepository.Verify(r => r.SaveChangesAsync(), Times.Once);
@@ -333,16 +333,16 @@ public class CarServiceTests
     [Test]
     public async Task EditCarAsync_WithNonExistentCarId_ShouldReturnFalse()
     {
-        // Arrange
-        var model = new EditCarViewModel { Id = Guid.NewGuid() }; // This ID does not exist
+        
+        var model = new EditCarViewModel { Id = Guid.NewGuid() }; 
 
-        // Act
+        
         var result = await _carService.EditCarAsync(TestUserId, model, null);
             
-        // Assert
+        
         Assert.IsFalse(result);
 
-        // Verify no update or save operations were ever called
+        
         _mockCarRepository.Verify(r => r.UpdateAsync(It.IsAny<Car>()), Times.Never);
         _mockEngineRepository.Verify(r => r.UpdateAsync(It.IsAny<Engine>()), Times.Never);
         _mockCarRepository.Verify(r => r.SaveChangesAsync(), Times.Never);
@@ -350,15 +350,15 @@ public class CarServiceTests
     [Test]
     public async Task GetDeleteCarAsync_WithValidIdAndCorrectOwner_ShouldReturnViewModel()
     {
-        // Arrange
+        
         var carToTest = _testCars.First();
         var carId = carToTest.Id;
         var ownerId = TestUserId;
 
-        // Act
+        
         var result = await _carService.GetDeleteCarAsync(carId, ownerId);
 
-        // Assert
+        
         Assert.IsNotNull(result);
         Assert.IsInstanceOf<DeleteCarViewModel>(result);
         Assert.AreEqual(carId, result.Id);
@@ -369,67 +369,67 @@ public class CarServiceTests
     [Test]
     public async Task GetDeleteCarAsync_WithValidIdButWrongOwner_ShouldReturnNull()
     {
-        // Arrange
+        
         var carToTest = _testCars.First();
         var carId = carToTest.Id;
         var wrongOwnerId = "this-is-not-the-owner";
 
-        // Act
+        
         var result = await _carService.GetDeleteCarAsync(carId, wrongOwnerId);
 
-        // Assert
+        
         Assert.IsNull(result);
     }
     [Test]
     public async Task SoftDeleteCarAsync_WithExistingCarAndCorrectOwner_ShouldSetIsDeletedAndReturnTrue()
     {
-        // Arrange
+        
         var carToDelete = _testCars.First();
         var model = new DeleteCarViewModel { Id = carToDelete.Id };
         var ownerId = TestUserId;
 
         _mockUserManager.Setup(um => um.FindByIdAsync(ownerId))
             .ReturnsAsync(new ApplicationUser { Id = ownerId });
-        // Mock the specific repository call used by the method
+        
         _mockCarRepository.Setup(r => r.SingleOrDefaultAsync(It.IsAny<Expression<Func<Car, bool>>>()))
             .ReturnsAsync(carToDelete);
             
         _mockCarRepository.Setup(r => r.UpdateAsync(It.IsAny<Car>())).Returns(Task.FromResult(true));
         _mockCarRepository.Setup(r => r.SaveChangesAsync()).Returns(Task.CompletedTask);
 
-        // Act
+        
         var result = await _carService.SoftDeleteCarAsync(model, ownerId);
 
-        // Assert
+        
         Assert.IsTrue(result);
-        Assert.IsTrue(carToDelete.IsDeleted); // Verify the flag was set
+        Assert.IsTrue(carToDelete.IsDeleted); 
         _mockCarRepository.Verify(r => r.UpdateAsync(carToDelete), Times.Once);
         _mockCarRepository.Verify(r => r.SaveChangesAsync(), Times.Once);
     }
     [Test]
     public async Task SoftDeleteCarAsync_WithNonExistentCar_ShouldReturnFalse()
     {
-        // Arrange
-        var model = new DeleteCarViewModel { Id = Guid.NewGuid() }; // This ID does not exist
+        
+        var model = new DeleteCarViewModel { Id = Guid.NewGuid() }; 
 
-        // Mock the repository to find nothing
+        
         _mockCarRepository.Setup(r => r.SingleOrDefaultAsync(It.IsAny<Expression<Func<Car, bool>>>()))
             .ReturnsAsync((Car)null);
 
-        // Act
+        
         var result = await _carService.SoftDeleteCarAsync(model, TestUserId);
 
-        // Assert
+        
         Assert.IsFalse(result);
             
-        // Verify no update or save operations were called
+        
         _mockCarRepository.Verify(r => r.UpdateAsync(It.IsAny<Car>()), Times.Never);
         _mockCarRepository.Verify(r => r.SaveChangesAsync(), Times.Never);
     }
     [Test]
     public async Task GetFavoriteCarsAsync_WithValidUser_ShouldReturnOnlyTheirFavoriteCars()
     {
-        // Arrange
+        
         var user = new ApplicationUser { Id = TestUserId };
         var car1 = new Car { Id = Guid.NewGuid(), Model = "Favorite Car 1", Brand = new Brand(), Category = new Category(), FuelType = new FuelType(), Transmission = new Transmission(), Engine = new Engine() };
         var car2 = new Car { Id = Guid.NewGuid(), Model = "Favorite Car 2", Brand = new Brand(), Category = new Category(), FuelType = new FuelType(), Transmission = new Transmission(), Engine = new Engine() };
@@ -446,52 +446,52 @@ public class CarServiceTests
         var mockQueryable = favorites.BuildMock();
         _mockUserCarRepository.Setup(r => r.GetAllAttached()).Returns(mockQueryable);
 
-        // Act
+        
         var result = await _carService.GetFavoriteCarsAsync(TestUserId, 1, 5);
 
-        // Assert
+        
         Assert.IsNotNull(result);
-        Assert.AreEqual(2, result.Items.Count()); // Should only be 2, not 3
-        Assert.AreEqual(1, result.TotalPages);   // Total pages based on 2 items, not 3
+        Assert.AreEqual(2, result.Items.Count()); 
+        Assert.AreEqual(1, result.TotalPages);   
         Assert.IsTrue(result.Items.Any(c => c.CarModel == "Favorite Car 1"));
         Assert.IsFalse(result.Items.Any(c => c.CarModel == "Another User's Car"));
     }
     [Test]
     public async Task GetFavoriteCarsAsync_WithInvalidUser_ShouldReturnNull()
     {
-        // Arrange
+        
         var invalidUserId = "invalid-user";
         _mockUserManager.Setup(um => um.FindByIdAsync(invalidUserId)).ReturnsAsync((ApplicationUser)null);
         var emptyFavoritesList = new List<UserCar>();
-        var mockQueryable = emptyFavoritesList.BuildMock(); // Use .BuildMock()
+        var mockQueryable = emptyFavoritesList.BuildMock(); 
         _mockUserCarRepository.Setup(r => r.GetAllAttached()).Returns(mockQueryable);
-        // Act
+        
         var result = await _carService.GetFavoriteCarsAsync(invalidUserId, 1, 5);
 
-        // Assert
+        
         Assert.IsNull(result);
     }
     [Test]
     public async Task AddCarToFavoritesAsync_WhenCarIsNotOwnedAndNotFavorite_ShouldReturnTrue()
     {
-        // Arrange
+        
         var user = new ApplicationUser { Id = TestUserId };
-        var carToAdd = _testCars.First(c => c.Model == "Corolla"); // A car not owned by the user
+        var carToAdd = _testCars.First(c => c.Model == "Corolla");
 
         _mockUserManager.Setup(um => um.FindByIdAsync(TestUserId)).ReturnsAsync(user);
         _mockCarRepository.Setup(r => r.GetByIdAsync(carToAdd.Id)).ReturnsAsync(carToAdd);
 
-        // Setup to simulate the car is NOT already a favorite
+        
         _mockUserCarRepository.Setup(r => r.SingleOrDefaultAsync(It.IsAny<Expression<Func<UserCar, bool>>>()))
             .ReturnsAsync((UserCar)null);
 
         _mockUserCarRepository.Setup(r => r.AddAsync(It.IsAny<UserCar>())).Returns(Task.CompletedTask);
         _mockUserCarRepository.Setup(r => r.SaveChangesAsync()).Returns(Task.CompletedTask);
 
-        // Act
+        
         var result = await _carService.AddCarToFavoritesAsync(TestUserId, carToAdd.Id);
 
-        // Assert
+        
         Assert.IsTrue(result);
         _mockUserCarRepository.Verify(r => r.AddAsync(It.IsAny<UserCar>()), Times.Once);
         _mockUserCarRepository.Verify(r => r.SaveChangesAsync(), Times.Once);
@@ -499,17 +499,17 @@ public class CarServiceTests
     [Test]
     public async Task AddCarToFavoritesAsync_WhenUserIsSeller_ShouldReturnFalse()
     {
-        // Arrange
+        
         var user = new ApplicationUser { Id = TestUserId };
-        var carToFail = _testCars.First(c => c.Model == "Camry"); // The car owned by the user
+        var carToFail = _testCars.First(c => c.Model == "Camry");
 
         _mockUserManager.Setup(um => um.FindByIdAsync(TestUserId)).ReturnsAsync(user);
         _mockCarRepository.Setup(r => r.GetByIdAsync(carToFail.Id)).ReturnsAsync(carToFail);
 
-        // Act
+        
         var result = await _carService.AddCarToFavoritesAsync(TestUserId, carToFail.Id);
 
-        // Assert
+        
         Assert.IsFalse(result);
         _mockUserCarRepository.Verify(r => r.AddAsync(It.IsAny<UserCar>()), Times.Never);
         _mockUserCarRepository.Verify(r => r.SaveChangesAsync(), Times.Never);
@@ -517,7 +517,7 @@ public class CarServiceTests
     [Test]
     public async Task RemoveCarFromFavoritesAsync_WhenCarIsFavorite_ShouldRemoveAndReturnTrue()
     {
-        // Arrange
+        
         var user = new ApplicationUser { Id = TestUserId };
         var car = new Car { Id = Guid.NewGuid() };
         var existingFavorite = new UserCar { UserId = TestUserId, CarId = car.Id };
@@ -525,19 +525,17 @@ public class CarServiceTests
         _mockUserManager.Setup(um => um.FindByIdAsync(TestUserId)).ReturnsAsync(user);
         _mockCarRepository.Setup(r => r.SingleOrDefaultAsync(It.IsAny<Expression<Func<Car, bool>>>()))
             .ReturnsAsync(car);
-
-        // Setup to simulate that the car IS currently a favorite
+        
         _mockUserCarRepository.Setup(r => r.SingleOrDefaultAsync(It.IsAny<Expression<Func<UserCar, bool>>>()))
             .ReturnsAsync(existingFavorite);
-            
-        // HardDelete is synchronous, so we don't need to set up a return task
+        
         _mockUserCarRepository.Setup(r => r.HardDelete(It.IsAny<UserCar>()));
         _mockUserCarRepository.Setup(r => r.SaveChangesAsync()).Returns(Task.CompletedTask);
 
-        // Act
+        
         var result = await _carService.RemoveCarFromFavoritesAsync(TestUserId, car.Id);
 
-        // Assert
+        
         Assert.IsTrue(result);
         _mockUserCarRepository.Verify(r => r.HardDelete(existingFavorite), Times.Once);
         _mockUserCarRepository.Verify(r => r.SaveChangesAsync(), Times.Once);
@@ -545,41 +543,40 @@ public class CarServiceTests
     [Test]
     public async Task RemoveCarFromFavoritesAsync_WhenCarIsNotFavorite_ShouldReturnFalse()
     {
-        // Arrange
+        
         var user = new ApplicationUser { Id = TestUserId };
         var car = new Car { Id = Guid.NewGuid() };
 
         _mockUserManager.Setup(um => um.FindByIdAsync(TestUserId)).ReturnsAsync(user);
         _mockCarRepository.Setup(r => r.SingleOrDefaultAsync(It.IsAny<Expression<Func<Car, bool>>>()))
             .ReturnsAsync(car);
-
-        // Setup to simulate that the car is NOT a favorite
+        
         _mockUserCarRepository.Setup(r => r.SingleOrDefaultAsync(It.IsAny<Expression<Func<UserCar, bool>>>()))
             .ReturnsAsync((UserCar)null);
 
-        // Act
+        
         var result = await _carService.RemoveCarFromFavoritesAsync(TestUserId, car.Id);
 
-        // Assert
+        
         Assert.IsFalse(result);
 
-        // Verify the delete methods were never called
+        
         _mockUserCarRepository.Verify(r => r.HardDelete(It.IsAny<UserCar>()), Times.Never);
         _mockUserCarRepository.Verify(r => r.SaveChangesAsync(), Times.Never);
     }
     [Test]
     public async Task MyCarsPagedAsync_WithUserWhoHasCars_ShouldReturnOnlyTheirCars()
     {
-        // Arrange
+        
         var pageNumber = 1;
         var pageSize = 5;
 
-        // Act
+        
         var result = await _carService.MyCarsPagedAsync(TestUserId, pageNumber, pageSize);
 
-        // Assert
+        
         Assert.IsNotNull(result);
-        Assert.AreEqual(2, result.Items.Count()); // Should only be the 2 cars sold by TestUserId
+        Assert.AreEqual(2, result.Items.Count()); 
         Assert.AreEqual(1, result.TotalPages);
         Assert.IsTrue(result.Items.All(c => _testCars.Where(tc => tc.SellerId == TestUserId).Select(tc => tc.Id).Contains(c.Id)));
         Assert.IsFalse(result.Items.Any(c => c.CarModel == "Civic"));
@@ -587,15 +584,15 @@ public class CarServiceTests
     [Test]
     public async Task MyCarsPagedAsync_WithUserWhoHasNoCars_ShouldReturnEmptyList()
     {
-        // Arrange
+        
         var userIdWithNoCars = "user-with-no-cars";
         var pageNumber = 1;
         var pageSize = 5;
 
-        // Act
+        
         var result = await _carService.MyCarsPagedAsync(userIdWithNoCars, pageNumber, pageSize);
 
-        // Assert
+        
         Assert.IsNotNull(result);
         Assert.IsEmpty(result.Items);
         Assert.AreEqual(0, result.TotalPages);
@@ -604,7 +601,7 @@ public class CarServiceTests
     [Test]
     public async Task GetCarImageByIdAsync_WhenCarHasImage_ShouldReturnImageDataAndContentType()
     {
-        // Arrange
+        
         var carId = Guid.NewGuid();
         var sampleImageData = new byte[] { 1, 2, 3, 4, 5 };
         var carWithImage = new Car { Id = carId, ImageData = sampleImageData };
@@ -612,10 +609,10 @@ public class CarServiceTests
         _mockCarRepository.Setup(r => r.FirstOrDefaultAsync(It.IsAny<Expression<Func<Car, bool>>>()))
             .ReturnsAsync(carWithImage);
 
-        // Act
+        
         var result = await _carService.GetCarImageByIdAsync(carId);
 
-        // Assert
+        
         Assert.IsNotNull(result);
         Assert.AreEqual(sampleImageData, result.Value.ImageData);
         Assert.AreEqual("image/jpeg", result.Value.ContentType);
@@ -623,18 +620,15 @@ public class CarServiceTests
     [Test]
     public async Task GetCarImageByIdAsync_WhenCarHasNoImage_ShouldReturnNull()
     {
-        // Arrange
+        
         var carId = Guid.NewGuid();
-        // This car object has a null ImageData property
         var carWithoutImage = new Car { Id = carId, ImageData = null };
 
         _mockCarRepository.Setup(r => r.FirstOrDefaultAsync(It.IsAny<Expression<Func<Car, bool>>>()))
             .ReturnsAsync(carWithoutImage);
-
-        // Act
+        
         var result = await _carService.GetCarImageByIdAsync(carId);
-
-        // Assert
+        
         Assert.IsNull(result);
     }
 }

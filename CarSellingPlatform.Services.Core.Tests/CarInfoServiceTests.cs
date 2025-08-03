@@ -34,7 +34,7 @@ namespace CarSellingPlatform.Services.Core.Tests
             _mockTransmissionRepository = new Mock<IRepository<Transmission, Guid>>();
 
             _carInfoService = new CarInfoService(
-                null, // Context is not used in the service methods, so we can pass null
+                null, 
                 _mockBrandRepository.Object,
                 _mockCategoryRepository.Object,
                 _mockFuelTypeRepository.Object,
@@ -56,15 +56,15 @@ namespace CarSellingPlatform.Services.Core.Tests
         [Test]
         public void Constructor_ValidParameters_CreatesInstance()
         {
-            // Arrange & Act
+            
             var service = new CarInfoService(
-                null, // Context can be null since it's not used in the service methods
+                null, 
                 _mockBrandRepository.Object,
                 _mockCategoryRepository.Object,
                 _mockFuelTypeRepository.Object,
                 _mockTransmissionRepository.Object);
 
-            // Assert
+            
             Assert.IsNotNull(service);
             Assert.IsInstanceOf<ICarInfoService>(service);
         }
@@ -72,7 +72,7 @@ namespace CarSellingPlatform.Services.Core.Tests
         [Test]
         public void Constructor_NullContext_DoesNotThrow()
         {
-            // Arrange, Act & Assert - Context is not used, so null is acceptable
+            
             Assert.DoesNotThrow(() => new CarInfoService(
                 null,
                 _mockBrandRepository.Object,
@@ -84,7 +84,7 @@ namespace CarSellingPlatform.Services.Core.Tests
         [Test]
         public void Constructor_NullBrandRepository_DoesNotThrowButWillFailOnMethodCall()
         {
-            // Arrange, Act & Assert - Constructor doesn't validate, but method calls will fail
+            
             CarInfoService service = null;
             Assert.DoesNotThrow(() => service = new CarInfoService(
                 null,
@@ -93,14 +93,14 @@ namespace CarSellingPlatform.Services.Core.Tests
                 _mockFuelTypeRepository.Object,
                 _mockTransmissionRepository.Object));
 
-            // Verify that calling the method with null repository throws
+            
             Assert.ThrowsAsync<NullReferenceException>(async () => await service.GetBrandsAsync());
         }
 
         [Test]
         public void Constructor_NullCategoryRepository_DoesNotThrowButWillFailOnMethodCall()
         {
-            // Arrange, Act & Assert - Constructor doesn't validate, but method calls will fail
+            
             CarInfoService service = null;
             Assert.DoesNotThrow(() => service = new CarInfoService(
                 null,
@@ -109,14 +109,14 @@ namespace CarSellingPlatform.Services.Core.Tests
                 _mockFuelTypeRepository.Object,
                 _mockTransmissionRepository.Object));
 
-            // Verify that calling the method with null repository throws
+            
             Assert.ThrowsAsync<NullReferenceException>(async () => await service.GetCategoriesAsync());
         }
 
         [Test]
         public void Constructor_NullFuelTypeRepository_DoesNotThrowButWillFailOnMethodCall()
         {
-            // Arrange, Act & Assert - Constructor doesn't validate, but method calls will fail
+            
             CarInfoService service = null;
             Assert.DoesNotThrow(() => service = new CarInfoService(
                 null,
@@ -125,14 +125,14 @@ namespace CarSellingPlatform.Services.Core.Tests
                 null,
                 _mockTransmissionRepository.Object));
 
-            // Verify that calling the method with null repository throws
+            
             Assert.ThrowsAsync<NullReferenceException>(async () => await service.GetFuelTypesAsync());
         }
 
         [Test]
         public void Constructor_NullTransmissionRepository_DoesNotThrowButWillFailOnMethodCall()
         {
-            // Arrange, Act & Assert - Constructor doesn't validate, but method calls will fail
+            
             CarInfoService service = null;
             Assert.DoesNotThrow(() => service = new CarInfoService(
                 null,
@@ -141,7 +141,7 @@ namespace CarSellingPlatform.Services.Core.Tests
                 _mockFuelTypeRepository.Object,
                 null));
 
-            // Verify that calling the method with null repository throws
+            
             Assert.ThrowsAsync<NullReferenceException>(async () => await service.GetTransmissionsAsync());
         }
 
@@ -152,7 +152,7 @@ namespace CarSellingPlatform.Services.Core.Tests
         [Test]
         public async Task GetBrandsAsync_ValidData_ReturnsCorrectBrands()
         {
-            // Arrange
+            
             var brandId1 = Guid.NewGuid();
             var brandId2 = Guid.NewGuid();
             var brands = new List<Brand>
@@ -164,10 +164,10 @@ namespace CarSellingPlatform.Services.Core.Tests
             var mockQueryable = CreateMockQueryable(brands);
             _mockBrandRepository.Setup(r => r.GetAllAttached()).Returns(mockQueryable);
 
-            // Act
+            
             var result = await _carInfoService.GetBrandsAsync();
 
-            // Assert
+            
             Assert.IsNotNull(result);
             var brandList = result.ToList();
             Assert.AreEqual(2, brandList.Count);
@@ -184,15 +184,15 @@ namespace CarSellingPlatform.Services.Core.Tests
         [Test]
         public async Task GetBrandsAsync_EmptyData_ReturnsEmptyCollection()
         {
-            // Arrange
+            
             var brands = new List<Brand>().AsQueryable();
             var mockQueryable = CreateMockQueryable(brands);
             _mockBrandRepository.Setup(r => r.GetAllAttached()).Returns(mockQueryable);
 
-            // Act
+            
             var result = await _carInfoService.GetBrandsAsync();
 
-            // Assert
+            
             Assert.IsNotNull(result);
             Assert.AreEqual(0, result.Count());
             _mockBrandRepository.Verify(r => r.GetAllAttached(), Times.Once);
@@ -201,11 +201,11 @@ namespace CarSellingPlatform.Services.Core.Tests
         [Test]
         public void GetBrandsAsync_RepositoryThrowsException_PropagatesException()
         {
-            // Arrange
+            
             _mockBrandRepository.Setup(r => r.GetAllAttached())
                 .Throws(new InvalidOperationException("Database error"));
 
-            // Act & Assert
+             
             var ex = Assert.ThrowsAsync<InvalidOperationException>(
                 async () => await _carInfoService.GetBrandsAsync());
             
@@ -219,7 +219,7 @@ namespace CarSellingPlatform.Services.Core.Tests
         [Test]
         public async Task GetCategoriesAsync_ValidData_ReturnsCorrectCategories()
         {
-            // Arrange
+            
             var categoryId1 = Guid.NewGuid();
             var categoryId2 = Guid.NewGuid();
             var categories = new List<Category>
@@ -231,10 +231,10 @@ namespace CarSellingPlatform.Services.Core.Tests
             var mockQueryable = CreateMockQueryable(categories);
             _mockCategoryRepository.Setup(r => r.GetAllAttached()).Returns(mockQueryable);
 
-            // Act
+            
             var result = await _carInfoService.GetCategoriesAsync();
 
-            // Assert
+            
             Assert.IsNotNull(result);
             var categoryList = result.ToList();
             Assert.AreEqual(2, categoryList.Count);
@@ -251,15 +251,15 @@ namespace CarSellingPlatform.Services.Core.Tests
         [Test]
         public async Task GetCategoriesAsync_EmptyData_ReturnsEmptyCollection()
         {
-            // Arrange
+            
             var categories = new List<Category>().AsQueryable();
             var mockQueryable = CreateMockQueryable(categories);
             _mockCategoryRepository.Setup(r => r.GetAllAttached()).Returns(mockQueryable);
 
-            // Act
+            
             var result = await _carInfoService.GetCategoriesAsync();
 
-            // Assert
+            
             Assert.IsNotNull(result);
             Assert.AreEqual(0, result.Count());
             _mockCategoryRepository.Verify(r => r.GetAllAttached(), Times.Once);
@@ -268,11 +268,11 @@ namespace CarSellingPlatform.Services.Core.Tests
         [Test]
         public void GetCategoriesAsync_RepositoryThrowsException_PropagatesException()
         {
-            // Arrange
+            
             _mockCategoryRepository.Setup(r => r.GetAllAttached())
                 .Throws(new InvalidOperationException("Database error"));
 
-            // Act & Assert
+             
             var ex = Assert.ThrowsAsync<InvalidOperationException>(
                 async () => await _carInfoService.GetCategoriesAsync());
             
@@ -286,7 +286,7 @@ namespace CarSellingPlatform.Services.Core.Tests
         [Test]
         public async Task GetFuelTypesAsync_ValidData_ReturnsCorrectFuelTypes()
         {
-            // Arrange
+            
             var fuelTypeId1 = Guid.NewGuid();
             var fuelTypeId2 = Guid.NewGuid();
             var fuelTypes = new List<FuelType>
@@ -298,10 +298,10 @@ namespace CarSellingPlatform.Services.Core.Tests
             var mockQueryable = CreateMockQueryable(fuelTypes);
             _mockFuelTypeRepository.Setup(r => r.GetAllAttached()).Returns(mockQueryable);
 
-            // Act
+            
             var result = await _carInfoService.GetFuelTypesAsync();
 
-            // Assert
+            
             Assert.IsNotNull(result);
             var fuelTypeList = result.ToList();
             Assert.AreEqual(2, fuelTypeList.Count);
@@ -318,15 +318,15 @@ namespace CarSellingPlatform.Services.Core.Tests
         [Test]
         public async Task GetFuelTypesAsync_EmptyData_ReturnsEmptyCollection()
         {
-            // Arrange
+            
             var fuelTypes = new List<FuelType>().AsQueryable();
             var mockQueryable = CreateMockQueryable(fuelTypes);
             _mockFuelTypeRepository.Setup(r => r.GetAllAttached()).Returns(mockQueryable);
 
-            // Act
+            
             var result = await _carInfoService.GetFuelTypesAsync();
 
-            // Assert
+            
             Assert.IsNotNull(result);
             Assert.AreEqual(0, result.Count());
             _mockFuelTypeRepository.Verify(r => r.GetAllAttached(), Times.Once);
@@ -335,11 +335,11 @@ namespace CarSellingPlatform.Services.Core.Tests
         [Test]
         public void GetFuelTypesAsync_RepositoryThrowsException_PropagatesException()
         {
-            // Arrange
+            
             _mockFuelTypeRepository.Setup(r => r.GetAllAttached())
                 .Throws(new InvalidOperationException("Database error"));
 
-            // Act & Assert
+             
             var ex = Assert.ThrowsAsync<InvalidOperationException>(
                 async () => await _carInfoService.GetFuelTypesAsync());
             
@@ -353,7 +353,7 @@ namespace CarSellingPlatform.Services.Core.Tests
         [Test]
         public async Task GetTransmissionsAsync_ValidData_ReturnsCorrectTransmissions()
         {
-            // Arrange
+            
             var transmissionId1 = Guid.NewGuid();
             var transmissionId2 = Guid.NewGuid();
             var transmissions = new List<Transmission>
@@ -365,10 +365,10 @@ namespace CarSellingPlatform.Services.Core.Tests
             var mockQueryable = CreateMockQueryable(transmissions);
             _mockTransmissionRepository.Setup(r => r.GetAllAttached()).Returns(mockQueryable);
 
-            // Act
+            
             var result = await _carInfoService.GetTransmissionsAsync();
 
-            // Assert
+            
             Assert.IsNotNull(result);
             var transmissionList = result.ToList();
             Assert.AreEqual(2, transmissionList.Count);
@@ -385,15 +385,15 @@ namespace CarSellingPlatform.Services.Core.Tests
         [Test]
         public async Task GetTransmissionsAsync_EmptyData_ReturnsEmptyCollection()
         {
-            // Arrange
+            
             var transmissions = new List<Transmission>().AsQueryable();
             var mockQueryable = CreateMockQueryable(transmissions);
             _mockTransmissionRepository.Setup(r => r.GetAllAttached()).Returns(mockQueryable);
 
-            // Act
+            
             var result = await _carInfoService.GetTransmissionsAsync();
 
-            // Assert
+            
             Assert.IsNotNull(result);
             Assert.AreEqual(0, result.Count());
             _mockTransmissionRepository.Verify(r => r.GetAllAttached(), Times.Once);
@@ -402,11 +402,11 @@ namespace CarSellingPlatform.Services.Core.Tests
         [Test]
         public void GetTransmissionsAsync_RepositoryThrowsException_PropagatesException()
         {
-            // Arrange
+            
             _mockTransmissionRepository.Setup(r => r.GetAllAttached())
                 .Throws(new InvalidOperationException("Database error"));
 
-            // Act & Assert
+             
             var ex = Assert.ThrowsAsync<InvalidOperationException>(
                 async () => await _carInfoService.GetTransmissionsAsync());
             
@@ -420,16 +420,16 @@ namespace CarSellingPlatform.Services.Core.Tests
         [Test]
         public async Task GetAllDataAsync_AllMethodsWork_ReturnsValidData()
         {
-            // Arrange
+            
             SetupAllRepositories();
 
-            // Act
+            
             var brands = await _carInfoService.GetBrandsAsync();
             var categories = await _carInfoService.GetCategoriesAsync();
             var fuelTypes = await _carInfoService.GetFuelTypesAsync();
             var transmissions = await _carInfoService.GetTransmissionsAsync();
 
-            // Assert
+            
             Assert.IsNotNull(brands);
             Assert.IsNotNull(categories);
             Assert.IsNotNull(fuelTypes);

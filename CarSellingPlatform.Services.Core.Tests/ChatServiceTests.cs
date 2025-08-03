@@ -37,7 +37,7 @@ public class ChatServiceTests
     [Test]
         public async Task ListAllChat_WhenUserHasChats_ShouldReturnViewModelCollection()
         {
-            // Arrange
+            
             var user = new ApplicationUser { Id = TestUserId, FirstName = "Test", LastName = "User" };
             var seller = new ApplicationUser { Id = "seller-id", FirstName = "John", LastName = "Seller" };
             var buyer = new ApplicationUser { Id = "buyer-id", FirstName = "Jane", LastName = "Buyer" };
@@ -57,10 +57,10 @@ public class ChatServiceTests
             var mockQueryable = chats.BuildMock();
             _mockChatRepository.Setup(r => r.GetAllAttached()).Returns(mockQueryable);
 
-            // Act
+            
             var result = await _chatService.ListAllChat(TestUserId);
 
-            // Assert
+            
             Assert.IsNotNull(result);
             Assert.AreEqual(2, result.Count());
             
@@ -87,26 +87,26 @@ public class ChatServiceTests
     [Test]
     public async Task CreateAsync_WhenChatDoesNotExist_ShouldCreateChatAndReturnTrue() 
     {
-            // Arrange
+            
             var user = new ApplicationUser { Id = TestUserId };
             var car = new Car { Id = Guid.NewGuid(), SellerId = "seller-id" };
             _mockUserManager.Setup(um => um.FindByIdAsync(TestUserId))
                 .ReturnsAsync(new ApplicationUser { Id = TestUserId });
-            // Mock finding the car
+            
             _mockCarRepository.Setup(r => r.SingleOrDefaultAsync(It.IsAny<Expression<Func<Car, bool>>>()))
                 .ReturnsAsync(car);
             
-            // Mock finding NO existing chat
+        
             _mockChatRepository.Setup(r => r.SingleOrDefaultAsync(It.IsAny<Expression<Func<Chat, bool>>>()))
                 .ReturnsAsync((Chat)null);
 
             _mockChatRepository.Setup(r => r.AddAsync(It.IsAny<Chat>())).Returns(Task.CompletedTask);
             _mockChatRepository.Setup(r => r.SaveChangesAsync()).Returns(Task.CompletedTask);
             
-            // Act
+            
             var result = await _chatService.CreateAsync(TestUserId, car.Id);
 
-            // Assert
+            
             Assert.IsTrue(result);
             _mockChatRepository.Verify(r => r.AddAsync(It.IsAny<Chat>()), Times.Once);
             _mockChatRepository.Verify(r => r.SaveChangesAsync(), Times.Once);
@@ -115,7 +115,7 @@ public class ChatServiceTests
     [Test]
     public async Task CreateAsync_WhenChatAlreadyExists_ShouldNotCreateChatAndReturnFalse() 
     {
-            // Arrange
+            
             var user = new ApplicationUser { Id = TestUserId };
             var car = new Car { Id = Guid.NewGuid(), SellerId = "seller-id" };
             var existingChat = new Chat { UserId = user.Id, CarId = car.Id, SellerId = car.SellerId };
@@ -123,14 +123,14 @@ public class ChatServiceTests
             _mockCarRepository.Setup(r => r.SingleOrDefaultAsync(It.IsAny<Expression<Func<Car, bool>>>()))
                 .ReturnsAsync(car);
             
-            // Mock finding an EXISTING chat
+            
             _mockChatRepository.Setup(r => r.SingleOrDefaultAsync(It.IsAny<Expression<Func<Chat, bool>>>()))
                 .ReturnsAsync(existingChat);
             
-            // Act
+            
             var result = await _chatService.CreateAsync(TestUserId, car.Id);
 
-            // Assert
+            
             Assert.IsFalse(result);
             _mockChatRepository.Verify(r => r.AddAsync(It.IsAny<Chat>()), Times.Never);
             _mockChatRepository.Verify(r => r.SaveChangesAsync(), Times.Never);
@@ -138,7 +138,7 @@ public class ChatServiceTests
     [Test]
     public async Task DeleteAsync_WhenChatExists_ShouldDeleteChatAndReturnTrue()
     {
-        // Arrange
+        
         var chatId = Guid.NewGuid();
         var existingChat = new Chat { Id = chatId };
 
@@ -148,10 +148,10 @@ public class ChatServiceTests
         _mockChatRepository.Setup(r => r.HardDelete(It.IsAny<Chat>()));
         _mockChatRepository.Setup(r => r.SaveChangesAsync()).Returns(Task.CompletedTask);
 
-        // Act
+        
         var result = await _chatService.DeleteAsync(chatId);
 
-        // Assert
+        
         Assert.IsTrue(result);
         _mockChatRepository.Verify(r => r.HardDelete(existingChat), Times.Once);
         _mockChatRepository.Verify(r => r.SaveChangesAsync(), Times.Once);
@@ -160,17 +160,16 @@ public class ChatServiceTests
     [Test]
     public async Task DeleteAsync_WhenChatDoesNotExist_ShouldReturnFalse()
     {
-        // Arrange
+        
         var chatId = Guid.NewGuid();
-
-        // Mock finding NO existing chat
+        
         _mockChatRepository.Setup(r => r.SingleOrDefaultAsync(It.IsAny<Expression<Func<Chat, bool>>>()))
             .ReturnsAsync((Chat)null);
             
-        // Act
+        
         var result = await _chatService.DeleteAsync(chatId);
 
-        // Assert
+        
         Assert.IsFalse(result);
         _mockChatRepository.Verify(r => r.HardDelete(It.IsAny<Chat>()), Times.Never);
         _mockChatRepository.Verify(r => r.SaveChangesAsync(), Times.Never);
@@ -178,7 +177,7 @@ public class ChatServiceTests
     [Test]
     public async Task GetChatId_WhenChatExists_ShouldReturnCorrectChatId()
     {
-        // Arrange
+        
         var userId = TestUserId;
         var carId = Guid.NewGuid();
         var expectedChatId = Guid.NewGuid();
@@ -187,28 +186,27 @@ public class ChatServiceTests
         _mockChatRepository.Setup(r => r.SingleOrDefaultAsync(It.IsAny<Expression<Func<Chat, bool>>>()))
             .ReturnsAsync(existingChat);
 
-        // Act
+        
         var result = await _chatService.GetChatId(userId, carId);
 
-        // Assert
+        
         Assert.AreEqual(expectedChatId, result);
     }
 
     [Test]
     public async Task GetChatId_WhenChatDoesNotExist_ShouldReturnGuidEmpty()
     {
-        // Arrange
+        
         var userId = TestUserId;
         var carId = Guid.NewGuid();
-
-        // Mock finding NO existing chat
+        
         _mockChatRepository.Setup(r => r.SingleOrDefaultAsync(It.IsAny<Expression<Func<Chat, bool>>>()))
             .ReturnsAsync((Chat)null);
             
-        // Act
+        
         var result = await _chatService.GetChatId(userId, carId);
 
-        // Assert
+        
         Assert.AreEqual(Guid.Empty, result);
     }
 }
