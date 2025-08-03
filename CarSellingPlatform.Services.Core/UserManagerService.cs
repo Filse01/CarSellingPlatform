@@ -1,5 +1,6 @@
 using CarSellingPlatform.Data;
 using CarSellingPlatform.Data.Interfaces.Repository;
+using CarSellingPlatform.Data.Models.Car;
 using CarSellingPlatform.Data.Models.Chat;
 using CarSellingPlatform.Services.Core.Contracts;
 using CarSellingPlatform.Web.ViewModels.Car;
@@ -13,11 +14,15 @@ namespace CarSellingPlatform.Services.Core;
 public class UserManagerService : IUserManagerService
 {
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IRepository<Car, Guid> _carRepository;
     private readonly IRepository<Chat, Guid> _chatRepository;
-    public UserManagerService(UserManager<ApplicationUser> userManager, IRepository<Chat, Guid> chatRepository)
+    private readonly IRepository<UserCar, Guid> _userCarRepository;
+    public UserManagerService(UserManager<ApplicationUser> userManager, IRepository<Chat, Guid> chatRepository, IRepository<Car, Guid> carRepository, IRepository<UserCar, Guid> userCarRepository)
     {
         _userManager = userManager;
         _chatRepository = chatRepository;
+        _carRepository = carRepository;
+        _userCarRepository = userCarRepository;
     }
     public async Task<PagedListViewModel<UserManagementIndexViewModel>> ListPagedAsync(string? userId, int pageNumber, int pageSize)
     {
@@ -78,12 +83,20 @@ public class UserManagerService : IUserManagerService
         var sellerChats = await _chatRepository.GetAllAttached()
             .Where(c => c.SellerId == user.Id)
             .ToListAsync();
+        var sellerUserCars = await _userCarRepository.GetAllAttached()
+            .Where(c => c.UserId == user.Id)
+            .ToListAsync();
+        var sellerCars = await _carRepository.GetAllAttached()
+            .Where(c => c.SellerId == user.Id)
+            .ToListAsync();
         var userChats = await _chatRepository.GetAllAttached()
             .Where(c => c.UserId == user.Id)
             .ToListAsync();
 
         _chatRepository.HardDeleteRange(sellerChats); 
         _chatRepository.HardDeleteRange(userChats); 
+        _carRepository.HardDeleteRange(sellerCars);
+        _userCarRepository.HardDeleteRange(sellerUserCars);
         await _chatRepository.SaveChangesAsync(); 
         var result = await _userManager.DeleteAsync(user); 
         

@@ -1,4 +1,5 @@
 using CarSellingPlatform.Data.Interfaces.Repository;
+using CarSellingPlatform.Data.Models.Car;
 using CarSellingPlatform.Data.Models.Chat;
 using CarSellingPlatform.Services.Core.Contracts;
 using Microsoft.AspNetCore.Identity;
@@ -10,6 +11,8 @@ namespace CarSellingPlatform.Services.Core.Tests;
 public class UserManagerServiceTests
 {
         private Mock<IRepository<Chat, Guid>> _chatRepositoryMock;
+        private Mock<IRepository<Car, Guid>> _carRepositoryMock;
+        private Mock<IRepository<UserCar, Guid>> _userCarRepositoryMock;
         private Mock<UserManager<ApplicationUser>> _mockUserManager;
         private IUserManagerService _userManagerService;
 
@@ -17,11 +20,13 @@ public class UserManagerServiceTests
         public void SetUp()
         {
             _chatRepositoryMock = new Mock<IRepository<Chat, Guid>>();
+            _carRepositoryMock = new Mock<IRepository<Car, Guid>>();
+            _userCarRepositoryMock = new Mock<IRepository<UserCar, Guid>>();
             var store = new Mock<IUserStore<ApplicationUser>>();
             _mockUserManager = new Mock<UserManager<ApplicationUser>>(
                 store.Object, null, null, null, null, null, null, null, null);
             
-            _userManagerService = new UserManagerService(_mockUserManager.Object, _chatRepositoryMock.Object);
+            _userManagerService = new UserManagerService(_mockUserManager.Object, _chatRepositoryMock.Object, _carRepositoryMock.Object, _userCarRepositoryMock.Object);
         }
         
 
@@ -133,16 +138,31 @@ public class UserManagerServiceTests
                 new Chat { SellerId = userId },
                 new Chat { UserId = userId }  
             };
+            var cars = new List<Car>
+            {
+                new Car { SellerId = userId }
+            };
+            var userCar = new List<UserCar>
+            {
+                new UserCar { UserId = userId, CarId = cars[0].Id }
+            };
 
             _mockUserManager.Setup(um => um.FindByIdAsync(userId)).ReturnsAsync(user);
-            
+            _mockUserManager.Setup(um => um.DeleteAsync(user)).ReturnsAsync(IdentityResult.Success);
+
             var mockChatQueryable = chats.BuildMock();
             _chatRepositoryMock.Setup(r => r.GetAllAttached()).Returns(mockChatQueryable);
             
             _chatRepositoryMock.Setup(r => r.HardDeleteRange(It.IsAny<IEnumerable<Chat>>()));
             _chatRepositoryMock.Setup(r => r.SaveChangesAsync()).Returns(Task.CompletedTask);
             _mockUserManager.Setup(um => um.DeleteAsync(user)).ReturnsAsync(IdentityResult.Success);
-
+            
+            var mockCarQueryable = cars.BuildMock();
+            _carRepositoryMock.Setup(r => r.GetAllAttached()).Returns(mockCarQueryable);
+            _carRepositoryMock.Setup(r => r.HardDeleteRange(It.IsAny<IEnumerable<Car>>()));
+            
+            var mockUserCarRepository = userCar.BuildMock();
+            _userCarRepositoryMock.Setup(r => r.GetAllAttached()).Returns(mockUserCarRepository);
             
             var result = await _userManagerService.DeleteUser(userId);
 
@@ -151,6 +171,8 @@ public class UserManagerServiceTests
             _chatRepositoryMock.Verify(r => r.HardDeleteRange(It.IsAny<IEnumerable<Chat>>()), Times.Exactly(2));
             _chatRepositoryMock.Verify(r => r.SaveChangesAsync(), Times.Once);
             _mockUserManager.Verify(um => um.DeleteAsync(user), Times.Once);
+            _carRepositoryMock.Verify(r => r.HardDeleteRange(It.IsAny<IEnumerable<Car>>()), Times.Once); 
+            _userCarRepositoryMock.Verify(r => r.HardDeleteRange(It.IsAny<IEnumerable<UserCar>>()), Times.Once); 
         }
 
         [Test]
