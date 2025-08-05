@@ -4,7 +4,7 @@ An ASP.NET Core MVC web application for buying and selling cars. The platform al
 
 ---
 ## 🎮 Test it 
--  [Google](carsellingapp-250805125548.azurewebsites.net)
+-  [Site](https://carsellingapp-250805125548.azurewebsites.net)
 
 ---
 ## ✨ Features
