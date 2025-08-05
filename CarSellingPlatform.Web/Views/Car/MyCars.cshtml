@@ -1,5 +1,8 @@
 @using CarSellingPlatform.Web.ViewModels.Car
 @model PagedListViewModel<MyCarsViewModel>
+@{
+    ViewData["Title"] = $"My Cars";
+}
 <div id="carResults">
     @if (Model?.Items?.Any() == true)
     {

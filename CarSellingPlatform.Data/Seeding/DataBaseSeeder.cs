@@ -80,6 +80,7 @@ public static class DataBaseSeeder
 
     public static async Task ImportBrandsFromJsonAsync(CarSellingPlatformDbContext context)
     {
+        
         var path = Path.Combine("..", "CarSellingPlatform.Data", "Seeding", "Input", "Brands.json");
         string brandsJson = File.ReadAllText(path);
         var brands = JsonSerializer.Deserialize<List<Brand>>(brandsJson);
