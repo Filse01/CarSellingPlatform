@@ -3,7 +3,13 @@
 @{
     ViewData["Title"] = "Favorite Cars";
 }
-
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
 <div class="container-fluid">
     <div class="row mb-4 text-center">
         <div class="col-12">

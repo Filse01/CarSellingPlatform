@@ -85,6 +85,9 @@ public class CarController : BaseController
             return View(model);
         }
         bool addResult = await _carService.AddCarAsync(userId, model, imageFile);
+        TempData["SuccessMessage"] = addResult
+            ? "Car added successfully."
+            : "Failed to add car.";
         if (addResult == false)
         {
             return View(model);
@@ -122,6 +125,9 @@ public class CarController : BaseController
         }
 
         bool editResult = await _carService.EditCarAsync(userId, model, imageFile);
+        TempData["SuccessMessage"] = editResult
+            ? "Car edited successfully."
+            : "Failed to edit car.";
         if (editResult == false)
         {
             return View(model);
@@ -147,6 +153,9 @@ public class CarController : BaseController
     {
         bool deleteResult = await _carService
             .SoftDeleteCarAsync(model,GetUserId());
+        TempData["SuccessMessage"] = deleteResult
+            ? "Car deleted successfully."
+            : "Failed to delete car.";
         return RedirectToAction(nameof(Index));
     }
 
@@ -168,6 +177,9 @@ public class CarController : BaseController
             return RedirectToAction(nameof(Index));
         }
         bool opResult = await _carService.AddCarToFavoritesAsync(userId, id);
+        TempData["SuccessMessage"] = opResult
+            ? "Car added to favorites successfully."
+            : "Failed to add car to favorites.";
         if (opResult == false)
         {
             return RedirectToAction(nameof(Index));
@@ -181,6 +193,9 @@ public class CarController : BaseController
         string? userId = GetUserId();
         
         bool opResult = await _carService.RemoveCarFromFavoritesAsync(userId, id);
+        TempData["SuccessMessage"] = opResult
+            ? "Car removed from favorites successfully."
+            : "Failed to remove car from favorites.";
         if (opResult == false)
         {
             return RedirectToAction(nameof(Index));

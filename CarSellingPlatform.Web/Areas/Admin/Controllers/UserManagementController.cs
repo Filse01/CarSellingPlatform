@@ -42,9 +42,12 @@ public class UserManagementController : BaseAdminController
     public async Task<IActionResult> DeleteUser(string id)
     {
         bool opResult = await _userManagerService.DeleteUser(id);
+        TempData["SuccessMessage"] = opResult
+            ? "User deleted successfully."
+            : "Failed to delete user.";
         if (opResult == false)
         {
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), "Home");
         }
         return RedirectToAction(nameof(Index));
     }

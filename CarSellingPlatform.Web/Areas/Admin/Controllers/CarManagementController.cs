@@ -13,7 +13,6 @@ public class CarManagementController : BaseAdminController
         _carManagementService = carManagementService;
         _carInfoService = carInfoService;
     }
-    // GET
     public async Task<IActionResult> Index(int page =1)
     {
         const int pageSize = 10;
@@ -44,6 +43,9 @@ public class CarManagementController : BaseAdminController
         }
 
         bool editResult = await _carManagementService.EditCarAsync(userId, model);
+        TempData["SuccessMessage"] = editResult
+            ? "Car edited successfully."
+            : "Failed to edit car.";
         if (editResult == false)
         {
             return View(model);
@@ -54,6 +56,9 @@ public class CarManagementController : BaseAdminController
     {
         bool deleteResult = await _carManagementService
             .SoftDeleteCarAsync(id,GetUserId());
+        TempData["SuccessMessage"] = deleteResult
+            ? "Car deleted successfully."
+            : "Failed to delete car.";
         return RedirectToAction(nameof(Index));
     }
 }

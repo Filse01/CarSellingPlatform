@@ -3,6 +3,13 @@
 @{
     ViewData["Title"] = $"{Model.Year} {Model.BrandName} {Model.CarModel}";
 }
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
 
 <link rel="stylesheet" href="~/css/details.css"/>
 
