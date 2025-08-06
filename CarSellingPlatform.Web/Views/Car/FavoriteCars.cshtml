@@ -72,11 +72,11 @@
                                                 <i class="fas fa-eye me-1"></i> View Details
                                             </a>
 
-                                            <a asp-controller="Chat" asp-action="Index"
-                                               asp-route-carId="@car.Id" asp-route-sellerId="@car.SellerId"
-                                               class="btn btn-primary btn-sm">
-                                                <i class="fas fa-comments me-1"></i> Contact Seller
-                                            </a>
+                                            <form method="post" asp-controller="Chat" asp-action="Create" asp-route-carId="@car.Id">
+                                                <button type="submit" class="btn btn-primary">
+                                                    Contact Seller
+                                                </button>
+                                            </form>
 
                                             <form asp-controller="Car" asp-action="RemoveFavoriteCars" asp-route-id="@car.Id" method="post">
                                                 <button type="submit" class="btn btn-primary btn-sm">
