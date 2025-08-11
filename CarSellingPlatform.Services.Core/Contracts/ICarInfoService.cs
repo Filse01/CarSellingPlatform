@@ -8,4 +8,5 @@ public interface ICarInfoService
     Task<IEnumerable<AddCarCategory>> GetCategoriesAsync();
     Task<IEnumerable<AddCarFuelType>> GetFuelTypesAsync();
     Task<IEnumerable<AddCarTransmission>> GetTransmissionsAsync();
+    Task<IEnumerable<AddCarDealership>> GetDealersihpAsync(string userId);
 }

@@ -58,9 +58,12 @@ public class AddCarViewModel
 
     [Required]
     public Guid TransmissionId { get; set; } 
+    
+    public Guid? DealershipId { get; set; }
 
     public IEnumerable<AddCarBrand>? Brands { get; set; }
     public IEnumerable<AddCarCategory>? Categories { get; set; }
     public IEnumerable<AddCarFuelType>? FuelTypes { get; set; } 
     public IEnumerable<AddCarTransmission>? Transmissions { get; set; } 
+    public IEnumerable<AddCarDealership>? Dealerships { get; set; }
 }

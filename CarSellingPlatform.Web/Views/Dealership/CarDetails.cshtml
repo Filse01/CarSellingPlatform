@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="~/css/details.css"/>
 
 <div class="container-fluid">
-    <a href="@ViewBag.BackUrl" class="btn btn-secondary">← Back to Cars</a>
+    <a asp-controller="Dealership" asp-action="AllCars" asp-route-id="@Model.DealershipId" class="btn btn-secondary">← Back to Cars</a>
     
     <div class="car-details-container">
         <div class="car-header">
@@ -96,6 +96,5 @@
             <h3>Description</h3>
             <p class="description-text">@Model.Description</p>
         </div>
-        <partial name="_DealershipPartialView" model="Model.Dealership" />
     </div>
 </div>

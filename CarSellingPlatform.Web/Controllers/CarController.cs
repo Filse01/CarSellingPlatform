@@ -11,12 +11,12 @@ public class CarController : BaseController
 {
     private readonly ICarInfoService _carInfoService;
     private readonly ICarService _carService;
-    private readonly CarSellingPlatformDbContext _context;
-    public CarController(ICarInfoService carInfoService, ICarService carService, CarSellingPlatformDbContext context)
+    private readonly IDealerShipService _dealerShipService;
+    public CarController(ICarInfoService carInfoService, ICarService carService, IDealerShipService dealerShipService)
     {
         _carInfoService = carInfoService;
         _carService = carService;
-        _context = context;
+        _dealerShipService = dealerShipService;
     }
     
     [AllowAnonymous]
@@ -54,6 +54,15 @@ public class CarController : BaseController
         {
             return this.RedirectToAction(nameof(Index));
         }
+        if (car.DealershipId.HasValue)
+        {
+            var dealership = await _dealerShipService.GetDetailsDealershipAsync(car.DealershipId.Value, userId);
+
+            if (dealership != null)
+            {
+                car.Dealership = dealership; 
+            }
+        }
         string referrer = Request.Headers["Referer"].ToString();
         string backUrl = Url.Action("Index", "Car");
         if (!string.IsNullOrEmpty(referrer) && referrer.Contains("/Car/FavoriteCars"))
@@ -66,12 +75,14 @@ public class CarController : BaseController
     [HttpGet]
     public async Task<IActionResult> AddCar()
     {
+        var userId = GetUserId();
         AddCarViewModel model = new AddCarViewModel()
         {
             Categories = await this._carInfoService.GetCategoriesAsync(),
             Brands = await this._carInfoService.GetBrandsAsync(),
             FuelTypes = await this._carInfoService.GetFuelTypesAsync(),
             Transmissions = await this._carInfoService.GetTransmissionsAsync(),
+            Dealerships = await this._carInfoService.GetDealersihpAsync(userId)
         };
         return View(model);
     }

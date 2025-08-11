@@ -1,0 +1,79 @@
+@using CarSellingPlatform.Web.ViewModels.Car
+@model CarSellingPlatform.Web.ViewModels.Dealership.AddDealershipInputModel
+
+@{
+    ViewData["Title"] = "Add a dealership";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="card-title mb-0">
+                        <i class="fas fa-car me-2"></i>Add a dealership
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="AddDealership" method="post" enctype="multipart/form-data" novalidate>
+                        <!-- Basic Information -->
+                        
+                       <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="@Model.Name" class="form-label">@Model.Name</label>
+                                    <input asp-for="@Model.Name" class="form-control" placeholder="Enter dealership's name"/>
+                                    <span asp-validation-for="@Model.Name" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="@Model.Address" class="form-label">Address</label>
+                                    <input asp-for="@Model.Address" class="form-control" placeholder="Enter address" />
+                                    <span asp-validation-for="@Model.Address" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                           <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="@Model.PhoneNumber" class="form-label">Phone number</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input asp-for="@Model.PhoneNumber" class="form-control" placeholder="+359XXXXXXXX" inputmode="decimal" max="10000000" />
+                                    </div>
+                                    <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="@Model.Description" class="form-label">Description</label>
+                                <textarea asp-for="@Model.Description" class="form-control" rows="4" placeholder="Enter detailed description of the dealership..."></textarea>
+                                <span asp-validation-for="@Model.Description" class="text-danger"></span>
+                            </div>
+                        </div>
+                       <div class="mb-3">
+                            <label for="ImageFile" class="form-label">Upload Image</label>
+                            <input type="file" id="ImageFile" name="ImageFile" class="form-control" accept="image/*" />
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i>Register Dealership
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

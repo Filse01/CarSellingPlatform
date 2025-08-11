@@ -32,6 +32,8 @@ public class Car
     [Required]
     public string SellerId { get; set; } = null!;
     public ApplicationUser Seller { get; set; } = null!;
+    public Guid? DealershipId { get; set; }
+    public Dealership? Dealership { get; set; }
     public Guid CategoryId { get; set; }
     
     public Category Category { get; set; } = null!;

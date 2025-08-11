@@ -15,6 +15,7 @@ namespace CarSellingPlatform.Data
 
         }
         
+        public DbSet<Dealership> Dealerships { get; set; }
         public DbSet<Car> Cars { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<FuelType> FuelTypes { get; set; }

@@ -23,6 +23,7 @@ namespace CarSellingPlatform.Services.Core.Tests
         private Mock<IRepository<Category, Guid>> _mockCategoryRepository;
         private Mock<IRepository<FuelType, Guid>> _mockFuelTypeRepository;
         private Mock<IRepository<Transmission, Guid>> _mockTransmissionRepository;
+        private Mock<IRepository<Dealership, Guid>> _mockDealershipRepository;
         private ICarInfoService _carInfoService;
 
         [SetUp]
@@ -32,13 +33,15 @@ namespace CarSellingPlatform.Services.Core.Tests
             _mockCategoryRepository = new Mock<IRepository<Category, Guid>>();
             _mockFuelTypeRepository = new Mock<IRepository<FuelType, Guid>>();
             _mockTransmissionRepository = new Mock<IRepository<Transmission, Guid>>();
+            _mockDealershipRepository = new Mock<IRepository<Dealership, Guid>>();
 
             _carInfoService = new CarInfoService(
                 null, 
                 _mockBrandRepository.Object,
                 _mockCategoryRepository.Object,
                 _mockFuelTypeRepository.Object,
-                _mockTransmissionRepository.Object);
+                _mockTransmissionRepository.Object,
+                _mockDealershipRepository.Object);
         }
 
         [TearDown]
@@ -62,7 +65,8 @@ namespace CarSellingPlatform.Services.Core.Tests
                 _mockBrandRepository.Object,
                 _mockCategoryRepository.Object,
                 _mockFuelTypeRepository.Object,
-                _mockTransmissionRepository.Object);
+                _mockTransmissionRepository.Object,
+                _mockDealershipRepository.Object);
 
             
             Assert.IsNotNull(service);
@@ -78,7 +82,8 @@ namespace CarSellingPlatform.Services.Core.Tests
                 _mockBrandRepository.Object,
                 _mockCategoryRepository.Object,
                 _mockFuelTypeRepository.Object,
-                _mockTransmissionRepository.Object));
+                _mockTransmissionRepository.Object,
+                _mockDealershipRepository.Object));
         }
 
         [Test]
@@ -91,7 +96,8 @@ namespace CarSellingPlatform.Services.Core.Tests
                 null,
                 _mockCategoryRepository.Object,
                 _mockFuelTypeRepository.Object,
-                _mockTransmissionRepository.Object));
+                _mockTransmissionRepository.Object,
+                _mockDealershipRepository.Object));
 
             
             Assert.ThrowsAsync<NullReferenceException>(async () => await service.GetBrandsAsync());
@@ -107,7 +113,8 @@ namespace CarSellingPlatform.Services.Core.Tests
                 _mockBrandRepository.Object,
                 null,
                 _mockFuelTypeRepository.Object,
-                _mockTransmissionRepository.Object));
+                _mockTransmissionRepository.Object,
+                _mockDealershipRepository.Object));
 
             
             Assert.ThrowsAsync<NullReferenceException>(async () => await service.GetCategoriesAsync());
@@ -123,7 +130,8 @@ namespace CarSellingPlatform.Services.Core.Tests
                 _mockBrandRepository.Object,
                 _mockCategoryRepository.Object,
                 null,
-                _mockTransmissionRepository.Object));
+                _mockTransmissionRepository.Object,
+                _mockDealershipRepository.Object));
 
             
             Assert.ThrowsAsync<NullReferenceException>(async () => await service.GetFuelTypesAsync());
@@ -139,7 +147,8 @@ namespace CarSellingPlatform.Services.Core.Tests
                 _mockBrandRepository.Object,
                 _mockCategoryRepository.Object,
                 _mockFuelTypeRepository.Object,
-                null));
+                null,
+                _mockDealershipRepository.Object));
 
             
             Assert.ThrowsAsync<NullReferenceException>(async () => await service.GetTransmissionsAsync());

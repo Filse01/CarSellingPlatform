@@ -56,6 +56,9 @@ namespace AspNetCoreArchTemplate.Data.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<Guid?>("DealershipId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Description")
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
@@ -100,6 +103,8 @@ namespace AspNetCoreArchTemplate.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("DealershipId");
+
                     b.HasIndex("EngineId");
 
                     b.HasIndex("FuelTypeId");
@@ -125,6 +130,45 @@ namespace AspNetCoreArchTemplate.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("CarSellingPlatform.Data.Models.Car.Dealership", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<byte[]>("Logo")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("OwnerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Dealerships");
                 });
 
             modelBuilder.Entity("CarSellingPlatform.Data.Models.Car.Engine", b =>
@@ -484,6 +528,10 @@ namespace AspNetCoreArchTemplate.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("CarSellingPlatform.Data.Models.Car.Dealership", "Dealership")
+                        .WithMany("Cars")
+                        .HasForeignKey("DealershipId");
+
                     b.HasOne("CarSellingPlatform.Data.Models.Car.Engine", "Engine")
                         .WithMany("Cars")
                         .HasForeignKey("EngineId")
@@ -512,6 +560,8 @@ namespace AspNetCoreArchTemplate.Data.Migrations
 
                     b.Navigation("Category");
 
+                    b.Navigation("Dealership");
+
                     b.Navigation("Engine");
 
                     b.Navigation("FuelType");
@@ -519,6 +569,17 @@ namespace AspNetCoreArchTemplate.Data.Migrations
                     b.Navigation("Seller");
 
                     b.Navigation("Transmission");
+                });
+
+            modelBuilder.Entity("CarSellingPlatform.Data.Models.Car.Dealership", b =>
+                {
+                    b.HasOne("CarSellingPlatform.Data.Models.Chat.ApplicationUser", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("CarSellingPlatform.Data.Models.Car.UserCar", b =>
@@ -650,6 +711,11 @@ namespace AspNetCoreArchTemplate.Data.Migrations
                 });
 
             modelBuilder.Entity("CarSellingPlatform.Data.Models.Car.Category", b =>
+                {
+                    b.Navigation("Cars");
+                });
+
+            modelBuilder.Entity("CarSellingPlatform.Data.Models.Car.Dealership", b =>
                 {
                     b.Navigation("Cars");
                 });

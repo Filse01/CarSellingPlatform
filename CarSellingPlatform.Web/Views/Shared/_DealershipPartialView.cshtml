@@ -1,0 +1,83 @@
+@model CarSellingPlatform.Web.ViewModels.Dealership.DetailsDealershipViewModel
+
+<div class="dealership-section mt-4">
+    <h3>Available at Dealership</h3>
+    <div class="card dealership-info-card shadow-sm">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-2 text-center">
+                    <!-- Dealership Logo -->
+                    <div class="dealership-logo-container mb-3 mb-md-0">
+                        @if (Model.Logo != null && Model.Logo.Length > 0)
+                        {
+                            <img src="@Url.Action("GetDealershipImage", "Dealership", new { id = Model.Id })"
+                                 alt="@Model.Name Logo" class="img-fluid rounded dealership-logo-small"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                        }
+                        else
+                        {
+                            <div class="dealership-placeholder-small d-flex align-items-center justify-content-center bg-light rounded">
+                                <i class="fas fa-store fa-2x text-muted"></i>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <!-- Dealership Details -->
+                    <h5 class="mb-2">@Model.Name</h5>
+                    @if (!string.IsNullOrEmpty(Model.Description))
+                    {
+                        <p class="text-muted mb-2 small">@Model.Description</p>
+                    }
+                    <div class="dealership-contact-info">
+                        <div class="mb-1">
+                            <small class="text-muted">
+                                <i class="fas fa-map-marker-alt me-1"></i>
+                                @Model.Address
+                            </small>
+                        </div>
+                        <div class="mb-1">
+                            <small class="text-muted">
+                                <i class="fas fa-phone me-1"></i>
+                                <a href="tel:@Model.PhoneNumber" class="text-decoration-none">@Model.PhoneNumber</a>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <!-- Dealership Actions -->
+                    <div class="dealership-actions d-grid gap-2">
+                        <a href="@Url.Action("DetailsDealership", "Dealership", new { id = Model.Id })" class="btn btn-primary btn-sm">
+                            <i class="fas fa-eye me-1"></i> View Dealership
+                        </a>
+                        
+                        <a href="@Url.Action("AllCars", "Dealership", new { id = Model.Id })" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-car me-1"></i> View All Cars
+                        </a>
+                        
+                        <button type="button" class="btn btn-success btn-sm flex-fill" data-bs-toggle="modal" data-bs-target="#phoneModal">
+                            Call
+                        </button>
+
+                        <div class="modal fade" id="phoneModal" tabindex="-1" aria-labelledby="phoneModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="phoneModalLabel">Contact Us</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Our phone number is: <strong>@Model.PhoneNumber</strong>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

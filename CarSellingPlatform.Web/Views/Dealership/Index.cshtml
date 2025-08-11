@@ -1,0 +1,144 @@
+@model CarSellingPlatform.Web.ViewModels.Car.PagedListViewModel<CarSellingPlatform.Web.ViewModels.Dealership.IndexDealershipViewModel>
+
+@{
+    ViewData["Title"] = "Dealerships";
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="container-fluid">
+    <div class="row mb-4 text-center">
+        <div class="col-12">
+            <h1 class="display-4 mb-3">Our Dealerships</h1>
+            <p class="text-muted">Discover trusted dealerships in your area</p>
+        </div>
+    </div>
+
+    <div id="dealershipResults">
+        @if (Model?.Items?.Any() == true)
+        {
+            <div class="row">
+                @foreach (var dealership in Model.Items)
+                {
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                        <div class="card dealership-card shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <!-- Logo -->
+                                <div class="dealership-logo-container mb-3">
+                                    @if (dealership.Logo != null && dealership.Logo.Length > 0)
+                                    {
+                                        <img src="@Url.Action("GetDealershipImage", "Dealership", new { id = dealership.Id })"
+                                             alt="@dealership.Name Logo" class="img-fluid rounded dealership-logo"
+                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                    }
+                                    else
+                                    {
+                                        <div class="dealership-placeholder d-flex align-items-center justify-content-center bg-light rounded">
+                                            <i class="fas fa-store fa-3x text-muted"></i>
+                                        </div>
+                                    }
+                                </div>
+
+                                <!-- Details -->
+                                <div class="dealership-details">
+                                    <h5 class="card-title mb-2">@dealership.Name</h5>
+                                    @if (!string.IsNullOrEmpty(dealership.Description))
+                                    {
+                                        <p class="card-text text-muted mb-3 small">@dealership.Description</p>
+                                    }
+                                    <div class="dealership-info mb-3">
+                                        <div class="mb-2">
+                                            <small class="text-muted">
+                                                <i class="fas fa-map-marker-alt me-1"></i>
+                                                @dealership.Address
+                                            </small>
+                                        </div>
+                                        <div class="mb-2">
+                                            <small class="text-muted">
+                                                <i class="fas fa-phone me-1"></i>
+                                                <a href="tel:@dealership.PhoneNumber" class="text-decoration-none">@dealership.PhoneNumber</a>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Actions -->
+                                <div class="action-section d-grid gap-2 mt-auto">
+                                    <a href="@Url.Action("DetailsDealership", "Dealership", new { id = dealership.Id })" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-eye me-1"></i> View Details
+                                    </a>
+                                    
+                                    <a href="@Url.Action("AllCars", "Dealership", new { id = dealership.Id })" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-car me-1"></i> View Cars
+                                    </a>
+                                    <button type="button" class="btn btn-success btn-sm flex-fill" data-bs-toggle="modal" data-bs-target="#phoneModal">
+                                        Call
+                                    </button>
+
+                                    <div class="modal fade" id="phoneModal" tabindex="-1" aria-labelledby="phoneModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="phoneModalLabel">Contact Us</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Our phone number is: <strong>@dealership.PhoneNumber</strong>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                   </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Pagination -->
+            <div class="col-12 d-flex justify-content-center">
+                <nav>
+                    <ul class="pagination">
+                        <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber - 1)">Previous</a>
+                        </li>
+
+                        <li class="page-item disabled">
+                            <span class="page-link">Page @Model.PageNumber of @Model.TotalPages</span>
+                        </li>
+
+                        <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber + 1)">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-12 text-center">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        No dealerships are currently available. Please check back later!
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const baseUrl = '@Url.Action("Filter", "Dealership")';
+    </script>
+    <script src="~/js/dealership.js"></script>
+}

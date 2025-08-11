@@ -126,7 +126,8 @@ public class CarService : ICarService
                 EngineId = newEngine.Id,
                 TransmissionId = model.TransmissionId,
                 FuelTypeId = model.FuelTypeId,
-                ImageData = imageData
+                ImageData = imageData,
+                DealershipId = model.DealershipId,
             };
             await _carRepository.AddAsync(newCar);
             await _carRepository.SaveChangesAsync();
@@ -146,6 +147,7 @@ public class CarService : ICarService
                 .Include(c => c.FuelType)
                 .Include(c => c.Brand)
                 .Include(c => c.Engine)
+                .Include(c => c.Dealership)
                 .Include(c => c.Transmission)
                 .Include(c => c.Seller)
                 .AsNoTracking()
@@ -171,6 +173,7 @@ public class CarService : ICarService
                     IsUserSeller = userId != null ? carModel.SellerId.ToLower() == userId.ToLower() : false,
                     PhoneNubmer = carModel.Seller.PhoneNumber,
                     ImageData = carModel.ImageData,
+                    DealershipId = carModel.DealershipId,
                 };
             }
         }
@@ -350,6 +353,7 @@ public class CarService : ICarService
                     BrandName = c.Car.Brand.Name,
                     CarModel = c.Car.Model,
                     ImageUrl = c.Car.ImageUrl,
+                    ImageData = c.Car.ImageData,
                     Description = c.Car.Description,
                     Price = c.Car.Price,
                     CategoryName = c.Car.Category.Name,

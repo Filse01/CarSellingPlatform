@@ -1,0 +1,151 @@
+@model CarSellingPlatform.Web.ViewModels.Car.PagedListViewModel<CarSellingPlatform.Web.ViewModels.Car.IndexCarViewModel>
+
+@{
+    ViewData["Title"] = "Cars for Sale";
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="container-fluid">
+    <div class="row mb-4 text-center">
+        <div class="col-12">
+            <h1 class="display-4 mb-3">Cars for sale in this dealership</h1>
+            <p class="text-muted">Find your perfect car from our extensive collection</p>
+        </div>
+    </div>
+   
+    <div id="carResults">
+        @if (Model?.Items?.Any() == true)
+        {
+            <div class="row">
+                @foreach (var car in Model.Items)
+                {
+                    <div class="col-12 mb-4">
+                        <div class="card car-card shadow-sm h-100">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-md-3 col-lg-2">
+                                        <div class="car-image-container">
+                                            @if (!string.IsNullOrEmpty(car.ImageUrl))
+                                            {
+                                                <img src="@car.ImageUrl" alt="@car.CarModel" class="img-fluid rounded car-image"
+                                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                            }
+                                            else if (car.ImageData != null && car.ImageData.Length > 0)
+                                            {
+                                                <img src="@Url.Action("GetCarImage", "Car", new { id = car.Id })"
+                                                     alt="@car.CarModel" class="img-fluid rounded car-image"
+                                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                            }
+                                            else
+                                            {
+                                                <img src="~/image/no-photo.jpg" alt="No Image" class="img-fluid rounded car-image" />
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <!-- Details -->
+                                    <div class="col-md-6 col-lg-7">
+                                        <h5 class="card-title mb-2">@car.BrandName @car.CarModel (@car.CategoryName)</h5>
+                                        <p class="card-text text-muted mb-2">@car.Description</p>
+                                        <div class="row text-sm">
+                                            <div class="col-6 col-lg-4 mb-1"><small class="text-muted"><i class="fas fa-calendar-alt me-1"></i>Year: <strong>@car.Year</strong></small></div>
+                                            <div class="col-6 col-lg-4 mb-1"><small class="text-muted"><i class="fas fa-horse me-1"></i>HP: <strong>@car.HorsePower</strong></small></div>
+                                            <div class="col-6 col-lg-4 mb-1"><small class="text-muted"><i class="fas fa-palette me-1"></i>Color: <strong>@car.Color</strong></small></div>
+                                            <div class="col-6 col-lg-4 mb-1"><small class="text-muted"><i class="fas fa-cog me-1"></i>Engine: <strong>@car.Displacement</strong></small></div>
+                                            <div class="col-6 col-lg-4 mb-1"><small class="text-muted"><i class="fas fa-gas-pump me-1"></i>Fuel: <strong>@car.FuelTypeName</strong></small></div>
+                                            <div class="col-6 col-lg-4 mb-1"><small class="text-muted"><i class="fas fa-cogs me-1"></i>Transmission: <strong>@car.TransmissionTypeName</strong></small></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Price + Actions -->
+                                    <div class="col-md-3 text-center mt-3 mt-md-0">
+                                        <div class="price-section d-none d-md-block">
+                                            <h3 class="text-primary fw-bold mb-3">
+                                                $@car.Price.ToString("N0")
+                                            </h3>
+
+                                            <div class="d-grid gap-2">
+                                                @if (car.IsUserSeller)
+                                                {
+                                                    <a href="@Url.Action("EditCar", "Car", new { id = car.Id })" class="btn btn-primary btn-sm">
+                                                        <i class="fas fa-pen me-1"></i> Edit
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@Url.Action("CarDetails", "Dealership", new { id = car.Id })" class="btn btn-primary btn-sm">
+                                                        <i class="fas fa-eye me-1"></i> View Details
+                                                    </a>
+
+                                                    @if (User?.Identity?.IsAuthenticated == true && !car.IsUserFavorite)
+                                                    {
+                                                        <div class="d-flex gap-2 align-items-center">
+                                                            <form asp-controller="Car" asp-action="AddFavoriteCars" method="post">
+                                                                <input type="hidden" name="id" value="@car.Id"/>
+                                                                <button type="submit" class="btn btn-primary">Add to Favorites</button>
+                                                            </form>
+
+                                                            <form method="post" asp-controller="Chat" asp-action="Create" asp-route-carId="@car.Id">
+                                                                <button type="submit" class="btn btn-primary">
+                                                                    Contact Seller
+                                                                </button>
+                                                            </form>
+                                                        </div>
+
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Pagination -->
+            <div class="col-12 d-flex justify-content-center">
+                <nav>
+                    <ul class="pagination">
+                        <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber - 1)">Previous</a>
+                        </li>
+
+                        <li class="page-item disabled">
+                            <span class="page-link">Page @Model.PageNumber of @Model.TotalPages</span>
+                        </li>
+
+                        <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber + 1)">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-12 text-center">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        No cars are currently available. Please check back later!
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const baseUrl = '@Url.Action("Filter", "Car")';
+    </script>
+    <script src="~/js/car.js"></script>
+}

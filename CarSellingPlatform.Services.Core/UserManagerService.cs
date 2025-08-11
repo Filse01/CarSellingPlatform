@@ -17,6 +17,7 @@ public class UserManagerService : IUserManagerService
     private readonly IRepository<Car, Guid> _carRepository;
     private readonly IRepository<Chat, Guid> _chatRepository;
     private readonly IRepository<UserCar, Guid> _userCarRepository;
+    private readonly IRepository<Dealership, Guid> _dealershipRepository;
     public UserManagerService(UserManager<ApplicationUser> userManager, IRepository<Chat, Guid> chatRepository, IRepository<Car, Guid> carRepository, IRepository<UserCar, Guid> userCarRepository)
     {
         _userManager = userManager;
@@ -92,10 +93,14 @@ public class UserManagerService : IUserManagerService
         var userChats = await _chatRepository.GetAllAttached()
             .Where(c => c.UserId == user.Id)
             .ToListAsync();
+        var dealerShips = await _dealershipRepository.GetAllAttached()
+            .Where(d => d.OwnerId == user.Id)
+            .ToListAsync();
 
         _chatRepository.HardDeleteRange(sellerChats); 
         _chatRepository.HardDeleteRange(userChats); 
         _carRepository.HardDeleteRange(sellerCars);
+        _dealershipRepository.HardDeleteRange(dealerShips);
         _userCarRepository.HardDeleteRange(sellerUserCars);
         await _chatRepository.SaveChangesAsync(); 
         var result = await _userManager.DeleteAsync(user); 

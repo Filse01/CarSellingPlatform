@@ -14,14 +14,15 @@ public class CarInfoService : ICarInfoService
     private readonly IRepository<Category, Guid> _categoryRepository;
     private readonly IRepository<FuelType, Guid> _fuelTypeRepository;
     private readonly IRepository<Transmission, Guid> _transmissionRepository;
-    
-    public CarInfoService(CarSellingPlatformDbContext context, IRepository<Brand, Guid> brandRepository, IRepository<Category, Guid> categoryRepository, IRepository<FuelType, Guid> fuelTypeRepository, IRepository<Transmission, Guid> transmissionRepository)
+    private readonly IRepository<Dealership, Guid> _dealershipRepository;
+    public CarInfoService(CarSellingPlatformDbContext context, IRepository<Brand, Guid> brandRepository, IRepository<Category, Guid> categoryRepository, IRepository<FuelType, Guid> fuelTypeRepository, IRepository<Transmission, Guid> transmissionRepository, IRepository<Dealership, Guid> dealershipRepository)
     {
         _context = context;
         _brandRepository = brandRepository;
         _categoryRepository = categoryRepository;
         _fuelTypeRepository = fuelTypeRepository;
         _transmissionRepository = transmissionRepository;
+        _dealershipRepository = dealershipRepository;
     }
     public async Task<IEnumerable<AddCarBrand>> GetBrandsAsync()
     {
@@ -74,5 +75,19 @@ public class CarInfoService : ICarInfoService
                 Type = t.Type
             }).ToListAsync();
         return transmissions;
+    }
+
+    public async Task<IEnumerable<AddCarDealership>> GetDealersihpAsync(string userId)
+    {
+        IEnumerable<AddCarDealership> dealerships = await _dealershipRepository
+            .GetAllAttached()
+            .AsNoTracking()
+            .Where(d => d.OwnerId == userId)
+            .Select(t => new AddCarDealership()
+            {
+                Id = t.Id,
+                Name = t.Name
+            }).ToListAsync();
+        return dealerships;
     }
 }

@@ -1,0 +1,64 @@
+@model CarSellingPlatform.Web.ViewModels.Dealership.DetailsDealershipViewModel
+
+<div class="container-fluid">
+    <!-- Dealership Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card dealership-header-card shadow-sm">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-3 col-lg-2 text-center">
+                            <div class="dealership-logo-container mb-3 mb-md-0">
+                                @if (Model.Logo != null && Model.Logo.Length > 0)
+                                {
+                                    <img src="@Url.Action("GetDealershipImage", "Dealership", new { id = Model.Id })"
+                                         alt="@Model.Name Logo" class="img-fluid rounded dealership-logo"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                }
+                                else
+                                {
+                                    <div class="dealership-placeholder d-flex align-items-center justify-content-center bg-light rounded">
+                                        <i class="fas fa-store fa-4x text-muted"></i>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 col-lg-7">
+                            <h1 class="display-5 mb-2">@Model.Name</h1>
+                            @if (!string.IsNullOrEmpty(Model.Description))
+                            {
+                                <p class="lead text-muted mb-3">@Model.Description</p>
+                            }
+                            
+                            <div class="dealership-contact-info">
+                                <div class="row">
+                                    <div class="col-md-6 mb-2">
+                                        <i class="fas fa-map-marker-alt text-primary me-2"></i>
+                                        <strong>Address:</strong><br>
+                                        <span class="text-muted">@Model.Address</span>
+                                    </div>
+                                    <div class="col-md-6 mb-2">
+                                        <i class="fas fa-phone text-primary me-2"></i>
+                                        <strong>Phone:</strong><br>
+                                        <a href="tel:@Model.PhoneNumber" class="text-decoration-none">
+                                            @Model.PhoneNumber
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3 text-center">
+                            <div class="d-grid gap-2">
+                                <a href="@Url.Action("Index", "Dealership")" class="btn btn-outline-secondary">
+                                    <i class="fas fa-arrow-left me-2"></i> Back to Dealerships
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
