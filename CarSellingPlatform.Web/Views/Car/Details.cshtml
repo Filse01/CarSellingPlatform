@@ -96,6 +96,10 @@
             <h3>Description</h3>
             <p class="description-text">@Model.Description</p>
         </div>
-        <partial name="_DealershipPartialView" model="Model.Dealership" />
+        @if (Model.Dealership != null)
+        {
+            <partial name="_DealershipPartialView" model="Model.Dealership" />
+        }
+        
     </div>
 </div>

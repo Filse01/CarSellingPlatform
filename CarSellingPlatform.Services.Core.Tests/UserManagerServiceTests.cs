@@ -13,6 +13,7 @@ public class UserManagerServiceTests
         private Mock<IRepository<Chat, Guid>> _chatRepositoryMock;
         private Mock<IRepository<Car, Guid>> _carRepositoryMock;
         private Mock<IRepository<UserCar, Guid>> _userCarRepositoryMock;
+        private Mock<IRepository<Dealership, Guid>> _dealershipRepositoryMock;
         private Mock<UserManager<ApplicationUser>> _mockUserManager;
         private IUserManagerService _userManagerService;
 
@@ -22,11 +23,12 @@ public class UserManagerServiceTests
             _chatRepositoryMock = new Mock<IRepository<Chat, Guid>>();
             _carRepositoryMock = new Mock<IRepository<Car, Guid>>();
             _userCarRepositoryMock = new Mock<IRepository<UserCar, Guid>>();
+            _dealershipRepositoryMock = new Mock<IRepository<Dealership, Guid>>();
             var store = new Mock<IUserStore<ApplicationUser>>();
             _mockUserManager = new Mock<UserManager<ApplicationUser>>(
                 store.Object, null, null, null, null, null, null, null, null);
             
-            _userManagerService = new UserManagerService(_mockUserManager.Object, _chatRepositoryMock.Object, _carRepositoryMock.Object, _userCarRepositoryMock.Object);
+            _userManagerService = new UserManagerService(_mockUserManager.Object, _chatRepositoryMock.Object, _carRepositoryMock.Object, _userCarRepositoryMock.Object, _dealershipRepositoryMock.Object);
         }
         
 
@@ -146,6 +148,10 @@ public class UserManagerServiceTests
             {
                 new UserCar { UserId = userId, CarId = cars[0].Id }
             };
+            var dealership = new List<Dealership>
+            {
+                new Dealership { OwnerId = userId }
+            };
 
             _mockUserManager.Setup(um => um.FindByIdAsync(userId)).ReturnsAsync(user);
             _mockUserManager.Setup(um => um.DeleteAsync(user)).ReturnsAsync(IdentityResult.Success);
@@ -164,6 +170,10 @@ public class UserManagerServiceTests
             var mockUserCarRepository = userCar.BuildMock();
             _userCarRepositoryMock.Setup(r => r.GetAllAttached()).Returns(mockUserCarRepository);
             
+            var mockDealerRepository = dealership.BuildMock();
+            _dealershipRepositoryMock.Setup(r => r.GetAllAttached()).Returns(mockDealerRepository);
+            _dealershipRepositoryMock.Setup(r => r.HardDeleteRange(It.IsAny<IEnumerable<Dealership>>()));
+            
             var result = await _userManagerService.DeleteUser(userId);
 
             
@@ -173,6 +183,7 @@ public class UserManagerServiceTests
             _mockUserManager.Verify(um => um.DeleteAsync(user), Times.Once);
             _carRepositoryMock.Verify(r => r.HardDeleteRange(It.IsAny<IEnumerable<Car>>()), Times.Once); 
             _userCarRepositoryMock.Verify(r => r.HardDeleteRange(It.IsAny<IEnumerable<UserCar>>()), Times.Once); 
+            _dealershipRepositoryMock.Verify(r => r.HardDeleteRange(It.IsAny<IEnumerable<Dealership>>()), Times.Once);
         }
 
         [Test]

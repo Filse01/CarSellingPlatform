@@ -2,7 +2,8 @@
     ViewData["Title"] = "Welcome";
 }
 
-<div class="container text-center mt-5">
+<div class="welcome-background container text-center mt-5">
+<div class="welcome-content text-center text-white">
     <h1 class="display-4">Welcome to CarSellingPlatform</h1>
     <p class="lead">Buy and Sell Cars Easily!</p>
 
@@ -10,8 +11,38 @@
         <a asp-controller="Car" asp-action="Index" class="btn btn-primary btn-lg">Browse Cars</a>
         <a asp-controller="Car" asp-action="AddCar" class="btn btn-primary btn-lg">Sell Your Car</a>
     </div>
-
-    <div class="mt-5">
-        <img src="https://car-images.bauersecure.com/wp-images/9629/0000994018f5-f982-40f8-8.jpg" class="img-fluid rounded" alt="Car Image">
-    </div>
 </div>
+</div>
+<style>
+    .welcome-background {
+      /* The URL to your car image */
+      background-image: url('https://car-images.bauersecure.com/wp-images/9629/0000994018f5-f982-40f8-8.jpg');
+      
+      /* Full height */
+      height: 90vh; /* Using 90vh to account for a potential navbar */
+
+      /* Center and scale the image nicely */
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      
+      /* Add a dark overlay to make text more readable */
+      position: relative;
+    }
+    
+    .welcome-background::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5); /* Black overlay with 50% opacity */
+    }
+    
+    /* Ensure content is on top of the overlay */
+    .welcome-content {
+        position: relative;
+        z-index: 1;
+    }
+</style>

@@ -18,12 +18,13 @@ public class UserManagerService : IUserManagerService
     private readonly IRepository<Chat, Guid> _chatRepository;
     private readonly IRepository<UserCar, Guid> _userCarRepository;
     private readonly IRepository<Dealership, Guid> _dealershipRepository;
-    public UserManagerService(UserManager<ApplicationUser> userManager, IRepository<Chat, Guid> chatRepository, IRepository<Car, Guid> carRepository, IRepository<UserCar, Guid> userCarRepository)
+    public UserManagerService(UserManager<ApplicationUser> userManager, IRepository<Chat, Guid> chatRepository, IRepository<Car, Guid> carRepository, IRepository<UserCar, Guid> userCarRepository, IRepository<Dealership, Guid> dealershipRepository)
     {
         _userManager = userManager;
         _chatRepository = chatRepository;
         _carRepository = carRepository;
         _userCarRepository = userCarRepository;
+        _dealershipRepository = dealershipRepository;
     }
     public async Task<PagedListViewModel<UserManagementIndexViewModel>> ListPagedAsync(string? userId, int pageNumber, int pageSize)
     {
