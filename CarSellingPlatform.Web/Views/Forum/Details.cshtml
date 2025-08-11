@@ -1,0 +1,72 @@
+@model CarSellingPlatform.Web.ViewModels.Forum.DetailsPostViewModel
+@{
+    ViewData["Title"] = Model.Post.Title;
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h1 class="h2 mb-0">@Model.Post.Title</h1>
+        </div>
+        <div class="card-body">
+            <div class="text-muted mb-3">
+                <small>
+                    By <strong>@(Model.Post.Author?.FirstName + " " + Model.Post.Author?.LastName ?? "Unknown User")</strong>
+                </small>
+            </div>
+
+            <div class="post-body fs-5">
+                @Model.Post.Text
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <h3 class="mb-3">@Model.Post.Comments.Count() Comments</h3>
+        <hr />
+        @foreach (var comment in Model.Post.Comments.OrderBy(c => c.CreatedAt))
+        {
+            <div class="card mb-3 bg-light">
+                <div class="card-body">
+                    <p>@comment.Text</p>
+                    <small class="text-muted">
+                        -- <strong>@(comment.Author?.FirstName + " " + comment.Author?.LastName ?? "Unknown")</strong>on @comment.CreatedAt.ToString("MMM dd, yyyy 'at' hh:mm tt")
+
+                    </small>
+                </div>
+            </div>
+        }
+        @if (!Model.Post.Comments.Any())
+        {
+            <p>No comments yet. Be the first to reply!</p>
+        }
+    </div>
+
+    <div class="mt-4">
+        <hr />
+        @if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            <h4>Leave a Reply</h4>
+            <form asp-controller="Forum" asp-action="AddComment" asp-route-id="@Model.Post.Id" method="post">
+                @* Hidden field to pass the Post ID back to the controller *@
+                <input type="hidden" asp-for="Post.Id" />
+
+                <div class="mb-3">
+                    <textarea asp-for="NewCommentText" class="form-control" rows="4" placeholder="Type your comment here..."></textarea>
+                    <span asp-validation-for="NewCommentText" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Comment</button>
+            </form>
+        }
+        else
+        {
+            <div class="alert alert-info">
+                You must be <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Context.Request.Path">logged in</a> to post a comment.
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

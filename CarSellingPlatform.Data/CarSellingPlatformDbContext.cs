@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using CarSellingPlatform.Data.Models.Car;
 using CarSellingPlatform.Data.Models.Chat;
+using CarSellingPlatform.Data.Models.Forum;
 
 namespace CarSellingPlatform.Data
 {
@@ -24,8 +25,9 @@ namespace CarSellingPlatform.Data
         public DbSet<Brand> Brands { get; set; }
         
         public DbSet<Chat> Chats { get; set; }
-        
         public DbSet<Message> Messages { get; set; }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
