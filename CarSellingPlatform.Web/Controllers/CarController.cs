@@ -26,21 +26,33 @@ public class CarController : BaseController
         const int pageSize = 10;
         string? userId = GetUserId();
         var brands = await _carInfoService.GetBrandsAsync();
+        var categories = await _carInfoService.GetCategoriesAsync();
+        var transmissionTypes = await _carInfoService.GetTransmissionsAsync();
         var pagedCars = await _carService.ListPagedAsync(userId, page, pageSize);
         pagedCars.Brands = brands.Select(b => new AddCarBrand
         {
             Id = b.Id,
             Name = b.Name
         });
+        pagedCars.Categories = categories.Select(c => new AddCarCategory() { Id = c.Id, Name = c.Name });
+        pagedCars.Transmissions = transmissionTypes.Select(t => new AddCarTransmission() { Id = t.Id, Type = t.Type });
         return View(pagedCars);
     }
     [AllowAnonymous]
     [HttpGet]
-    public async Task<IActionResult> Filter(string search = "", Guid? brandId = null,int page = 1)
+    public async Task<IActionResult> Filter(string search = "",
+        Guid? brandId = null,
+        int page = 1,
+        Guid? categoryId = null,
+        Guid? transmissionTypeId = null,
+        int? minPrice = null, 
+        int? maxPrice = null,
+        int? minHp = null,    
+        int? maxHp = null)
     {
         const int pageSize = 10;
         string? userId = GetUserId();
-        var pagedCars = await _carService.ListPagedAsync(userId, page, pageSize, search, brandId);
+        var pagedCars = await _carService.ListPagedAsync(userId, page, pageSize, search, brandId,categoryId, transmissionTypeId ,minPrice, maxPrice, minHp, maxHp);
         
         return PartialView("_CarListPartial", pagedCars);
     }

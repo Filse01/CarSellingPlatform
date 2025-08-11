@@ -33,6 +33,42 @@
             </select>
         </div>
     </div>
+    <div class="row mb-4">
+        <div class="col-md-6 mb-2">
+            <select id="categoryFilter" class="form-select">
+                <option value="">-- All Categories --</option>
+                @* Ensure Model.Categories is populated by your Index action *@
+                @foreach (var category in Model.Categories)
+                {
+                    <option value="@category.Id">@category.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-6">
+            <select id="transmissionFilter" class="form-select">
+                <option value="">-- All Transmissions --</option>
+                @* Ensure Model.TransmissionTypes is populated by your Index action *@
+                @foreach (var transmission in Model.Transmissions)
+                {
+                    <option value="@transmission.Id">@transmission.Type</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col-md-3 col-6 mb-2">
+            <input type="number" id="minPriceFilter" class="form-control" placeholder="Min Price ($)" min="0" />
+        </div>
+        <div class="col-md-3 col-6 mb-2">
+            <input type="number" id="maxPriceFilter" class="form-control" placeholder="Max Price ($)" min="0" />
+        </div>
+        <div class="col-md-3 col-6 mb-2">
+            <input type="number" id="minHpFilter" class="form-control" placeholder="Min HP" min="0" />
+        </div>
+        <div class="col-md-3 col-6 mb-2">
+            <input type="number" id="maxHpFilter" class="form-control" placeholder="Max HP" min="0" />
+        </div>
+    </div>
 
     <div id="carResults">
         @if (Model?.Items?.Any() == true)

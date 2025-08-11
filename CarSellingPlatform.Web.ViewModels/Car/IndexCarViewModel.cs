@@ -13,10 +13,13 @@ public class IndexCarViewModel
     public string Description { get; set; } = null!;
     
     public string CategoryName { get; set; }
+    public Guid CategoryId { get; set; }
     
     public string FuelTypeName { get; set; }
+    public Guid FuelTypeId { get; set; }
     
     public string TransmissionTypeName { get; set; }
+    public Guid TransmissionTypeId { get; set; }
     
     public int HorsePower { get; set; }
     
@@ -33,4 +36,6 @@ public class IndexCarViewModel
     public byte[]? ImageData { get; set; }
     public string SellerId { get; set; } = null!;
     public IEnumerable<AddCarBrand> Brands { get; set; }
+    public IEnumerable<AddCarCategory> Categories { get; set; }
+    public IEnumerable<AddCarTransmission> Transmissions { get; set; }
 }

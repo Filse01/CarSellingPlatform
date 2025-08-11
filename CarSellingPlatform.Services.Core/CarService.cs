@@ -27,7 +27,7 @@ public class CarService : ICarService
         _userCarRepository = userCarRepository;
     }
 
-    public async Task<PagedListViewModel<IndexCarViewModel>> ListPagedAsync(string? userId, int pageNumber, int pageSize, string? search = null, Guid? brandId = null)
+    public async Task<PagedListViewModel<IndexCarViewModel>> ListPagedAsync(string? userId, int pageNumber, int pageSize, string? search = null, Guid? brandId = null, Guid? categoryId = null, Guid? transmissionTypeId = null, int? minPrice = null, int? maxPrice = null, int? minHp = null, int? maxHp = null)
     {
         var query = _carRepository.GetAllAttached()
             .Include(c => c.Category)
@@ -47,6 +47,30 @@ public class CarService : ICarService
         if (brandId.HasValue)
         {
             query = query.Where(c => c.BrandId == brandId);
+        }
+        if (minPrice.HasValue)
+        {
+            query = query.Where(c => c.Price >= minPrice.Value);
+        }
+        if (maxPrice.HasValue)
+        {
+            query = query.Where(c => c.Price <= maxPrice.Value);
+        }
+        if (minHp.HasValue)
+        {
+            query = query.Where(c => c.Engine.Horsepower >= minHp.Value);
+        }
+        if (maxHp.HasValue)
+        {
+            query = query.Where(c => c.Engine.Horsepower <= maxHp.Value);
+        }
+        if (categoryId.HasValue)
+        {
+            query = query.Where(c => c.Category.Id == categoryId.Value);
+        }
+        if (transmissionTypeId.HasValue)
+        {
+            query = query.Where(c => c.Transmission.Id == transmissionTypeId.Value);
         }
         int totalCount = await query.CountAsync();
 
