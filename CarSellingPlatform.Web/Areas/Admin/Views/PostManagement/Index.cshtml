@@ -1,7 +1,7 @@
 @using CarSellingPlatform.Web.ViewModels.CarManagement
-@model CarSellingPlatform.Web.ViewModels.Car.PagedListViewModel<CarSellingPlatform.Web.ViewModels.DealershipManagement.IndexDealershipManagementService>
+@model CarSellingPlatform.Web.ViewModels.Car.PagedListViewModel<CarSellingPlatform.Web.ViewModels.ForumManagement.IndexForumManagement>
 @{
-    ViewData["Title"] = "Dealership Management";
+    ViewData["Title"] = "Forum Management";
 }
 @if (TempData["SuccessMessage"] != null)
 {
@@ -12,41 +12,37 @@
 }
 <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0">All Cars</h5>
+                    <h5 class="mb-0">All Posts</h5>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead class="table-dark">
                             <tr>
-                                <th>Name</th>
-                                <th>Address</th>
-                                <th>Owner</th>
-                                <th>Phone Number</th>
+                                <th>Title</th>
+                                <th>AuthorName</th>
+                                <th>CreatedAt</th>
                                 <th class="text-center" style="width: 160px;">Action</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach (var car in Model.Items)
+                            @foreach (var post in Model.Items)
                             {
                                 <tr>
-                                    <form asp-controller="PostManagement" asp-action="DeleteDealership" method="post">
+                                    <form asp-controller="PostManagement" asp-action="DeletePost" method="post">
                                         <td>
-                                            @car.Name
-                                            <input type="hidden" name="UserId" value="@car.Id" />
+                                            @post.Title
+                                            <input type="hidden" name="UserId" value="@post.Id" />
                                         </td>
                                         <td>
-                                            @car.Address
+                                            @post.AuthorName
                                         </td>
                                         <td>
-                                            @car.OwnerName
-                                        </td>
-                                        <td>
-                                            @car.PhoneNumber
+                                            @post.CreatedAt
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center" >
-                                                <a asp-controller="DealershipManagement" asp-action="DeleteDealership" asp-route-id="@car.Id" class="btn btn-secondary">
+                                                <a asp-controller="PostManagement" asp-action="DeletePost" asp-route-id="@post.Id" class="btn btn-secondary">
                                                     <i class="fas fa-trash"></i> Delete 
                                                 </a>
                                             </div>
@@ -76,7 +72,7 @@
                         @if (!Model.Items.Any())
                         {
                             <div class="text-center py-4">
-                                <p class="text-muted">No users found.</p>
+                                <p class="text-muted">No posts found.</p>
                             </div>
                         }
                     </div>
