@@ -23,11 +23,21 @@ public class ForumService : IForumService
         _userManager = userManager;
     }
 
-    public async Task<PagedListViewModel<IndexPostViewModel>> ListPagedAsync(string? userId, int pageNumber, int pageSize)
+    public async Task<PagedListViewModel<IndexPostViewModel>> ListPagedAsync(string? userId, int pageNumber, int pageSize,string sortBy = "latest")
     {
         var query = _forumRepository.GetAllAttached()
             .Include(x => x.Comments)
             .AsNoTracking();
+        switch (sortBy?.ToLower())
+        {
+            case "comments":
+                query = query.OrderByDescending(p => p.Comments.Count());
+                break;
+            case "latest":
+            default:
+                query = query.OrderByDescending(p => p.CreatedAt);
+                break;
+        }
         int totalCount = await query.CountAsync();
         var posts = await query
             .Skip((pageNumber - 1) * pageSize)
@@ -46,7 +56,8 @@ public class ForumService : IForumService
         {
             Items = posts,
             PageNumber = pageNumber,
-            TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
+            TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize),
+            SortBy = sortBy
         };
     }
 
@@ -63,6 +74,7 @@ public class ForumService : IForumService
                 Title = model.Title,
                 Text = model.Text,
                 AuthorId = userId,
+                CreatedAt = DateTime.Now,
             };
             await _forumRepository.AddAsync(newPost);
             await _forumRepository.SaveChangesAsync();

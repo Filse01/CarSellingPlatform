@@ -14,12 +14,12 @@ public class ForumController : BaseController
         _forumService = forumService;
     }
     [AllowAnonymous]
-    public async Task<IActionResult> Index(int page =1)
+    public async Task<IActionResult> Index(int page =1,string sortBy = "latest")
     {
         const int pageSize = 10;
         string? userId = GetUserId();
         
-        var pagedDealerships = await _forumService.ListPagedAsync(userId, page, pageSize);
+        var pagedDealerships = await _forumService.ListPagedAsync(userId, page, pageSize, sortBy);
         return View(pagedDealerships);
     }
     [HttpGet]

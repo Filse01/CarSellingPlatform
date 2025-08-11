@@ -1,0 +1,84 @@
+@using CarSellingPlatform.Web.ViewModels.CarManagement
+@model CarSellingPlatform.Web.ViewModels.Car.PagedListViewModel<CarSellingPlatform.Web.ViewModels.DealershipManagement.IndexDealershipManagementService>
+@{
+    ViewData["Title"] = "Dealership Management";
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+<div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">All Cars</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-dark">
+                            <tr>
+                                <th>Name</th>
+                                <th>Address</th>
+                                <th>Owner</th>
+                                <th>Phone Number</th>
+                                <th class="text-center" style="width: 160px;">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var car in Model.Items)
+                            {
+                                <tr>
+                                    <form asp-controller="CarManagement" asp-action="DeleteCar" method="post">
+                                        <td>
+                                            @car.Name
+                                            <input type="hidden" name="UserId" value="@car.Id" />
+                                        </td>
+                                        <td>
+                                            @car.Address
+                                        </td>
+                                        <td>
+                                            @car.OwnerName
+                                        </td>
+                                        <td>
+                                            @car.PhoneNumber
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center" >
+                                                <a asp-controller="DealershipManagement" asp-action="DeleteDealership" asp-route-id="@car.Id" class="btn btn-secondary">
+                                                    <i class="fas fa-trash"></i> Delete 
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </form>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                        <div class="col-12 d-flex justify-content-center">
+                            <nav>
+                                <ul class="pagination">
+                                    <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+                                        <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber - 1)">Previous</a>
+                                    </li>
+
+                                    <li class="page-item disabled">
+                                        <span class="page-link">Page @Model.PageNumber of @Model.TotalPages</span>
+                                    </li>
+
+                                    <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+                                        <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber + 1)">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        @if (!Model.Items.Any())
+                        {
+                            <div class="text-center py-4">
+                                <p class="text-muted">No users found.</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>

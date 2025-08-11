@@ -7,6 +7,7 @@ public class PagedListViewModel<T>
     public int TotalPages { get; set; }
     public bool HasPreviousPage => PageNumber > 1;
     public bool HasNextPage => PageNumber < TotalPages;
+    public string? SortBy { get; set; }
     public IEnumerable<AddCarBrand> Brands { get; set; } = new List<AddCarBrand>();
     public IEnumerable<AddCarTransmission> Transmissions { get; set; } = new List<AddCarTransmission>();
     public IEnumerable<AddCarCategory> Categories { get; set; } = new List<AddCarCategory>();
