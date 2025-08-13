@@ -14,4 +14,6 @@ public class IndexDealershipViewModel
     public byte[]? Logo { get; set; }
 
     public string? Description { get; set; }
+    
+    public bool IsUserOwner { get; set; }
 }

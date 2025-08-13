@@ -12,4 +12,6 @@ public interface IDealerShipService
     Task<DetailsDealershipViewModel> GetDetailsDealershipAsync(Guid? id, string userId);
     Task<(byte[] ImageData, string ContentType)?> GetDealershipImageByIdAsync(Guid id);
     Task<DetailsCarViewModel> GetDetailsCarAsync(Guid? id, string userId);
+    Task<EditDealershipInputModel> GetEditDealershipAsync(Guid? id, string userId);
+    Task<bool> EditDealershipAsync(string userId,EditDealershipInputModel model, IFormFile? imageFile);
 }

@@ -76,9 +76,19 @@
                                     <a href="@Url.Action("AllCars", "Dealership", new { id = dealership.Id })" class="btn btn-outline-primary btn-sm">
                                         <i class="fas fa-car me-1"></i> View Cars
                                     </a>
-                                    <button type="button" class="btn btn-success btn-sm flex-fill" data-bs-toggle="modal" data-bs-target="#phoneModal">
-                                        Call
-                                    </button>
+                                    @if (dealership.IsUserOwner)
+                                    {
+                                        <a href="@Url.Action("EditDealership", "Dealership", new { id = dealership.Id })" class="btn btn-success btn-sm flex-fill">
+                                            <i class="fas fa-car me-1"></i> Edit Dealership
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-success btn-sm flex-fill" data-bs-toggle="modal" data-bs-target="#phoneModal">
+                                            Call
+                                        </button>
+                                    }
+                                    
 
                                     <div class="modal fade" id="phoneModal" tabindex="-1" aria-labelledby="phoneModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">

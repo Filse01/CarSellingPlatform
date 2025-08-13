@@ -42,8 +42,8 @@ public class DealershipController : BaseController
         }
         bool addResult = await _dealershipService.AddDealershipAsync(userId, model, imageFile);
         TempData["SuccessMessage"] = addResult
-            ? "Car added successfully."
-            : "Failed to add car.";
+            ? "Dealership added successfully."
+            : "Failed to add Dealership.";
         if (addResult == false)
         {
             return View(model);
@@ -100,5 +100,36 @@ public class DealershipController : BaseController
         }
 
         return NotFound();
+    }
+    [HttpGet]
+    public async Task<IActionResult> EditDealership(Guid id)
+    {
+        string? userId = GetUserId();
+            
+        EditDealershipInputModel? dealership = await _dealershipService.GetEditDealershipAsync(id, userId);
+        if (dealership == null)
+        {
+            return this.RedirectToAction(nameof(Index));
+        }
+        return View(dealership);
+    }
+    [HttpPost]
+    public async Task<IActionResult> EditDealership(EditDealershipInputModel model, IFormFile? imageFile)
+    {
+        var userId = GetUserId();
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        bool editResult = await _dealershipService.EditDealershipAsync(userId, model, imageFile);
+        TempData["SuccessMessage"] = editResult
+            ? "Dealership edited successfully."
+            : "Failed to edit Dealership.";
+        if (editResult == false)
+        {
+            return View(model);
+        }
+        return this.RedirectToAction(nameof(DetailsDealership), new { id = model.Id });
     }
 }

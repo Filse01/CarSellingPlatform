@@ -86,6 +86,8 @@ public class DealerShipService : IDealerShipService
                 PhoneNumber = c.PhoneNumber,
                 Logo = c.Logo,
                 Description = c.Description,
+                IsUserOwner = userId != null ?
+                    c.OwnerId.ToLower() == userId.ToLower() : false
             })
             .ToListAsync();
 
@@ -208,5 +210,68 @@ public class DealerShipService : IDealerShipService
             }
         }
         return model;
+    }
+
+    public async Task<EditDealershipInputModel> GetEditDealershipAsync(Guid? id, string userId)
+    {
+        EditDealershipInputModel model = null;
+        if (id.HasValue)
+        {
+            Dealership? editDealership = await _dealershipRepository.GetAllAttached()
+                .AsNoTracking()
+                .SingleOrDefaultAsync(c => c.Id == id.Value);
+           if (editDealership != null && editDealership.OwnerId.ToLower() == userId.ToLower())
+            {
+                model = new EditDealershipInputModel()
+                {
+                    Name = editDealership.Name,
+                    Address = editDealership.Address,
+                    PhoneNumber = editDealership.PhoneNumber,
+                    Description = editDealership.Description,
+                    Logo = editDealership.Logo,
+                };
+            }
+            
+        }
+        return model;
+    }
+
+    public async Task<bool> EditDealershipAsync(string userId, EditDealershipInputModel model, IFormFile? imageFile)
+    {
+        bool opResult = false;
+        var user = await _userManager.FindByIdAsync(userId);
+
+        Dealership updatedDealership = await _dealershipRepository.GetAllAttached()
+            .SingleOrDefaultAsync(c => c.Id == model.Id);
+        if (updatedDealership == null || updatedDealership.OwnerId.ToLower() != userId.ToLower())
+        {
+            return false;
+        }
+        if (updatedDealership != null && user != null)
+        {
+            byte[] imageData = null;
+
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await imageFile.CopyToAsync(memoryStream);
+                    imageData = memoryStream.ToArray();
+                }
+            }
+
+            if (updatedDealership.Logo != null && imageData != null)
+            {
+                updatedDealership.Logo = imageData;
+            }
+            updatedDealership.Name = model.Name;
+            updatedDealership.Address = model.Address;
+            updatedDealership.Description = model.Description;
+            updatedDealership.PhoneNumber = model.PhoneNumber;
+            await _dealershipRepository.UpdateAsync(updatedDealership);
+            await _dealershipRepository.SaveChangesAsync();
+            opResult = true;
+        }
+        return opResult;
     }
 }
