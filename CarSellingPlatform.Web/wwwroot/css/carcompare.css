@@ -1,0 +1,140 @@
+.page-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Search Form Styles */
+.search-form-container {
+    background-color: #ffffff;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    margin-bottom: 32px;
+}
+
+.search-form-container h1 {
+    font-size: 1.875rem; /* 30px */
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.search-form-container p {
+    color: #475569; /* slate-600 */
+    margin-bottom: 24px;
+}
+
+.search-inputs {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+}
+
+@media (min-width: 768px) {
+    .search-inputs {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.search-inputs label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.search-inputs input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1; /* slate-300 */
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.search-form-container button {
+    background-color: #2563eb; /* blue-600 */
+    color: white;
+    font-weight: 700;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 24px;
+}
+
+.search-form-container button:hover {
+    background-color: #1d4ed8; /* blue-700 */
+}
+
+/* Comparison Results Section */
+.comparison-results {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+}
+
+@media (min-width: 768px) {
+    .comparison-results {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.details-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    overflow: hidden;
+}
+
+.details-card img {
+    width: 100%;
+    height: 224px;
+    object-fit: cover;
+}
+
+.details-card h2 {
+    font-size: 1.5rem; /* 24px */
+    font-weight: 700;
+    padding: 24px;
+    margin: 0;
+}
+
+.details-grid {
+    border-top: 1px solid #e2e8f0; /* slate-200 */
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 24px;
+    border-bottom: 1px solid #e2e8f0; /* slate-200 */
+}
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.detail-item:nth-child(odd) {
+    background-color: #f8fafc; /* slate-50 */
+}
+
+.detail-label {
+    font-weight: 500;
+    color: #475569; /* slate-600 */
+}
+
+.price-value {
+    font-weight: 600;
+    color: #16a34a; /* green-600 */
+}
+
+.not-found-card {
+    background-color: #ffffff;
+    padding: 32px;
+    border-radius: 12px;
+    text-align: center;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}

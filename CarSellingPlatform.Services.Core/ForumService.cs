@@ -100,6 +100,7 @@ public class ForumService : IForumService
             };
             await _commentRepository.AddAsync(newComment);
             await _commentRepository.SaveChangesAsync();
+            opResult = true;
         }
         return opResult;
     }

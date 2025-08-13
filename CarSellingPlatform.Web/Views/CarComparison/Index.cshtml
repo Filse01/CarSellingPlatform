@@ -1,0 +1,115 @@
+@model CarSellingPlatform.Web.ViewModels.CarComparison.CarComparisonModel
+@{
+    ViewData["Title"] = "Car Comparison";
+}
+
+<div class="page-container">
+    <div class="search-form-container">
+        <h1>Car Comparison Tool</h1>
+        <p>Use the search boxes to find and select two cars to compare.</p>
+        <form asp-controller="CarComparison" asp-action="Index" method="post">
+            <div class="search-inputs">
+                <div>
+                    <label for="searchTerm1">Car 1</label>
+                    <input type="text" id="searchTerm1" name="SearchTerm1" list="car-list" placeholder="e.g., 2023 Toyota Camry" value="@Model.SearchTerm1">
+                </div>
+                <div>
+                    <label for="searchTerm2">Car 2</label>
+                    <input type="text" id="searchTerm2" name="SearchTerm2" list="car-list" placeholder="e.g., 2023 Honda Accord" value="@Model.SearchTerm2">
+                </div>
+            </div>
+            <datalist id="car-list">
+                @foreach (var car in Model.AvailableCars)
+                {
+                    <option value="@car.Year @car.Brand.Name @car.Model"></option>
+                }
+            </datalist>
+            <div>
+                <button type="submit">Compare Cars</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="comparison-results">
+        <!-- Car 1 Details -->
+        <div>
+            @if (Model.Car1 != null)
+            {
+                <div class="details-card">
+                    
+                    <div class="image-section">
+                        @if (!string.IsNullOrEmpty(Model.Car1.ImageUrl))
+                        {
+                            <img src="@Model.Car1.ImageUrl" alt="@Model.Car1.Model"/>
+                        }
+                        else if (Model.Car1.ImageData != null && Model.Car1.ImageData.Length > 0)
+                        {
+                            <img src="@Url.Action("GetCarImage", "Car", new { id = @Model.Car1.Id })" alt="@Model.Car1.Model"/>
+                        }
+                        else
+                        {
+                            <img src="~/image/no-photo.jpg" alt="No Image Available"/>
+                        }
+                    </div>
+                    <h2>@Model.Car1.Year @Model.Car1.Brand.Name @Model.Car1.Model</h2>
+                    <div class="details-grid">
+                        <div class="detail-item"><span class="detail-label">Price</span><span class="price-value">@Model.Car1.Price.ToString("C0")</span></div>
+                        <div class="detail-item"><span class="detail-label">Year</span><span>@Model.Car1.Year</span></div>
+                        <div class="detail-item"><span class="detail-label">Category</span><span>@Model.Car1.Category.Name</span></div>
+                        <div class="detail-item"><span class="detail-label">Color</span><span>@Model.Car1.Color</span></div>
+                        <div class="detail-item"><span class="detail-label">Horsepower</span><span>@Model.Car1.Engine.Horsepower hp</span></div>
+                        <div class="detail-item"><span class="detail-label">Fuel Type</span><span>@Model.Car1.FuelType.Type</span></div>
+                        <div class="detail-item"><span class="detail-label">Transmission</span><span>@Model.Car1.Transmission.Type</span></div>
+                    </div>
+                </div>
+            }
+            else if (!string.IsNullOrEmpty(Model.SearchTerm1))
+            {
+                <div class="not-found-card">
+                    <h2>Car Not Found</h2>
+                    <p>We couldn't find a car matching "@Model.SearchTerm1".</p>
+                </div>
+            }
+        </div>
+
+        <!-- Car 2 Details -->
+        <div>
+            @if (Model.Car2 != null)
+            {
+                <div class="details-card">
+                    <div class="image-section">
+                        @if (!string.IsNullOrEmpty(Model.Car2.ImageUrl))
+                        {
+                            <img src="@Model.Car2.ImageUrl" alt="@Model.Car2.Model"/>
+                        }
+                        else if (Model.Car2.ImageData != null && Model.Car2.ImageData.Length > 0)
+                        {
+                            <img src="@Url.Action("GetCarImage", "Car", new { id = @Model.Car2.Id })" alt="@Model.Car2.Model"/>
+                        }
+                        else
+                        {
+                            <img src="~/image/no-photo.jpg" alt="No Image Available" />
+                        }
+                    </div>
+                    <h2>@Model.Car2.Year @Model.Car2.Brand.Name @Model.Car2.Model</h2>
+                    <div class="details-grid">
+                        <div class="detail-item"><span class="detail-label">Price</span><span class="price-value">@Model.Car2.Price.ToString("C0")</span></div>
+                        <div class="detail-item"><span class="detail-label">Year</span><span>@Model.Car2.Year</span></div>
+                        <div class="detail-item"><span class="detail-label">Category</span><span>@Model.Car2.Category.Name</span></div>
+                        <div class="detail-item"><span class="detail-label">Color</span><span>@Model.Car2.Color</span></div>
+                        <div class="detail-item"><span class="detail-label">Horsepower</span><span>@Model.Car2.Engine.Horsepower hp</span></div>
+                        <div class="detail-item"><span class="detail-label">Fuel Type</span><span>@Model.Car2.FuelType.Type</span></div>
+                        <div class="detail-item"><span class="detail-label">Transmission</span><span>@Model.Car2.Transmission.Type</span></div>
+                    </div>
+                </div>
+            }
+            else if (!string.IsNullOrEmpty(Model.SearchTerm2))
+            {
+                <div class="not-found-card">
+                    <h2>Car Not Found</h2>
+                    <p>We couldn't find a car matching "@Model.SearchTerm2".</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
