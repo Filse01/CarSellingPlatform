@@ -25,6 +25,10 @@ namespace CarSellingPlatform.Web.Controllers
         {
             return View();
         }
+        public IActionResult GetError()
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Something went wrong.");
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error(int? statusCode)
@@ -39,7 +43,7 @@ namespace CarSellingPlatform.Web.Controllers
             }
             else if (statusCode == 500)
             {
-                return View("Error");
+                return View("InternalServerError");
             }
             else
             {

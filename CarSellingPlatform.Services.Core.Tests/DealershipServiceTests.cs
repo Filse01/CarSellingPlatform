@@ -302,5 +302,80 @@ public class DealershipServiceTests
 
         Assert.IsNull(result);
     }
+    [Test]
+    public async Task GetEditDealershipAsync_WhenUserIsOwner_ShouldReturnViewModel()
+    {
+        var ownerId = "owner-id";
+        var dealershipId = Guid.NewGuid();
+        var dealership = new Dealership { Id = dealershipId, OwnerId = ownerId, Name = "Original Name" };
+    
+        var dealerships = new List<Dealership> { dealership };
+        var mockQueryable = dealerships.BuildMock();
+        _mockDealershipRepository.Setup(r => r.GetAllAttached()).Returns(mockQueryable);
+
+        var result = await _dealerShipService.GetEditDealershipAsync(dealershipId, ownerId);
+
+        Assert.IsNotNull(result);
+        Assert.AreEqual("Original Name", result.Name);
+    }
+
+    [Test]
+    public async Task GetEditDealershipAsync_WhenUserIsNotOwner_ShouldReturnNull()
+    {
+        var ownerId = "owner-id";
+        var nonOwnerId = "non-owner-id";
+        var dealershipId = Guid.NewGuid();
+        var dealership = new Dealership { Id = dealershipId, OwnerId = ownerId, Name = "Original Name" };
+    
+        var dealerships = new List<Dealership> { dealership };
+        var mockQueryable = dealerships.BuildMock();
+        _mockDealershipRepository.Setup(r => r.GetAllAttached()).Returns(mockQueryable);
+
+        var result = await _dealerShipService.GetEditDealershipAsync(dealershipId, nonOwnerId);
+
+        Assert.IsNull(result);
+    }
+    [Test]
+public async Task EditDealershipAsync_WhenUserIsOwner_ShouldUpdateDealershipAndReturnTrue()
+{
+    var ownerId = "owner-id";
+    var dealershipId = Guid.NewGuid();
+    var model = new EditDealershipInputModel { Id = dealershipId, Name = "Updated Name" };
+    var existingDealership = new Dealership { Id = dealershipId, OwnerId = ownerId, Name = "Original Name", Logo = new byte[1] };
+    
+    _mockUserManager.Setup(um => um.FindByIdAsync(ownerId)).ReturnsAsync(new ApplicationUser { Id = ownerId });
+    
+    var dealerships = new List<Dealership> { existingDealership };
+    var mockQueryable = dealerships.BuildMock();
+    _mockDealershipRepository.Setup(r => r.GetAllAttached()).Returns(mockQueryable);
+
+    var result = await _dealerShipService.EditDealershipAsync(ownerId, model, null);
+
+    Assert.IsTrue(result);
+    _mockDealershipRepository.Verify(r => r.UpdateAsync(It.Is<Dealership>(d => d.Name == "Updated Name")), Times.Once);
+    _mockDealershipRepository.Verify(r => r.SaveChangesAsync(), Times.Once);
+}
+
+[Test]
+public async Task EditDealershipAsync_WhenUserIsNotOwner_ShouldNotUpdateAndReturnFalse()
+{
+    var ownerId = "owner-id";
+    var nonOwnerId = "non-owner-id";
+    var dealershipId = Guid.NewGuid();
+    var model = new EditDealershipInputModel { Id = dealershipId, Name = "Updated Name" };
+    var existingDealership = new Dealership { Id = dealershipId, OwnerId = ownerId };
+    
+    _mockUserManager.Setup(um => um.FindByIdAsync(nonOwnerId)).ReturnsAsync(new ApplicationUser { Id = nonOwnerId });
+
+    var dealerships = new List<Dealership> { existingDealership };
+    var mockQueryable = dealerships.BuildMock();
+    _mockDealershipRepository.Setup(r => r.GetAllAttached()).Returns(mockQueryable);
+
+    var result = await _dealerShipService.EditDealershipAsync(nonOwnerId, model, null);
+    
+    Assert.IsFalse(result);
+    _mockDealershipRepository.Verify(r => r.UpdateAsync(It.IsAny<Dealership>()), Times.Never);
+    _mockDealershipRepository.Verify(r => r.SaveChangesAsync(), Times.Never);
+}
 
 }

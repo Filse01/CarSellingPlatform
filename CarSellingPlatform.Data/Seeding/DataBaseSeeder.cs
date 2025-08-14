@@ -63,6 +63,7 @@ public static class DataBaseSeeder
         {
             var adminUser = new ApplicationUser()
             {
+                Id = "6ee1b162-422b-4cb5-a476-1432346b7503",
                 UserName = email,
                 Email = email,
                 EmailConfirmed = true,
